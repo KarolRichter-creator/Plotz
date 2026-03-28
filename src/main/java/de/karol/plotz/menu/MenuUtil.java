@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.component.ResolvableProfile;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public final class MenuUtil {
         int capitalCredits = PlotzStore.getCapitalCredits(player.getUUID());
 
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+
         stack.set(DataComponents.CUSTOM_NAME, Component.literal("§e" + player.getGameProfile().getName()));
         stack.set(
             DataComponents.LORE,
@@ -37,6 +39,12 @@ public final class MenuUtil {
                 Component.literal("§7Capital Credits: " + capitalCredits)
             ))
         );
+
+        stack.set(
+            DataComponents.PROFILE,
+            new ResolvableProfile(player.getGameProfile())
+        );
+
         return stack;
     }
 
