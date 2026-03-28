@@ -23,21 +23,18 @@ public final class PlotzLogic {
     }
 
     public static boolean tryCharge(ServerPlayer player, int amount) {
-        // TODO: Hier später EconomyCraft wirklich anbinden.
-        return true;
+        return EconomyBridge.removeMoney(player, amount);
     }
 
-    public static void paySeller(String sellerName, int amount) {
-        // TODO: Hier später Verkäufer auszahlen.
+    public static void paySeller(ServerPlayer buyerContext, String sellerName, int amount) {
+        EconomyBridge.addMoney(buyerContext.server, sellerName, amount);
     }
 
     public static boolean isServerClaimBlocked(ServerPlayer player) {
-        // TODO: Hier später OPAC-Server-Claims prüfen.
         return false;
     }
 
     public static boolean isMinDistanceValid(ServerPlayer player) {
-        // TODO: Hier später echten Mindestabstand prüfen.
         return true;
     }
 }

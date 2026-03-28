@@ -105,11 +105,11 @@ public class PlotzListingDetailMenu extends ChestMenu {
         }
 
         if (!PlotzLogic.tryCharge(sp, listing.price())) {
-            sp.sendSystemMessage(Component.literal("§cNicht genug Geld."));
+            sp.sendSystemMessage(Component.literal("§cNot enough money."));
             return;
         }
 
-        PlotzLogic.paySeller(listing.sellerName(), listing.price());
+        PlotzLogic.paySeller(sp, listing.sellerName(), listing.price());
 
         PlotzStore.addOwnedPlot(new PlotzStore.PlotEntry(
             sp.getUUID(),
