@@ -18,28 +18,30 @@ public final class PlotzStore {
             UUID.randomUUID().toString(),
             UUID.randomUUID(),
             "System",
-            "Kleines Grundstück am Fluss",
+            "Small Riverside Plot",
             4500,
             false,
             3,
-            "Nahe Fluss, außerhalb Hauptstadt",
-            "Schöne Lage mit Platz für Haus und Garten",
-            "Guter Preis wegen Lage",
-            "Kleines Haus und Garten"
+            "Near river, outside capital",
+            "Nice location with enough space for a house and garden",
+            "Good price because of location",
+            "Small house and garden",
+            false
         ));
 
         LISTINGS.add(new Listing(
             UUID.randomUUID().toString(),
             UUID.randomUUID(),
             "System",
-            "Hauptstadt-Grundstück am Markt",
+            "Capital Market Plot",
             12000,
             true,
             2,
-            "Direkt in der Hauptstadt",
-            "Perfekt für Shop oder Stadtvilla",
-            "Top Lage mitten in der Stadt",
-            "Leerer Bauplatz"
+            "Directly inside the capital",
+            "Perfect for a shop or city villa",
+            "Top location in the city center",
+            "Empty building plot",
+            true
         ));
     }
 
@@ -127,6 +129,7 @@ public final class PlotzStore {
         String location,
         String description,
         String justification,
-        String builtOnPlot
+        String builtOnPlot,
+        boolean negotiable
     ) {}
 }

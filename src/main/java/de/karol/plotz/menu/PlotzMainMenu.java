@@ -94,7 +94,7 @@ public class PlotzMainMenu extends ChestMenu {
 
         box.setItem(25, MenuUtil.named(
             Items.PAPER,
-            "§7Claim credits require an OPAC RW / Party"
+            "§7Claim credits currently require an OPAC party"
         ));
 
         broadcastChanges();
@@ -126,7 +126,7 @@ public class PlotzMainMenu extends ChestMenu {
             }
 
             if (!PlotzLogic.hasRequiredParty(sp)) {
-                sp.sendSystemMessage(Component.literal("§cYou need to create or join an OPAC RW / Party first."));
+                sp.sendSystemMessage(Component.literal("§cYou need to create or join an Open Parties and Claims party first."));
                 return;
             }
 
@@ -149,7 +149,7 @@ public class PlotzMainMenu extends ChestMenu {
             }
 
             if (!PlotzLogic.hasRequiredParty(sp)) {
-                sp.sendSystemMessage(Component.literal("§cYou need to create or join an OPAC RW / Party first."));
+                sp.sendSystemMessage(Component.literal("§cYou need to create or join an Open Parties and Claims party first."));
                 return;
             }
 
@@ -166,24 +166,7 @@ public class PlotzMainMenu extends ChestMenu {
         }
 
         if (slotId == 14) {
-            boolean capital = PlotzLogic.isCapital(sp.blockPosition());
-
-            PlotzStore.addListing(new PlotzStore.Listing(
-                java.util.UUID.randomUUID().toString(),
-                sp.getUUID(),
-                sp.getGameProfile().getName(),
-                "Plot by " + sp.getGameProfile().getName(),
-                capital ? 8000 : 5000,
-                capital,
-                1,
-                "X=" + sp.blockPosition().getX() + " Z=" + sp.blockPosition().getZ(),
-                capital ? "Plot inside the capital" : "Plot outside the capital",
-                "Basic starter price",
-                "No detailed building value yet"
-            ));
-
-            sp.sendSystemMessage(Component.literal("§aA simple sale listing was created."));
-            refresh();
+            PlotzCreateSaleMenu.open(sp);
             return;
         }
 

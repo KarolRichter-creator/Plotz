@@ -76,10 +76,18 @@ public class PlotzListingDetailMenu extends ChestMenu {
         box.setItem(13, MenuUtil.named(Items.PAPER, "§7Description: " + listing.description()));
         box.setItem(14, MenuUtil.named(Items.COMPASS, "§bLocation: " + listing.location()));
         box.setItem(15, MenuUtil.named(Items.BRICKS, "§7Built on plot: " + listing.builtOnPlot()));
-        box.setItem(16, MenuUtil.named(Items.NAME_TAG, "§7Justification: " + listing.justification()));
+        box.setItem(16, MenuUtil.named(
+            listing.negotiable() ? Items.EMERALD : Items.GOLD_BLOCK,
+            listing.negotiable() ? "§aNegotiable" : "§6Fixed Price"
+        ));
 
         box.setItem(21, MenuUtil.named(Items.BARRIER, "§cBack"));
-        box.setItem(23, MenuUtil.named(Items.LIME_CONCRETE, "§aBuy Plot"));
+
+        if (listing.sellerId().equals(viewer.getUUID())) {
+            box.setItem(23, MenuUtil.named(Items.RED_CONCRETE, "§cWithdraw Listing"));
+        } else {
+            box.setItem(23, MenuUtil.named(Items.LIME_CONCRETE, "§aBuy Plot"));
+        }
 
         broadcastChanges();
     }
@@ -119,7 +127,9 @@ public class PlotzListingDetailMenu extends ChestMenu {
         }
 
         if (listing.sellerId().equals(sp.getUUID())) {
-            sp.sendSystemMessage(Component.literal("§cYou cannot buy your own plot."));
+            PlotzStore.removeListing(listing.listingId());
+            sp.sendSystemMessage(Component.literal("§aListing withdrawn."));
+            PlotzMySalesMenu.open(sp);
             return;
         }
 
