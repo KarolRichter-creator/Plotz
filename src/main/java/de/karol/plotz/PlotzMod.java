@@ -1,9 +1,11 @@
 package de.karol.plotz;
 
 import com.mojang.brigadier.CommandDispatcher;
+import de.karol.plotz.menu.PlotzMainMenu;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -27,15 +29,12 @@ public class PlotzMod {
                 .executes(ctx -> {
                     CommandSourceStack source = ctx.getSource();
 
-                    source.sendSuccess(() -> Component.literal("§6======= [ Plotz ] ======="), false);
-                    source.sendSuccess(() -> Component.literal("§eNormale Claim-Chunks kaufen"), false);
-                    source.sendSuccess(() -> Component.literal(" §7Preis: 250$"), false);
-                    source.sendSuccess(() -> Component.literal("§eHauptstadt-Claim-Chunks kaufen"), false);
-                    source.sendSuccess(() -> Component.literal(" §7Preis: 500$"), false);
-                    source.sendSuccess(() -> Component.literal("§7Mindestabstand: 700 Blöcke"), false);
-                    source.sendSuccess(() -> Component.literal("§7Server-Claims: gesperrt"), false);
-                    source.sendSuccess(() -> Component.literal("§bDas echte Menü bauen wir im nächsten Schritt ein."), false);
-                    source.sendSuccess(() -> Component.literal("§6========================"), false);
+                    if (!(source.getEntity() instanceof ServerPlayer player)) {
+                        source.sendFailure(Component.literal("Nur Spieler können /plotz benutzen."));
+                        return 0;
+                    }
+
+                    PlotzMainMenu.open(player);
                     return 1;
                 })
         );

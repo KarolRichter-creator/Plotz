@@ -5,8 +5,10 @@ public class PlotzConfig {
     public static final int CAPITAL_CHUNK_PRICE = 500;
     public static final int MIN_DISTANCE_BLOCKS = 700;
 
-    public static final int MAX_NORMAL_CREDITS = 100;
-    public static final int MAX_CAPITAL_CREDITS = 50;
+    public static final int CAPITAL_MIN_X = -2000;
+    public static final int CAPITAL_MAX_X = 2000;
+    public static final int CAPITAL_MIN_Z = -2000;
+    public static final int CAPITAL_MAX_Z = 2000;
 
     private PlotzConfig() {}
 }

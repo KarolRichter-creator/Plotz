@@ -1,23 +1,29 @@
 package de.karol.plotz.service;
 
+import de.karol.plotz.config.PlotzConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ClaimValidationService {
-
     private ClaimValidationService() {}
 
-    public static boolean isServerClaimBlocked(ServerPlayer player) {
-        // TODO: OPAC-Server-Claims per API prüfen und hier true/false zurückgeben
-        return false;
+    public static boolean isCapitalChunk(BlockPos pos) {
+        return pos.getX() >= PlotzConfig.CAPITAL_MIN_X
+            && pos.getX() <= PlotzConfig.CAPITAL_MAX_X
+            && pos.getZ() >= PlotzConfig.CAPITAL_MIN_Z
+            && pos.getZ() <= PlotzConfig.CAPITAL_MAX_Z;
     }
 
-    public static boolean isCapitalChunk(ServerPlayer player) {
-        // TODO: über Zonen prüfen
+    public static boolean isServerClaimBlocked(ServerPlayer player) {
+        // TODO:
+        // Hier später OPAC-Server-Claims prüfen.
+        // Alles, was Server-Claim ist, soll blockiert werden.
         return false;
     }
 
     public static boolean isMinDistanceValid(ServerPlayer player) {
-        // TODO: 700-Block-Regel hier prüfen
+        // TODO:
+        // Hier später Mindestabstand 700 Blöcke prüfen.
         return true;
     }
 }

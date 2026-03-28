@@ -3,22 +3,19 @@ package de.karol.plotz.service;
 import net.minecraft.server.level.ServerPlayer;
 
 public class EconomyService {
-
     private EconomyService() {}
 
-    public static boolean tryBuyNormalCredit(ServerPlayer player, int amount) {
-        // TODO: EconomyCraft sauber anbinden:
-        // laut Mod-Doku gibt es /eco removemoney bzw. /removemoney zum Geldabzug.
+    public static boolean tryCharge(ServerPlayer player, int amount) {
+        // TODO:
+        // Hier später EconomyCraft sauber einbauen.
+        // Zum Beispiel:
+        // 1. Kontostand prüfen
+        // 2. Geld mit EconomyCraft abziehen
         return true;
     }
 
-    public static boolean tryBuyCapitalCredit(ServerPlayer player, int amount) {
-        // TODO: EconomyCraft sauber anbinden
-        return true;
-    }
-
-    public static boolean tryBuyListing(ServerPlayer buyer, int amount) {
-        // TODO: Käufer belasten, Verkäufer gutschreiben
-        return true;
+    public static void paySeller(String sellerName, int amount) {
+        // TODO:
+        // Hier später Verkäufer über EconomyCraft auszahlen.
     }
 }

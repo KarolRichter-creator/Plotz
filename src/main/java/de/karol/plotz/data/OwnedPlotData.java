@@ -5,31 +5,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class OwnedPlotData {
-    public static class PlotEntry {
-        public final String plotId;
-        public final UUID owner;
-        public final String worldId;
-        public final List<String> chunks;
-        public final boolean capital;
-
-        public PlotEntry(String plotId, UUID owner, String worldId, List<String> chunks, boolean capital) {
-            this.plotId = plotId;
-            this.owner = owner;
-            this.worldId = worldId;
-            this.chunks = chunks;
-            this.capital = capital;
-        }
-    }
+    public record PlotEntry(
+        UUID owner,
+        String title,
+        boolean capital,
+        int chunkCount,
+        String location,
+        String description
+    ) {}
 
     private static final List<PlotEntry> PLOTS = new ArrayList<>();
 
     private OwnedPlotData() {}
 
-    public static List<PlotEntry> getPlots() {
-        return PLOTS;
+    public static synchronized void addPlot(PlotEntry entry) {
+        PLOTS.add(entry);
     }
 
-    public static void addPlot(PlotEntry entry) {
-        PLOTS.add(entry);
+    public static synchronized List<PlotEntry> getPlotsOf(UUID owner) {
+        return PLOTS.stream().filter(p -> p.owner().equals(owner)).toList();
     }
 }

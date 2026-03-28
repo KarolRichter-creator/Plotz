@@ -5,51 +5,64 @@ import java.util.List;
 import java.util.UUID;
 
 public class MarketListingData {
-    public static class Listing {
-        public final UUID seller;
-        public final String title;
-        public final int price;
-        public final String description;
-        public final String locationText;
-        public final String justification;
-        public final String builtOnPlot;
-        public final int chunkCount;
-
-        public Listing(UUID seller, String title, int price, String description, String locationText,
-                       String justification, String builtOnPlot, int chunkCount) {
-            this.seller = seller;
-            this.title = title;
-            this.price = price;
-            this.description = description;
-            this.locationText = locationText;
-            this.justification = justification;
-            this.builtOnPlot = builtOnPlot;
-            this.chunkCount = chunkCount;
-        }
-    }
+    public record Listing(
+        UUID sellerId,
+        String sellerName,
+        String title,
+        int price,
+        boolean capital,
+        int chunkCount,
+        String location,
+        String description
+    ) {}
 
     private static final List<Listing> LISTINGS = new ArrayList<>();
-
-    private MarketListingData() {}
-
-    public static List<Listing> getListings() {
-        return LISTINGS;
-    }
-
-    public static void addListing(Listing listing) {
-        LISTINGS.add(listing);
-    }
 
     static {
         LISTINGS.add(new Listing(
             UUID.randomUUID(),
-            "Beispiel-Grundstück am Fluss",
-            6500,
-            "Großes Grundstück mit guter Lage.",
-            "Nahe Hauptstadt",
-            "Nähe zur Stadt und gute Erreichbarkeit",
-            "Haus, Lager und kleiner Turm",
-            6
+            "System",
+            "Kleines Grundstück am Fluss",
+            4500,
+            false,
+            3,
+            "Nahe Fluss, außerhalb Hauptstadt",
+            "Schöne Lage mit Platz für Haus und Garten"
         ));
+        LISTINGS.add(new Listing(
+            UUID.randomUUID(),
+            "System",
+            "Hauptstadt-Grundstück am Markt",
+            12000,
+            true,
+            2,
+            "Direkt in der Hauptstadt",
+            "Perfekt für Shop oder Stadtvilla"
+        ));
+    }
+
+    private MarketListingData() {}
+
+    public static synchronized List<Listing> getListings() {
+        return List.copyOf(LISTINGS);
+    }
+
+    public static synchronized Listing getByIndex(int index) {
+        if (index < 0 || index >= LISTINGS.size()) return null;
+        return LISTINGS.get(index);
+    }
+
+    public static synchronized void addListing(Listing listing) {
+        LISTINGS.add(listing);
+    }
+
+    public static synchronized void removeByIndex(int index) {
+        if (index >= 0 && index < LISTINGS.size()) {
+            LISTINGS.remove(index);
+        }
+    }
+
+    public static synchronized List<Listing> getBySeller(UUID sellerId) {
+        return LISTINGS.stream().filter(l -> l.sellerId().equals(sellerId)).toList();
     }
 }
