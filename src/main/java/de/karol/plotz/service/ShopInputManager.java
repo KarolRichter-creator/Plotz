@@ -11,12 +11,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ShopInputManager {
     private static final Map<UUID, Boolean> WAITING_FOR_PRICE = new ConcurrentHashMap<>();
+    private static final Map<UUID, Boolean> TRANSITIONING = new ConcurrentHashMap<>();
 
     private ShopInputManager() {}
 
     public static void waitForPrice(ServerPlayer player) {
         WAITING_FOR_PRICE.put(player.getUUID(), true);
+        TRANSITIONING.put(player.getUUID(), true);
         player.sendSystemMessage(Component.literal("§eEnter the shop price in chat now."));
+        player.closeContainer();
+    }
+
+    public static boolean isTransitioning(UUID playerId) {
+        return TRANSITIONING.containsKey(playerId);
     }
 
     public static boolean handleChat(ServerPlayer player, String message) {
@@ -25,6 +32,7 @@ public final class ShopInputManager {
         }
 
         WAITING_FOR_PRICE.remove(player.getUUID());
+        TRANSITIONING.remove(player.getUUID());
 
         PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(player.getUUID());
         if (draft == null || draft.items().isEmpty()) {

@@ -1,8 +1,6 @@
 package de.karol.plotz.menu;
 
 import de.karol.plotz.data.PlotzStore;
-import de.karol.plotz.service.BalanceManager;
-import de.karol.plotz.service.ScoreboardManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,6 +17,7 @@ import net.minecraft.world.item.component.ItemLore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,33 +57,40 @@ public class PlotzShopMenu extends ChestMenu {
             lore.add(Component.literal("§6Price: $" + listing.price()));
             lore.add(Component.literal("§7Seller: " + listing.sellerName()));
             lore.add(Component.literal("§7Amount: " + stack.getCount()));
+            lore.add(Component.literal("§7Click to view"));
             stack.set(DataComponents.LORE, new ItemLore(lore));
             return stack;
         }
 
         ItemStack boxItem = new ItemStack(Items.SHULKER_BOX);
         boxItem.set(DataComponents.CUSTOM_NAME, Component.literal("§dShop Bundle"));
+
+        Map<String, Integer> grouped = new LinkedHashMap<>();
+        int totalCount = 0;
+
+        for (ItemStack item : listing.items()) {
+            String name = item.getHoverName().getString();
+            grouped.put(name, grouped.getOrDefault(name, 0) + item.getCount());
+            totalCount += item.getCount();
+        }
+
         List<Component> lore = new ArrayList<>();
         lore.add(Component.literal("§6Price: $" + listing.price()));
         lore.add(Component.literal("§7Seller: " + listing.sellerName()));
         lore.add(Component.literal("§7Stacks inside: " + listing.items().size()));
-
-        int totalCount = 0;
-        for (ItemStack item : listing.items()) {
-            totalCount += item.getCount();
-        }
         lore.add(Component.literal("§7Total items: " + totalCount));
 
         int shown = 0;
-        for (ItemStack item : listing.items()) {
+        for (Map.Entry<String, Integer> entry : grouped.entrySet()) {
             if (shown >= 5) {
                 lore.add(Component.literal("§8...and more"));
                 break;
             }
-            lore.add(Component.literal("§f" + item.getHoverName().getString() + " x" + item.getCount()));
+            lore.add(Component.literal("§f" + entry.getValue() + "x " + entry.getKey()));
             shown++;
         }
 
+        lore.add(Component.literal("§7Click to view"));
         boxItem.set(DataComponents.LORE, new ItemLore(lore));
         return boxItem;
     }
@@ -151,32 +157,7 @@ public class PlotzShopMenu extends ChestMenu {
         String listingId = listingIdsBySlot.get(slotId);
         if (listingId == null) return;
 
-        PlotzStore.ShopListing listing = PlotzStore.getShopListingById(listingId);
-        if (listing == null) return;
-
-        if (listing.sellerId().equals(sp.getUUID())) {
-            sp.sendSystemMessage(Component.literal("§cYou cannot buy your own listing."));
-            return;
-        }
-
-        if (!BalanceManager.removeBalance(sp.getUUID(), listing.price())) {
-            sp.sendSystemMessage(Component.literal("§cYou do not have enough money."));
-            return;
-        }
-
-        BalanceManager.addBalance(listing.sellerId(), listing.price());
-        ScoreboardManager.update(sp.server);
-
-        for (ItemStack stack : listing.items()) {
-            ItemStack give = stack.copy();
-            if (!sp.getInventory().add(give)) {
-                sp.drop(give, false);
-            }
-        }
-
-        PlotzStore.removeShopListing(listingId);
-        sp.sendSystemMessage(Component.literal("§aItem(s) bought for $" + listing.price()));
-        open(sp, page);
+        PlotzShopListingDetailMenu.open(sp, listingId, page);
     }
 
     @Override

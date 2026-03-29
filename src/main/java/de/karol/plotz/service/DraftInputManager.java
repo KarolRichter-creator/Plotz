@@ -24,21 +24,25 @@ public final class DraftInputManager {
     public static void waitForPrice(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.PRICE);
         player.sendSystemMessage(Component.literal("§eEnter the price in chat now."));
+        player.closeContainer();
     }
 
     public static void waitForDescription(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.DESCRIPTION);
         player.sendSystemMessage(Component.literal("§eEnter the description in chat now."));
+        player.closeContainer();
     }
 
     public static void waitForBuilt(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.BUILT);
         player.sendSystemMessage(Component.literal("§eEnter what is built on the plot in chat now."));
+        player.closeContainer();
     }
 
     public static void waitForJustification(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.JUSTIFICATION);
         player.sendSystemMessage(Component.literal("§eEnter the price justification in chat now."));
+        player.closeContainer();
     }
 
     public static boolean handleChat(ServerPlayer player, String message) {

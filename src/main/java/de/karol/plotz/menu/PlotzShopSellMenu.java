@@ -134,7 +134,6 @@ public class PlotzShopSellMenu extends ChestMenu {
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         if (!(player instanceof ServerPlayer sp)) return;
 
-        // Nur die untere Steuerleiste des Shop-Menüs blockieren
         if (slotId >= 45 && slotId <= 53) {
             if (slotId == 49) {
                 saveDraftFromContainer();
@@ -143,6 +142,8 @@ public class PlotzShopSellMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal("§cPut items in first."));
                     return;
                 }
+
+                clearSellArea();
                 ShopInputManager.waitForPrice(sp);
                 return;
             }
@@ -172,6 +173,7 @@ public class PlotzShopSellMenu extends ChestMenu {
 
         if (!(player instanceof ServerPlayer sp)) return;
         if (published) return;
+        if (ShopInputManager.isTransitioning(sp.getUUID())) return;
 
         List<ItemStack> toReturn = getSellContents();
         clearSellArea();
