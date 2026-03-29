@@ -4,10 +4,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import de.karol.plotz.menu.PlotzMainMenu;
+import de.karol.plotz.menu.PlotzShopMenu;
 import de.karol.plotz.service.BalanceManager;
 import de.karol.plotz.service.CapitalAreaManager;
+import de.karol.plotz.service.DailyRewardManager;
 import de.karol.plotz.service.DraftInputManager;
 import de.karol.plotz.service.OpacBridge;
+import de.karol.plotz.service.ScoreboardManager;
+import de.karol.plotz.service.ShopInputManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
@@ -19,6 +23,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import xaero.pac.common.event.api.OPACServerAddonRegisterEvent;
 
 import java.util.Collection;
@@ -31,6 +37,9 @@ public class PlotzMod {
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
         NeoForge.EVENT_BUS.addListener(this::onOpacAddonRegister);
         NeoForge.EVENT_BUS.addListener(this::onServerChat);
+        NeoForge.EVENT_BUS.addListener(this::onPlayerLogin);
+        NeoForge.EVENT_BUS.addListener(this::onPlayerLogout);
+        NeoForge.EVENT_BUS.addListener(this::onServerStarted);
         System.out.println("[Plotz] Mod gestartet.");
     }
 
@@ -49,6 +58,45 @@ public class PlotzMod {
                     }
 
                     PlotzMainMenu.open(player);
+                    return 1;
+                })
+        );
+
+        dispatcher.register(
+            Commands.literal("shop")
+                .requires(source -> source.hasPermission(0))
+                .executes(ctx -> {
+                    if (!(ctx.getSource().getEntity() instanceof ServerPlayer player)) {
+                        ctx.getSource().sendFailure(Component.literal("Only players can use /shop."));
+                        return 0;
+                    }
+
+                    PlotzShopMenu.open(player);
+                    return 1;
+                })
+        );
+
+        dispatcher.register(
+            Commands.literal("daily")
+                .requires(source -> source.hasPermission(0))
+                .executes(ctx -> {
+                    if (!(ctx.getSource().getEntity() instanceof ServerPlayer player)) {
+                        ctx.getSource().sendFailure(Component.literal("Only players can use /daily."));
+                        return 0;
+                    }
+
+                    if (!DailyRewardManager.canClaim(player.getUUID())) {
+                        long remaining = DailyRewardManager.getRemainingMs(player.getUUID()) / 1000L;
+                        long hours = remaining / 3600L;
+                        long minutes = (remaining % 3600L) / 60L;
+                        player.sendSystemMessage(Component.literal("§cDaily already claimed. Come back in " + hours + "h " + minutes + "m."));
+                        return 0;
+                    }
+
+                    BalanceManager.addBalance(player.getUUID(), 100);
+                    DailyRewardManager.markClaimed(player.getUUID());
+                    ScoreboardManager.update(player.server);
+                    player.sendSystemMessage(Component.literal("§aYou claimed your daily $100."));
                     return 1;
                 })
         );
@@ -84,6 +132,7 @@ public class PlotzMod {
                             }
 
                             BalanceManager.addBalance(target.getId(), amount);
+                            ScoreboardManager.update(sender.server);
 
                             sender.sendSystemMessage(Component.literal("§aYou paid $" + amount + " to " + target.getName() + "."));
                             ServerPlayer onlineTarget = sender.server.getPlayerList().getPlayer(target.getId());
@@ -150,6 +199,7 @@ public class PlotzMod {
                                 GameProfile target = profiles.iterator().next();
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
                                 BalanceManager.setBalance(target.getId(), amount);
+                                ScoreboardManager.update(ctx.getSource().getServer());
                                 ctx.getSource().sendSuccess(() -> Component.literal("§aSet balance of " + target.getName() + " to $" + amount), false);
                                 return 1;
                             }))))
@@ -166,7 +216,28 @@ public class PlotzMod {
                                 GameProfile target = profiles.iterator().next();
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
                                 BalanceManager.addBalance(target.getId(), amount);
+                                ScoreboardManager.update(ctx.getSource().getServer());
                                 ctx.getSource().sendSuccess(() -> Component.literal("§aAdded $" + amount + " to " + target.getName()), false);
+                                return 1;
+                            }))))
+                .then(Commands.literal("removemoney")
+                    .then(Commands.argument("player", GameProfileArgument.gameProfile())
+                        .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                            .executes(ctx -> {
+                                Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(ctx, "player");
+                                if (profiles.isEmpty()) {
+                                    ctx.getSource().sendFailure(Component.literal("Player not found."));
+                                    return 0;
+                                }
+
+                                GameProfile target = profiles.iterator().next();
+                                int amount = IntegerArgumentType.getInteger(ctx, "amount");
+                                if (!BalanceManager.removeBalance(target.getId(), amount)) {
+                                    ctx.getSource().sendFailure(Component.literal("§cPlayer does not have enough money."));
+                                    return 0;
+                                }
+                                ScoreboardManager.update(ctx.getSource().getServer());
+                                ctx.getSource().sendSuccess(() -> Component.literal("§aRemoved $" + amount + " from " + target.getName()), false);
                                 return 1;
                             }))))
         );
@@ -179,10 +250,33 @@ public class PlotzMod {
 
     private void onServerChat(ServerChatEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
-            boolean handled = DraftInputManager.handleChat(player, event.getRawText());
-            if (handled) {
+            boolean handledShop = ShopInputManager.handleChat(player, event.getRawText());
+            if (handledShop) {
+                event.setCanceled(true);
+                return;
+            }
+
+            boolean handledDraft = DraftInputManager.handleChat(player, event.getRawText());
+            if (handledDraft) {
                 event.setCanceled(true);
             }
         }
+    }
+
+    private void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            BalanceManager.setBalance(player.getUUID(), BalanceManager.getBalance(player.getUUID()));
+            ScoreboardManager.update(player.server);
+        }
+    }
+
+    private void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ScoreboardManager.update(player.server);
+        }
+    }
+
+    private void onServerStarted(ServerStartedEvent event) {
+        ScoreboardManager.update(event.getServer());
     }
 }
