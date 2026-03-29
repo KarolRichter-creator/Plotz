@@ -36,34 +36,38 @@ public class PlotzServerModeMenu extends ChestMenu {
         refresh();
     }
 
-    private void refresh() {
+    private void fillBackground() {
         for (int i = 0; i < box.getContainerSize(); i++) {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
+    }
 
-        box.setItem(10, MenuUtil.named(Items.GOLD_BLOCK, "§6Treasury: $" + TreasuryManager.getTreasury()));
+    private void refresh() {
+        fillBackground();
 
-        box.setItem(19, MenuUtil.named(Items.RED_CONCRETE, "§cTax -1%"));
-        box.setItem(20, MenuUtil.named(Items.PAPER, "§7Tax Rate: " + TreasuryManager.getTaxPercent() + "%"));
-        box.setItem(21, MenuUtil.named(Items.LIME_CONCRETE, "§aTax +1%"));
+        box.setItem(4, MenuUtil.named(Items.GOLD_BLOCK, "§6Treasury: $" + TreasuryManager.getTreasury()));
 
-        box.setItem(23, MenuUtil.named(Items.RED_CONCRETE, "§cOverdue -1%"));
-        box.setItem(24, MenuUtil.named(Items.PAPER, "§7Overdue Penalty: " + TreasuryManager.getOverduePenaltyPercent() + "%"));
-        box.setItem(25, MenuUtil.named(Items.LIME_CONCRETE, "§aOverdue +1%"));
+        box.setItem(10, MenuUtil.named(Items.RED_CONCRETE, "§cTax -1%"));
+        box.setItem(11, MenuUtil.named(Items.PAPER, "§7Tax Rate: " + TreasuryManager.getTaxPercent() + "%"));
+        box.setItem(12, MenuUtil.named(Items.LIME_CONCRETE, "§aTax +1%"));
+
+        box.setItem(14, MenuUtil.named(Items.RED_CONCRETE, "§cOverdue -1%"));
+        box.setItem(15, MenuUtil.named(Items.PAPER, "§7Overdue Penalty: " + TreasuryManager.getOverduePenaltyPercent() + "%"));
+        box.setItem(16, MenuUtil.named(Items.LIME_CONCRETE, "§aOverdue +1%"));
 
         box.setItem(28, MenuUtil.named(Items.RED_CONCRETE, "§cCancel -1%"));
         box.setItem(29, MenuUtil.named(Items.PAPER, "§7Cancel Penalty: " + TreasuryManager.getCancelPenaltyPercent() + "%"));
         box.setItem(30, MenuUtil.named(Items.LIME_CONCRETE, "§aCancel +1%"));
 
-        box.setItem(32, MenuUtil.named(Items.RED_CONCRETE, "§cMax Days -1"));
+        box.setItem(32, MenuUtil.named(Items.RED_CONCRETE, "§cDays -1"));
         box.setItem(33, MenuUtil.named(Items.CLOCK, "§7Max Overdue Days: " + TreasuryManager.getMaxOverdueDays()));
-        box.setItem(34, MenuUtil.named(Items.LIME_CONCRETE, "§aMax Days +1"));
+        box.setItem(34, MenuUtil.named(Items.LIME_CONCRETE, "§aDays +1"));
 
         box.setItem(40, MenuUtil.named(Items.EMERALD, "§aCreate Server Job"));
         box.setItem(42, MenuUtil.named(Items.BOOK, "§bOpen Server Jobs"));
-        box.setItem(44, MenuUtil.named(Items.MAP, "§7Server plot sales can be added later"));
-        MenuUtil.putPlayerInfoHead(box, viewer, 45);
+        box.setItem(44, MenuUtil.named(Items.MAP, "§7Server Shop / Plot Sales follow next"));
 
+        MenuUtil.putPlayerInfoHead(box, viewer, 45);
         broadcastChanges();
     }
 
@@ -71,11 +75,11 @@ public class PlotzServerModeMenu extends ChestMenu {
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         if (!(player instanceof ServerPlayer sp)) return;
 
-        if (slotId == 19) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() - 1);
-        if (slotId == 21) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() + 1);
+        if (slotId == 10) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() - 1);
+        if (slotId == 12) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() + 1);
 
-        if (slotId == 23) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() - 1);
-        if (slotId == 25) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() + 1);
+        if (slotId == 14) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() - 1);
+        if (slotId == 16) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() + 1);
 
         if (slotId == 28) TreasuryManager.setCancelPenaltyPercent(TreasuryManager.getCancelPenaltyPercent() - 1);
         if (slotId == 30) TreasuryManager.setCancelPenaltyPercent(TreasuryManager.getCancelPenaltyPercent() + 1);

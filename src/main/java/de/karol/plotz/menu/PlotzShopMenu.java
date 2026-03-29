@@ -1,6 +1,7 @@
 package de.karol.plotz.menu;
 
 import de.karol.plotz.data.PlotzStore;
+import de.karol.plotz.service.TreasuryManager;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,10 +52,16 @@ public class PlotzShopMenu extends ChestMenu {
     }
 
     private ItemStack createDisplayItem(PlotzStore.ShopListing listing) {
+        int base = listing.price();
+        int tax = TreasuryManager.calculateTax(base);
+        int total = TreasuryManager.calculateTotalWithTax(base);
+
         if (listing.items().size() == 1) {
             ItemStack stack = listing.items().get(0).copy();
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.literal("§6Price: $" + listing.price()));
+            lore.add(Component.literal("§6Base Price: $" + base));
+            lore.add(Component.literal("§cTax: $" + tax));
+            lore.add(Component.literal("§aTotal: $" + total));
             lore.add(Component.literal("§7Seller: " + listing.sellerName()));
             lore.add(Component.literal("§7Amount: " + stack.getCount()));
             lore.add(Component.literal("§7Click to view"));
@@ -75,7 +82,9 @@ public class PlotzShopMenu extends ChestMenu {
         }
 
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.literal("§6Price: $" + listing.price()));
+        lore.add(Component.literal("§6Base Price: $" + base));
+        lore.add(Component.literal("§cTax: $" + tax));
+        lore.add(Component.literal("§aTotal: $" + total));
         lore.add(Component.literal("§7Seller: " + listing.sellerName()));
         lore.add(Component.literal("§7Stacks inside: " + listing.items().size()));
         lore.add(Component.literal("§7Total items: " + totalCount));

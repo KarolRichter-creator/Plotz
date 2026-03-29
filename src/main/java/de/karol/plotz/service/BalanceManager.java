@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -79,12 +81,20 @@ public final class BalanceManager {
     }
 
     public static Optional<UUID> resolveKnownPlayer(MinecraftServer server, String name) {
-        GameProfileCache cache = server.getProfileCache();
-        if (cache == null) return Optional.empty();
+        ensureLoaded();
 
-        Optional<GameProfile> profile = cache.get(name);
-        profile.ifPresent(p -> setBalance(p.getId(), getBalance(p.getId())));
-        return profile.map(GameProfile::getId);
+        for (UUID id : getAllBalances().keySet()) {
+            if (SERVER_ACCOUNT_ID.equals(id)) {
+                continue;
+            }
+
+            String display = resolveDisplayName(server, id);
+            if (display.equalsIgnoreCase(name)) {
+                return Optional.of(id);
+            }
+        }
+
+        return Optional.empty();
     }
 
     public static Optional<UUID> resolveKnownAccount(MinecraftServer server, String name) {
@@ -92,7 +102,28 @@ public final class BalanceManager {
             setBalance(SERVER_ACCOUNT_ID, getBalance(SERVER_ACCOUNT_ID));
             return Optional.of(SERVER_ACCOUNT_ID);
         }
+
         return resolveKnownPlayer(server, name);
+    }
+
+    public static List<String> getKnownAccountNames(MinecraftServer server) {
+        ensureLoaded();
+
+        List<String> result = new ArrayList<>();
+        result.add("Server");
+
+        for (UUID id : getAllBalances().keySet()) {
+            if (SERVER_ACCOUNT_ID.equals(id)) {
+                continue;
+            }
+
+            String display = resolveDisplayName(server, id);
+            if (!result.contains(display)) {
+                result.add(display);
+            }
+        }
+
+        return result;
     }
 
     public static String resolveDisplayName(MinecraftServer server, UUID uuid) {

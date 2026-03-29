@@ -50,10 +50,16 @@ public class PlotzShopListingDetailMenu extends ChestMenu {
     }
 
     private ItemStack createPreview(PlotzStore.ShopListing listing) {
+        int base = listing.price();
+        int tax = TreasuryManager.calculateTax(base);
+        int total = TreasuryManager.calculateTotalWithTax(base);
+
         if (listing.items().size() == 1) {
             ItemStack stack = listing.items().get(0).copy();
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.literal("§6Price: $" + listing.price()));
+            lore.add(Component.literal("§6Base Price: $" + base));
+            lore.add(Component.literal("§cTax: $" + tax));
+            lore.add(Component.literal("§aTotal: $" + total));
             lore.add(Component.literal("§7Seller: " + listing.sellerName()));
             lore.add(Component.literal("§7Amount: " + stack.getCount()));
             stack.set(DataComponents.LORE, new ItemLore(lore));
@@ -73,7 +79,9 @@ public class PlotzShopListingDetailMenu extends ChestMenu {
         }
 
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.literal("§6Price: $" + listing.price()));
+        lore.add(Component.literal("§6Base Price: $" + base));
+        lore.add(Component.literal("§cTax: $" + tax));
+        lore.add(Component.literal("§aTotal: $" + total));
         lore.add(Component.literal("§7Seller: " + listing.sellerName()));
         lore.add(Component.literal("§7Stacks inside: " + listing.items().size()));
         lore.add(Component.literal("§7Total items: " + totalCount));
@@ -146,16 +154,16 @@ public class PlotzShopListingDetailMenu extends ChestMenu {
             return;
         }
 
-        if (!BalanceManager.removeBalance(sp.getUUID(), listing.price())) {
+        int total = TreasuryManager.calculateTotalWithTax(listing.price());
+        int tax = TreasuryManager.calculateTax(listing.price());
+
+        if (!BalanceManager.removeBalance(sp.getUUID(), total)) {
             sp.sendSystemMessage(Component.literal("§cYou do not have enough money."));
             return;
         }
 
-        int tax = TreasuryManager.calculateTax(listing.price());
-        int sellerPayout = Math.max(0, listing.price() - tax);
-
         TreasuryManager.addTreasury(tax);
-        BalanceManager.addBalance(listing.sellerId(), sellerPayout);
+        BalanceManager.addBalance(listing.sellerId(), listing.price());
         ScoreboardManager.update(sp.server);
 
         for (ItemStack stack : listing.items()) {
@@ -165,7 +173,7 @@ public class PlotzShopListingDetailMenu extends ChestMenu {
         }
 
         PlotzStore.removeShopListing(listingId);
-        sp.sendSystemMessage(Component.literal("§aItem(s) bought for $" + listing.price() + " §7(Tax: $" + tax + ")"));
+        sp.sendSystemMessage(Component.literal("§aItem(s) bought for $" + total + " §7(Tax: $" + tax + ")"));
         PlotzShopMenu.open(sp, returnPage);
     }
 

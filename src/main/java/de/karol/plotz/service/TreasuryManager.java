@@ -27,6 +27,7 @@ public final class TreasuryManager {
             PROPS.setProperty("cancelPenaltyPercent", "1");
             PROPS.setProperty("maxOverdueDays", "30");
             save();
+            BalanceManager.setBalance(BalanceManager.SERVER_ACCOUNT_ID, 0);
             return;
         }
 
@@ -34,6 +35,9 @@ public final class TreasuryManager {
             PROPS.load(in);
         } catch (IOException ignored) {
         }
+
+        long treasury = readLong("treasury", 0L);
+        BalanceManager.setBalance(BalanceManager.SERVER_ACCOUNT_ID, treasury);
     }
 
     private static void save() {
@@ -48,17 +52,23 @@ public final class TreasuryManager {
 
     public static long getTreasury() {
         ensureLoaded();
-        try {
-            return Long.parseLong(PROPS.getProperty("treasury", "0"));
-        } catch (NumberFormatException e) {
-            return 0L;
+        long treasury = readLong("treasury", 0L);
+        long serverBalance = BalanceManager.getBalance(BalanceManager.SERVER_ACCOUNT_ID);
+
+        if (serverBalance != treasury) {
+            treasury = serverBalance;
+            PROPS.setProperty("treasury", Long.toString(treasury));
+            save();
         }
+
+        return treasury;
     }
 
     public static void setTreasury(long amount) {
         ensureLoaded();
         PROPS.setProperty("treasury", Long.toString(amount));
         save();
+        BalanceManager.setBalance(BalanceManager.SERVER_ACCOUNT_ID, amount);
     }
 
     public static void addTreasury(long amount) {
@@ -110,7 +120,7 @@ public final class TreasuryManager {
     public static int getMaxOverdueDays() {
         ensureLoaded();
         try {
-            return Math.max(1, Integer.parseInt(PROPS.getProperty("maxOverdueDays", "30")));
+            return Math.max(10, Integer.parseInt(PROPS.getProperty("maxOverdueDays", "30")));
         } catch (NumberFormatException e) {
             return 30;
         }
@@ -118,12 +128,16 @@ public final class TreasuryManager {
 
     public static void setMaxOverdueDays(int days) {
         ensureLoaded();
-        PROPS.setProperty("maxOverdueDays", Integer.toString(Math.max(1, days)));
+        PROPS.setProperty("maxOverdueDays", Integer.toString(Math.max(10, days)));
         save();
     }
 
-    public static int calculateTax(int amount) {
-        return (int) Math.floor(amount * (getTaxPercent() / 100.0));
+    public static int calculateTax(int baseAmount) {
+        return (int) Math.floor(baseAmount * (getTaxPercent() / 100.0));
+    }
+
+    public static int calculateTotalWithTax(int baseAmount) {
+        return baseAmount + calculateTax(baseAmount);
     }
 
     public static int calculateCancelPenalty(int reward) {
@@ -137,6 +151,14 @@ public final class TreasuryManager {
     private static int parseClamped(String key, int fallback) {
         try {
             return Math.max(1, Math.min(100, Integer.parseInt(PROPS.getProperty(key, Integer.toString(fallback)))));
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
+    }
+
+    private static long readLong(String key, long fallback) {
+        try {
+            return Long.parseLong(PROPS.getProperty(key, Long.toString(fallback)));
         } catch (NumberFormatException e) {
             return fallback;
         }

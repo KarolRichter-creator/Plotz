@@ -69,17 +69,21 @@ public class PlotzListingDetailMenu extends ChestMenu {
             return;
         }
 
+        int base = listing.price();
+        int tax = TreasuryManager.calculateTax(base);
+        int total = TreasuryManager.calculateTotalWithTax(base);
+
         box.setItem(10, MenuUtil.named(
             listing.capital() ? Items.ENCHANTED_BOOK : Items.BOOK,
             (listing.capital() ? "§6" : "§e") + listing.title()
         ));
-        box.setItem(11, MenuUtil.named(Items.GOLD_INGOT, "§6Price: " + listing.price() + "$"));
-        box.setItem(12, MenuUtil.named(Items.MAP, "§bChunks: " + listing.chunkCount()));
-        box.setItem(13, MenuUtil.named(Items.PAPER, "§7Description: " + listing.description()));
-        box.setItem(14, MenuUtil.named(Items.COMPASS, "§bLocation: " + listing.location()));
-        box.setItem(15, MenuUtil.named(Items.BRICKS, "§7Built on plot: " + listing.builtOnPlot()));
+        box.setItem(11, MenuUtil.named(Items.GOLD_INGOT, "§6Base Price: $" + base));
+        box.setItem(12, MenuUtil.named(Items.REDSTONE, "§cTax: $" + tax));
+        box.setItem(13, MenuUtil.named(Items.EMERALD, "§aTotal: $" + total));
+        box.setItem(14, MenuUtil.named(Items.MAP, "§bChunks: " + listing.chunkCount()));
+        box.setItem(15, MenuUtil.named(Items.COMPASS, "§bLocation: " + listing.location()));
         box.setItem(16, MenuUtil.named(
-            listing.negotiable() ? Items.EMERALD : Items.GOLD_BLOCK,
+            listing.negotiable() ? Items.EMERALD_BLOCK : Items.GOLD_BLOCK,
             listing.negotiable() ? "§aNegotiable" : "§6Fixed Price"
         ));
 
@@ -136,17 +140,17 @@ public class PlotzListingDetailMenu extends ChestMenu {
             return;
         }
 
-        boolean charged = PlotzLogic.tryCharge(sp, listing.price());
+        int total = TreasuryManager.calculateTotalWithTax(listing.price());
+        int tax = TreasuryManager.calculateTax(listing.price());
+
+        boolean charged = PlotzLogic.tryCharge(sp, total);
         if (!charged) {
             sp.sendSystemMessage(Component.literal("§cYou do not have enough money."));
             return;
         }
 
-        int tax = TreasuryManager.calculateTax(listing.price());
-        int sellerPayout = Math.max(0, listing.price() - tax);
-
         TreasuryManager.addTreasury(tax);
-        PlotzLogic.paySeller(sp, listing.sellerName(), sellerPayout);
+        PlotzLogic.paySeller(sp, listing.sellerName(), listing.price());
 
         PlotzStore.addOwnedPlot(new PlotzStore.PlotEntry(
             sp.getUUID(),

@@ -19,6 +19,7 @@ import de.karol.plotz.service.ShopInputManager;
 import de.karol.plotz.service.TreasuryManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -136,6 +137,9 @@ public class PlotzMod {
             Commands.literal("pay")
                 .requires(source -> source.hasPermission(0))
                 .then(Commands.argument("player", StringArgumentType.word())
+                    .suggests((ctx, builder) ->
+                        SharedSuggestionProvider.suggest(BalanceManager.getKnownAccountNames(ctx.getSource().getServer()), builder)
+                    )
                     .then(Commands.argument("amount", IntegerArgumentType.integer(1))
                         .executes(ctx -> {
                             if (!(ctx.getSource().getEntity() instanceof ServerPlayer sender)) {
@@ -218,12 +222,22 @@ public class PlotzMod {
                 }))
                 .then(Commands.literal("setmoney")
                     .then(Commands.argument("account", StringArgumentType.word())
+                        .suggests((ctx, builder) ->
+                            SharedSuggestionProvider.suggest(BalanceManager.getKnownAccountNames(ctx.getSource().getServer()), builder)
+                        )
                         .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                             .executes(ctx -> {
                                 String account = StringArgumentType.getString(ctx, "account");
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
 
-                                Optional<UUID> target = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
+                                if (account.equalsIgnoreCase("server")) {
+                                    TreasuryManager.setTreasury(amount);
+                                    ScoreboardManager.update(ctx.getSource().getServer());
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§aSet Treasury to $" + amount), false);
+                                    return 1;
+                                }
+
+                                Optional<UUID> target = BalanceManager.resolveKnownPlayer(ctx.getSource().getServer(), account);
                                 if (target.isEmpty()) {
                                     ctx.getSource().sendFailure(Component.literal("§cOnly known players or Server are allowed."));
                                     return 0;
@@ -236,12 +250,22 @@ public class PlotzMod {
                             }))))
                 .then(Commands.literal("addmoney")
                     .then(Commands.argument("account", StringArgumentType.word())
+                        .suggests((ctx, builder) ->
+                            SharedSuggestionProvider.suggest(BalanceManager.getKnownAccountNames(ctx.getSource().getServer()), builder)
+                        )
                         .then(Commands.argument("amount", IntegerArgumentType.integer(1))
                             .executes(ctx -> {
                                 String account = StringArgumentType.getString(ctx, "account");
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
 
-                                Optional<UUID> target = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
+                                if (account.equalsIgnoreCase("server")) {
+                                    TreasuryManager.addTreasury(amount);
+                                    ScoreboardManager.update(ctx.getSource().getServer());
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§aAdded $" + amount + " to Treasury"), false);
+                                    return 1;
+                                }
+
+                                Optional<UUID> target = BalanceManager.resolveKnownPlayer(ctx.getSource().getServer(), account);
                                 if (target.isEmpty()) {
                                     ctx.getSource().sendFailure(Component.literal("§cOnly known players or Server are allowed."));
                                     return 0;
@@ -254,12 +278,25 @@ public class PlotzMod {
                             }))))
                 .then(Commands.literal("removemoney")
                     .then(Commands.argument("account", StringArgumentType.word())
+                        .suggests((ctx, builder) ->
+                            SharedSuggestionProvider.suggest(BalanceManager.getKnownAccountNames(ctx.getSource().getServer()), builder)
+                        )
                         .then(Commands.argument("amount", IntegerArgumentType.integer(1))
                             .executes(ctx -> {
                                 String account = StringArgumentType.getString(ctx, "account");
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
 
-                                Optional<UUID> target = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
+                                if (account.equalsIgnoreCase("server")) {
+                                    if (!TreasuryManager.removeTreasury(amount)) {
+                                        ctx.getSource().sendFailure(Component.literal("§cTreasury does not have enough money."));
+                                        return 0;
+                                    }
+                                    ScoreboardManager.update(ctx.getSource().getServer());
+                                    ctx.getSource().sendSuccess(() -> Component.literal("§aRemoved $" + amount + " from Treasury"), false);
+                                    return 1;
+                                }
+
+                                Optional<UUID> target = BalanceManager.resolveKnownPlayer(ctx.getSource().getServer(), account);
                                 if (target.isEmpty()) {
                                     ctx.getSource().sendFailure(Component.literal("§cOnly known players or Server are allowed."));
                                     return 0;

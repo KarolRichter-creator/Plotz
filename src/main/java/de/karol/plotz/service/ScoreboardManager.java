@@ -25,6 +25,7 @@ public final class ScoreboardManager {
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
 
             List<Map.Entry<UUID, Long>> entries = new ArrayList<>(BalanceManager.getAllBalances().entrySet());
+            entries.removeIf(e -> BalanceManager.SERVER_ACCOUNT_ID.equals(e.getKey()));
             entries.sort(Map.Entry.<UUID, Long>comparingByValue(Comparator.reverseOrder()));
 
             int count = 0;
@@ -39,6 +40,8 @@ public final class ScoreboardManager {
                 count++;
             }
 
+            long treasury = TreasuryManager.getTreasury();
+            server.getCommands().performPrefixedCommand(source, "scoreboard players set Treasury " + OBJECTIVE + " " + treasury);
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
         } catch (Exception ignored) {
         }
