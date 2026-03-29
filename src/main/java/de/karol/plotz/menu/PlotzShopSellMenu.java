@@ -38,11 +38,26 @@ public class PlotzShopSellMenu extends ChestMenu {
         super(MenuType.GENERIC_9x6, containerId, inventory, box, 6);
         this.viewer = viewer;
         this.box = box;
+        restoreDraftItems();
         refresh();
     }
 
+    private void restoreDraftItems() {
+        PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(viewer.getUUID());
+        if (draft == null) {
+            return;
+        }
+
+        int slot = 0;
+        for (ItemStack stack : draft.items()) {
+            if (slot >= 45) break;
+            box.setItem(slot, stack.copy());
+            slot++;
+        }
+    }
+
     private void refresh() {
-        for (int i = 27; i < box.getContainerSize(); i++) {
+        for (int i = 45; i < box.getContainerSize(); i++) {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
 
@@ -59,25 +74,26 @@ public class PlotzShopSellMenu extends ChestMenu {
         broadcastChanges();
     }
 
-    private ItemStack getFirstSellItem() {
-        for (int i = 0; i < 27; i++) {
+    private List<ItemStack> getSellContents() {
+        List<ItemStack> result = new ArrayList<>();
+        for (int i = 0; i < 45; i++) {
             ItemStack stack = box.getItem(i);
             if (!stack.isEmpty()) {
-                return stack.copy();
+                result.add(stack.copy());
             }
         }
-        return ItemStack.EMPTY;
+        return result;
     }
 
     private void clearSellArea() {
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 45; i++) {
             box.setItem(i, ItemStack.EMPTY);
         }
     }
 
     private void saveDraftFromContainer() {
-        ItemStack item = getFirstSellItem();
-        if (item.isEmpty()) {
+        List<ItemStack> items = getSellContents();
+        if (items.isEmpty()) {
             return;
         }
 
@@ -87,15 +103,15 @@ public class PlotzShopSellMenu extends ChestMenu {
         PlotzStore.setShopDraft(new PlotzStore.ShopDraft(
             viewer.getUUID(),
             viewer.getGameProfile().getName(),
-            item.copy(),
+            items,
             price
         ));
     }
 
     private void publish() {
         PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(viewer.getUUID());
-        if (draft == null || draft.item().isEmpty()) {
-            viewer.sendSystemMessage(Component.literal("§cPut an item in first."));
+        if (draft == null || draft.items().isEmpty()) {
+            viewer.sendSystemMessage(Component.literal("§cPut items in first."));
             return;
         }
 
@@ -103,7 +119,7 @@ public class PlotzShopSellMenu extends ChestMenu {
             UUID.randomUUID().toString(),
             viewer.getUUID(),
             viewer.getGameProfile().getName(),
-            draft.item().copy(),
+            draft.items(),
             draft.price()
         ));
 
@@ -116,31 +132,36 @@ public class PlotzShopSellMenu extends ChestMenu {
 
     @Override
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        super.clicked(slotId, button, clickType, player);
-
         if (!(player instanceof ServerPlayer sp)) return;
 
-        if (slotId == 49) {
-            saveDraftFromContainer();
-            if (PlotzStore.getShopDraft(sp.getUUID()) == null) {
-                sp.sendSystemMessage(Component.literal("§cPut an item in first."));
+        if (slotId >= 45) {
+            if (slotId == 49) {
+                saveDraftFromContainer();
+                PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(sp.getUUID());
+                if (draft == null || draft.items().isEmpty()) {
+                    sp.sendSystemMessage(Component.literal("§cPut items in first."));
+                    return;
+                }
+                ShopInputManager.waitForPrice(sp);
                 return;
             }
-            ShopInputManager.waitForPrice(sp);
+
+            if (slotId == 50) {
+                saveDraftFromContainer();
+                publish();
+                return;
+            }
+
+            if (slotId == 53) {
+                PlotzShopMenu.open(sp);
+                return;
+            }
+
             return;
         }
 
-        if (slotId == 50) {
-            saveDraftFromContainer();
-            publish();
-            return;
-        }
-
-        if (slotId == 53) {
-            PlotzShopMenu.open(sp);
-            return;
-        }
-
+        super.clicked(slotId, button, clickType, player);
+        saveDraftFromContainer();
         refresh();
     }
 
@@ -151,19 +172,12 @@ public class PlotzShopSellMenu extends ChestMenu {
         if (!(player instanceof ServerPlayer sp)) return;
         if (published) return;
 
-        List<ItemStack> toReturn = new ArrayList<>();
-        for (int i = 0; i < 27; i++) {
-            ItemStack stack = box.getItem(i);
-            if (!stack.isEmpty()) {
-                toReturn.add(stack.copy());
-            }
-        }
-
+        List<ItemStack> toReturn = getSellContents();
         clearSellArea();
 
         for (ItemStack stack : toReturn) {
-            if (!sp.getInventory().add(stack)) {
-                sp.drop(stack, false);
+            if (!sp.getInventory().add(stack.copy())) {
+                sp.drop(stack.copy(), false);
             }
         }
     }

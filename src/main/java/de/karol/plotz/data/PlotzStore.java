@@ -225,9 +225,29 @@ public final class PlotzStore {
         SHOP_DRAFTS.put(playerId, new ShopDraft(
             draft.ownerId(),
             draft.ownerName(),
-            draft.item().copy(),
+            copyStacks(draft.items()),
             price
         ));
+    }
+
+    public static void updateShopDraftItems(UUID playerId, List<ItemStack> items) {
+        ShopDraft draft = SHOP_DRAFTS.get(playerId);
+        int price = draft == null ? 100 : draft.price();
+        String ownerName = draft == null ? "Unknown" : draft.ownerName();
+        SHOP_DRAFTS.put(playerId, new ShopDraft(
+            playerId,
+            ownerName,
+            copyStacks(items),
+            price
+        ));
+    }
+
+    private static List<ItemStack> copyStacks(List<ItemStack> items) {
+        List<ItemStack> copied = new ArrayList<>();
+        for (ItemStack stack : items) {
+            if (!stack.isEmpty()) copied.add(stack.copy());
+        }
+        return copied;
     }
 
     public record PlotEntry(
@@ -273,14 +293,14 @@ public final class PlotzStore {
         String listingId,
         UUID sellerId,
         String sellerName,
-        ItemStack item,
+        List<ItemStack> items,
         int price
     ) {}
 
     public record ShopDraft(
         UUID ownerId,
         String ownerName,
-        ItemStack item,
+        List<ItemStack> items,
         int price
     ) {}
 }

@@ -35,15 +35,19 @@ public final class ScoreboardManager {
                 if (count >= 5) break;
 
                 String name = resolveName(server, entry.getKey());
-                String fake = "\"" + (count + 1) + ". " + name + "\"";
+                String fakeName = (count + 1) + "." + sanitize(name);
                 server.getCommands().performPrefixedCommand(
                     source,
-                    "scoreboard players set " + fake + " " + OBJECTIVE + " " + entry.getValue()
+                    "scoreboard players set " + fakeName + " " + OBJECTIVE + " " + entry.getValue()
                 );
                 count++;
             }
         } catch (Exception ignored) {
         }
+    }
+
+    private static String sanitize(String input) {
+        return input.replaceAll("[^A-Za-z0-9_]", "_");
     }
 
     private static String resolveName(MinecraftServer server, UUID uuid) {

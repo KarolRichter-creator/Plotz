@@ -27,7 +27,7 @@ public final class ShopInputManager {
         WAITING_FOR_PRICE.remove(player.getUUID());
 
         PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(player.getUUID());
-        if (draft == null) {
+        if (draft == null || draft.items().isEmpty()) {
             player.sendSystemMessage(Component.literal("§cNo shop draft selected."));
             return true;
         }

@@ -3,6 +3,7 @@ package de.karol.plotz.menu;
 import de.karol.plotz.data.PlotzStore;
 import de.karol.plotz.service.BalanceManager;
 import de.karol.plotz.service.ScoreboardManager;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -14,7 +15,9 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemLore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +51,44 @@ public class PlotzShopMenu extends ChestMenu {
         refresh();
     }
 
+    private ItemStack createDisplayItem(PlotzStore.ShopListing listing) {
+        if (listing.items().size() == 1) {
+            ItemStack stack = listing.items().get(0).copy();
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.literal("§6Price: $" + listing.price()));
+            lore.add(Component.literal("§7Seller: " + listing.sellerName()));
+            lore.add(Component.literal("§7Amount: " + stack.getCount()));
+            stack.set(DataComponents.LORE, new ItemLore(lore));
+            return stack;
+        }
+
+        ItemStack boxItem = new ItemStack(Items.SHULKER_BOX);
+        boxItem.set(DataComponents.CUSTOM_NAME, Component.literal("§dShop Bundle"));
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.literal("§6Price: $" + listing.price()));
+        lore.add(Component.literal("§7Seller: " + listing.sellerName()));
+        lore.add(Component.literal("§7Stacks inside: " + listing.items().size()));
+
+        int totalCount = 0;
+        for (ItemStack item : listing.items()) {
+            totalCount += item.getCount();
+        }
+        lore.add(Component.literal("§7Total items: " + totalCount));
+
+        int shown = 0;
+        for (ItemStack item : listing.items()) {
+            if (shown >= 5) {
+                lore.add(Component.literal("§8...and more"));
+                break;
+            }
+            lore.add(Component.literal("§f" + item.getHoverName().getString() + " x" + item.getCount()));
+            shown++;
+        }
+
+        boxItem.set(DataComponents.LORE, new ItemLore(lore));
+        return boxItem;
+    }
+
     private void refresh() {
         listingIdsBySlot.clear();
 
@@ -56,18 +97,15 @@ public class PlotzShopMenu extends ChestMenu {
         }
 
         List<PlotzStore.ShopListing> listings = PlotzStore.getShopListings();
-        int start = page * 28;
-        int end = Math.min(start + 28, listings.size());
+        int start = page * 45;
+        int end = Math.min(start + 45, listings.size());
 
-        int slot = 10;
+        int slot = 0;
         for (int i = start; i < end; i++) {
-            if (slot % 9 == 8) slot++;
-            if (slot >= 44) break;
+            if (slot >= 45) break;
 
             PlotzStore.ShopListing listing = listings.get(i);
-            ItemStack display = listing.item().copy();
-            display.setCount(Math.min(display.getCount(), display.getMaxStackSize()));
-            box.setItem(slot, display);
+            box.setItem(slot, createDisplayItem(listing));
             listingIdsBySlot.put(slot, listing.listingId());
             slot++;
         }
@@ -99,7 +137,7 @@ public class PlotzShopMenu extends ChestMenu {
         }
 
         if (slotId == 52) {
-            if ((page + 1) * 28 < PlotzStore.getShopListings().size()) {
+            if ((page + 1) * 45 < PlotzStore.getShopListings().size()) {
                 open(sp, page + 1);
             }
             return;
@@ -129,14 +167,15 @@ public class PlotzShopMenu extends ChestMenu {
         BalanceManager.addBalance(listing.sellerId(), listing.price());
         ScoreboardManager.update(sp.server);
 
-        ItemStack bought = listing.item().copy();
-        boolean added = sp.getInventory().add(bought);
-        if (!added) {
-            sp.drop(bought, false);
+        for (ItemStack stack : listing.items()) {
+            ItemStack give = stack.copy();
+            if (!sp.getInventory().add(give)) {
+                sp.drop(give, false);
+            }
         }
 
         PlotzStore.removeShopListing(listingId);
-        sp.sendSystemMessage(Component.literal("§aItem bought for $" + listing.price()));
+        sp.sendSystemMessage(Component.literal("§aItem(s) bought for $" + listing.price()));
         open(sp, page);
     }
 
