@@ -49,8 +49,17 @@ public class PlotzServerModeMenu extends ChestMenu {
         box.setItem(4, MenuUtil.named(Items.GOLD_BLOCK, "§6Treasury: $" + TreasuryManager.getTreasury()));
 
         box.setItem(10, MenuUtil.named(Items.RED_CONCRETE, "§cTax -1%"));
-        box.setItem(11, MenuUtil.named(Items.PAPER, "§7Tax Rate: " + TreasuryManager.getTaxPercent() + "%"));
+        box.setItem(11, MenuUtil.named(
+            AdminSettingsManager.autoTaxEnabled() ? Items.COMPASS : Items.PAPER,
+            "§7Tax Rate: " + TreasuryManager.getTaxPercent() + "% " +
+                (AdminSettingsManager.autoTaxEnabled() ? "§8(Auto)" : "§8(Manual)")
+        ));
         box.setItem(12, MenuUtil.named(Items.LIME_CONCRETE, "§aTax +1%"));
+        box.setItem(13, MenuUtil.named(
+            AdminSettingsManager.autoTaxEnabled() ? Items.LIME_DYE : Items.GRAY_DYE,
+            (AdminSettingsManager.autoTaxEnabled() ? "§a" : "§7") + "Auto Tax: " +
+                (AdminSettingsManager.autoTaxEnabled() ? "ON" : "OFF")
+        ));
 
         box.setItem(14, MenuUtil.named(Items.RED_CONCRETE, "§cOverdue -1%"));
         box.setItem(15, MenuUtil.named(Items.PAPER, "§7Overdue Penalty: " + TreasuryManager.getOverduePenaltyPercent() + "%"));
@@ -80,8 +89,15 @@ public class PlotzServerModeMenu extends ChestMenu {
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         if (!(player instanceof ServerPlayer sp)) return;
 
-        if (slotId == 10) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() - 1);
-        if (slotId == 12) TreasuryManager.setTaxPercent(TreasuryManager.getTaxPercent() + 1);
+        if (slotId == 10 && !AdminSettingsManager.autoTaxEnabled()) {
+            TreasuryManager.setTaxPercent(TreasuryManager.getManualTaxPercent() - 1);
+        }
+        if (slotId == 12 && !AdminSettingsManager.autoTaxEnabled()) {
+            TreasuryManager.setTaxPercent(TreasuryManager.getManualTaxPercent() + 1);
+        }
+        if (slotId == 13) {
+            AdminSettingsManager.setAutoTaxEnabled(!AdminSettingsManager.autoTaxEnabled());
+        }
 
         if (slotId == 14) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() - 1);
         if (slotId == 16) TreasuryManager.setOverduePenaltyPercent(TreasuryManager.getOverduePenaltyPercent() + 1);

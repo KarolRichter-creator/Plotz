@@ -91,10 +91,10 @@ public class PlotzJobDetailMenu extends ChestMenu {
 
         boolean creator = job.creatorId() != null && job.creatorId().equals(viewer.getUUID());
         boolean worker = job.workerId() != null && job.workerId().equals(viewer.getUUID());
-        boolean admin = viewer.hasPermissions(2);
+        boolean serverModeManage = serverOnly && viewer.hasPermissions(2);
 
         if (job.status() == JobManager.JobStatus.OPEN) {
-            if (job.serverJob() && admin) {
+            if (serverModeManage && job.serverJob()) {
                 if (JobManager.canAcceptNow(job)) {
                     box.setItem(23, MenuUtil.named(Items.LIME_CONCRETE, "§aAccept Server Job"));
                 } else {
@@ -118,7 +118,7 @@ public class PlotzJobDetailMenu extends ChestMenu {
                 box.setItem(23, MenuUtil.named(Items.NAME_TAG, "§7In Progress by " + job.workerName()));
             }
         } else if (job.status() == JobManager.JobStatus.COMPLETED) {
-            if (creator || admin || (job.serverJob() && admin)) {
+            if (creator || serverModeManage) {
                 box.setItem(23, MenuUtil.named(Items.LIME_CONCRETE, "§aConfirm Job"));
             } else {
                 box.setItem(23, MenuUtil.named(Items.NAME_TAG, "§7Waiting for confirmation"));
@@ -147,19 +147,21 @@ public class PlotzJobDetailMenu extends ChestMenu {
 
         boolean creator = job.creatorId() != null && job.creatorId().equals(sp.getUUID());
         boolean worker = job.workerId() != null && job.workerId().equals(sp.getUUID());
-        boolean admin = sp.hasPermissions(2);
+        boolean serverModeManage = serverOnly && sp.hasPermissions(2);
 
         if (slotId == 23) {
             if (job.status() == JobManager.JobStatus.OPEN) {
-                if (job.serverJob() && admin) {
+                if (job.serverJob() && serverModeManage) {
                     if (!JobManager.canAcceptNow(job)) {
                         sp.sendSystemMessage(Component.literal("§cThis job cannot be accepted yet."));
                         return;
                     }
+
                     if (!JobManager.acceptJob(jobId, sp.getUUID(), sp.getGameProfile().getName())) {
                         sp.sendSystemMessage(Component.literal("§cThis job is no longer open."));
                         return;
                     }
+
                     sp.sendSystemMessage(Component.literal("§aYou accepted the server job."));
                     PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                     return;
@@ -170,6 +172,7 @@ public class PlotzJobDetailMenu extends ChestMenu {
                         sp.sendSystemMessage(Component.literal("§cCould not withdraw job."));
                         return;
                     }
+
                     sp.sendSystemMessage(Component.literal("§aJob withdrawn."));
                     PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                     return;
@@ -200,16 +203,18 @@ public class PlotzJobDetailMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal("§cCould not mark job as completed."));
                     return;
                 }
+
                 sp.sendSystemMessage(Component.literal("§aJob marked as completed."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;
             }
 
-            if (job.status() == JobManager.JobStatus.COMPLETED && (creator || admin || (job.serverJob() && admin))) {
+            if (job.status() == JobManager.JobStatus.COMPLETED && (creator || serverModeManage)) {
                 if (!JobManager.confirmJob(jobId)) {
                     sp.sendSystemMessage(Component.literal("§cCould not confirm job."));
                     return;
                 }
+
                 sp.sendSystemMessage(Component.literal("§aJob confirmed."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;
@@ -217,11 +222,12 @@ public class PlotzJobDetailMenu extends ChestMenu {
         }
 
         if (slotId == 24) {
-            if (job.status() == JobManager.JobStatus.OPEN && job.serverJob() && admin) {
+            if (job.status() == JobManager.JobStatus.OPEN && job.serverJob() && serverModeManage) {
                 if (!JobManager.withdrawByCreator(jobId)) {
                     sp.sendSystemMessage(Component.literal("§cCould not withdraw job."));
                     return;
                 }
+
                 sp.sendSystemMessage(Component.literal("§aServer job withdrawn."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;

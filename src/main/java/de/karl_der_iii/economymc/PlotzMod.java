@@ -165,9 +165,9 @@ public class PlotzMod {
                                 String name = StringArgumentType.getString(ctx, "player");
                                 int amount = IntegerArgumentType.getInteger(ctx, "amount");
 
-                                Optional<UUID> resolved = BalanceManager.resolveKnownPlayer(sender.server, name);
+                                Optional<UUID> resolved = BalanceManager.resolveKnownAccount(sender.server, name);
                                 if (resolved.isEmpty()) {
-                                    ctx.getSource().sendFailure(Component.literal("§cOnly players who already joined this world can receive money."));
+                                    ctx.getSource().sendFailure(Component.literal("§cOnly known players or Treasury can receive money."));
                                     return 0;
                                 }
 
@@ -185,7 +185,9 @@ public class PlotzMod {
                                 BalanceManager.addBalance(targetId, amount);
                                 ScoreboardManager.update(sender.server);
 
-                                sender.sendSystemMessage(Component.literal("§aYou paid $" + amount + " to " + name + "."));
+                                String targetName = BalanceManager.resolveDisplayName(sender.server, targetId);
+                                sender.sendSystemMessage(Component.literal("§aYou paid $" + amount + " to " + targetName + "."));
+
                                 ServerPlayer onlineTarget = sender.server.getPlayerList().getPlayer(targetId);
                                 if (onlineTarget != null) {
                                     onlineTarget.sendSystemMessage(Component.literal("§aYou received $" + amount + " from " + sender.getGameProfile().getName() + "."));

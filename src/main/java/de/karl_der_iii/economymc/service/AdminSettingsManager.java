@@ -30,6 +30,7 @@ public final class AdminSettingsManager {
             PROPS.setProperty("minOverduePercent", "1");
             PROPS.setProperty("minCancelPercent", "1");
             PROPS.setProperty("jobAcceptHour", "2");
+            PROPS.setProperty("autoTaxEnabled", "true");
             save();
             return;
         }
@@ -102,6 +103,17 @@ public final class AdminSettingsManager {
     public static void setServerModeEnabled(boolean value) {
         ensureLoaded();
         PROPS.setProperty("serverModeEnabled", Boolean.toString(value));
+        save();
+    }
+
+    public static boolean autoTaxEnabled() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("autoTaxEnabled", "true"));
+    }
+
+    public static void setAutoTaxEnabled(boolean value) {
+        ensureLoaded();
+        PROPS.setProperty("autoTaxEnabled", Boolean.toString(value));
         save();
     }
 

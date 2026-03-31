@@ -86,6 +86,16 @@ public final class TreasuryManager {
 
     public static int getTaxPercent() {
         ensureLoaded();
+
+        if (AdminSettingsManager.autoTaxEnabled()) {
+            return computeAutoTaxPercent();
+        }
+
+        return parseClamped("taxPercent", AdminSettingsManager.minTaxPercent());
+    }
+
+    public static int getManualTaxPercent() {
+        ensureLoaded();
         return parseClamped("taxPercent", AdminSettingsManager.minTaxPercent());
     }
 
@@ -146,6 +156,18 @@ public final class TreasuryManager {
 
     public static int calculateOverdueReduction(int reward, long overdueDays) {
         return (int) Math.floor(reward * ((getOverduePenaltyPercent() / 100.0) * overdueDays));
+    }
+
+    private static int computeAutoTaxPercent() {
+        long treasury = getTreasury();
+        int min = AdminSettingsManager.minTaxPercent();
+
+        if (treasury >= 200000L) return min;
+        if (treasury >= 100000L) return Math.max(min, 2);
+        if (treasury >= 50000L) return Math.max(min, 3);
+        if (treasury >= 20000L) return Math.max(min, 4);
+        if (treasury >= 10000L) return Math.max(min, 5);
+        return Math.max(min, 6);
     }
 
     private static int parseClamped(String key, int fallback) {
