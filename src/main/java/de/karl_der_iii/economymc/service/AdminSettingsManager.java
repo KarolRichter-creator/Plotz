@@ -20,7 +20,12 @@ public final class AdminSettingsManager {
         "en_us",
         "pl_pl",
         "fr_fr",
-        "es_es"
+        "es_es",
+        "pt_br",
+        "ru_ru",
+        "tr_tr",
+        "zh_cn",
+        "ja_jp"
     );
 
     private AdminSettingsManager() {}
