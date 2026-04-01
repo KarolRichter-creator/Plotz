@@ -77,6 +77,7 @@ public final class CheckManager {
         PROPS.setProperty(base + "redeemedBy", "");
         save();
 
+        TransactionHistoryManager.add(creatorId, LanguageManager.format("history.check.create", amount));
         return getCheck(id);
     }
 
@@ -121,6 +122,7 @@ public final class CheckManager {
         save();
 
         BalanceManager.addBalance(redeemerId, entry.amount());
+        TransactionHistoryManager.add(redeemerId, LanguageManager.format("history.check.redeem", entry.amount()));
         return true;
     }
 }

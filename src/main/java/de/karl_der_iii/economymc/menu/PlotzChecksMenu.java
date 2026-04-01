@@ -2,6 +2,7 @@ package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.service.CheckManager;
 import de.karl_der_iii.economymc.service.ChecksInputManager;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -27,7 +28,7 @@ public class PlotzChecksMenu extends ChestMenu {
     public static void open(ServerPlayer player, int page) {
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzChecksMenu(containerId, inventory, player, page),
-            Component.literal("Checks")
+            Component.literal(LanguageManager.tr("checks.menu.title"))
         ));
     }
 

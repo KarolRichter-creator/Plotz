@@ -1,6 +1,7 @@
 package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.service.AdminSettingsManager;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -20,7 +21,7 @@ public class PlotzAdminModeMenu extends ChestMenu {
     public static void open(ServerPlayer player) {
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzAdminModeMenu(containerId, inventory, player),
-            Component.literal("Plotz Admin Mode")
+            Component.literal(LanguageManager.tr("admin.mode.title"))
         ));
     }
 
@@ -54,6 +55,9 @@ public class PlotzAdminModeMenu extends ChestMenu {
         box.setItem(17, MenuUtil.named(Items.PAPER, "§7Min Overdue: " + AdminSettingsManager.minOverduePercent() + "%"));
         box.setItem(18, MenuUtil.named(Items.PAPER, "§7Min Cancel: " + AdminSettingsManager.minCancelPercent() + "%"));
 
+        box.setItem(20, MenuUtil.named(Items.GLOBE_BANNER_PATTERN, LanguageManager.currentLanguageLabel()));
+        box.setItem(21, MenuUtil.named(Items.WRITABLE_BOOK, LanguageManager.tr("admin.language.toggle")));
+
         MenuUtil.putPlayerInfoHead(box, viewer, 22);
         broadcastChanges();
     }
@@ -71,6 +75,10 @@ public class PlotzAdminModeMenu extends ChestMenu {
         if (slotId == 16) AdminSettingsManager.setMinTaxPercent((AdminSettingsManager.minTaxPercent() + 1) % 6);
         if (slotId == 17) AdminSettingsManager.setMinOverduePercent((AdminSettingsManager.minOverduePercent() + 1) % 6);
         if (slotId == 18) AdminSettingsManager.setMinCancelPercent((AdminSettingsManager.minCancelPercent() + 1) % 6);
+
+        if (slotId == 20 || slotId == 21) {
+            AdminSettingsManager.setLanguage(AdminSettingsManager.nextLanguage());
+        }
 
         refresh();
     }

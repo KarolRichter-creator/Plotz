@@ -7,12 +7,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Properties;
 
 public final class AdminSettingsManager {
     private static final Path FILE = FMLPaths.CONFIGDIR.get().resolve("economymc-admin.properties");
     private static final Properties PROPS = new Properties();
     private static boolean loaded = false;
+
+    private static final List<String> SUPPORTED_LANGUAGES = List.of(
+        "de_de",
+        "en_us",
+        "pl_pl",
+        "fr_fr",
+        "es_es"
+    );
 
     private AdminSettingsManager() {}
 
@@ -31,6 +40,7 @@ public final class AdminSettingsManager {
             PROPS.setProperty("minCancelPercent", "1");
             PROPS.setProperty("jobAcceptHour", "2");
             PROPS.setProperty("autoTaxEnabled", "true");
+            PROPS.setProperty("language", "de_de");
             save();
             return;
         }
@@ -115,6 +125,32 @@ public final class AdminSettingsManager {
         ensureLoaded();
         PROPS.setProperty("autoTaxEnabled", Boolean.toString(value));
         save();
+    }
+
+    public static String language() {
+        ensureLoaded();
+        String value = PROPS.getProperty("language", "de_de").toLowerCase();
+        return SUPPORTED_LANGUAGES.contains(value) ? value : "de_de";
+    }
+
+    public static void setLanguage(String value) {
+        ensureLoaded();
+        String normalized = value == null ? "de_de" : value.toLowerCase();
+        if (!SUPPORTED_LANGUAGES.contains(normalized)) {
+            normalized = "de_de";
+        }
+        PROPS.setProperty("language", normalized);
+        save();
+    }
+
+    public static String nextLanguage() {
+        ensureLoaded();
+        String current = language();
+        int idx = SUPPORTED_LANGUAGES.indexOf(current);
+        if (idx < 0 || idx + 1 >= SUPPORTED_LANGUAGES.size()) {
+            return SUPPORTED_LANGUAGES.get(0);
+        }
+        return SUPPORTED_LANGUAGES.get(idx + 1);
     }
 
     public static int minTaxPercent() {

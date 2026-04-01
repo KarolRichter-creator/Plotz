@@ -204,6 +204,7 @@ public final class JobManager {
         int finalReward = calculateCurrentReward(job);
         if (job.workerId() != null && finalReward != 0) {
             BalanceManager.addBalanceAllowNegative(job.workerId(), finalReward);
+            TransactionHistoryManager.add(job.workerId(), LanguageManager.format("history.job.reward", finalReward));
         }
 
         int remainder = job.reward() - Math.max(finalReward, 0);
@@ -273,8 +274,10 @@ public final class JobManager {
 
         if (job.serverJob()) {
             TreasuryManager.addTreasury(amount);
+            TransactionHistoryManager.addTreasury(LanguageManager.format("history.job.refund", amount));
         } else if (job.creatorId() != null) {
             BalanceManager.addBalance(job.creatorId(), amount);
+            TransactionHistoryManager.add(job.creatorId(), LanguageManager.format("history.job.refund", amount));
         }
     }
 

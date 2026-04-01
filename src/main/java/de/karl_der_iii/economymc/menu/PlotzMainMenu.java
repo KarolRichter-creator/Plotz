@@ -1,6 +1,7 @@
 package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.data.PlotzStore;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import de.karl_der_iii.economymc.service.OpacBridge;
 import de.karl_der_iii.economymc.service.PlotzLogic;
 import net.minecraft.network.chat.Component;
@@ -25,7 +26,7 @@ public class PlotzMainMenu extends ChestMenu {
     public static void open(ServerPlayer player) {
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzMainMenu(containerId, inventory, player),
-            Component.literal("Plotz")
+            Component.literal(LanguageManager.tr("plots.menu.title"))
         ));
     }
 
@@ -93,12 +94,11 @@ public class PlotzMainMenu extends ChestMenu {
         ));
 
         box.setItem(25, MenuUtil.named(
-            Items.PAPER,
-            "§7Use /plotzadmin pos1, pos2, setcapital to define the capital"
+            Items.CLOCK,
+            LanguageManager.tr("history.open")
         ));
 
         MenuUtil.putPlayerInfoHead(box, viewer, 18);
-
         broadcastChanges();
     }
 
@@ -113,13 +113,8 @@ public class PlotzMainMenu extends ChestMenu {
 
     @Override
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
-        if (!(player instanceof ServerPlayer sp)) {
-            return;
-        }
-
-        if (!clickAllowed()) {
-            return;
-        }
+        if (!(player instanceof ServerPlayer sp)) return;
+        if (!clickAllowed()) return;
 
         if (slotId == 10) {
             boolean charged = PlotzLogic.canBuyNormalCredit(sp);
@@ -164,6 +159,11 @@ public class PlotzMainMenu extends ChestMenu {
 
         if (slotId == 22) {
             PlotzMySalesMenu.open(sp);
+            return;
+        }
+
+        if (slotId == 25) {
+            PlotzHistoryMenu.open(sp, false);
         }
     }
 

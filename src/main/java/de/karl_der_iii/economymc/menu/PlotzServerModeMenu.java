@@ -2,6 +2,7 @@ package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.service.AdminSettingsManager;
 import de.karl_der_iii.economymc.service.JobsInputManager;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import de.karl_der_iii.economymc.service.TreasuryManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +23,7 @@ public class PlotzServerModeMenu extends ChestMenu {
     public static void open(ServerPlayer player) {
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzServerModeMenu(containerId, inventory, player),
-            Component.literal("EC Server Mode")
+            Component.literal(LanguageManager.tr("server.mode.title"))
         ));
     }
 
@@ -80,6 +81,7 @@ public class PlotzServerModeMenu extends ChestMenu {
         box.setItem(40, MenuUtil.named(Items.EMERALD, "§aCreate Server Job"));
         box.setItem(42, MenuUtil.named(Items.BOOK, "§bOpen Server Jobs"));
         box.setItem(44, MenuUtil.named(Items.MAP, "§7Treasury, jobs and taxes"));
+        box.setItem(53, MenuUtil.named(Items.CLOCK, LanguageManager.tr("history.treasury")));
 
         MenuUtil.putPlayerInfoHead(box, viewer, 45);
         broadcastChanges();
@@ -118,6 +120,11 @@ public class PlotzServerModeMenu extends ChestMenu {
 
         if (slotId == 42) {
             PlotzJobsMenu.open(sp, 0, false, true);
+            return;
+        }
+
+        if (slotId == 53) {
+            PlotzHistoryMenu.open(sp, true);
             return;
         }
 

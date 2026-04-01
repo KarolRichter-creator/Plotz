@@ -1,6 +1,7 @@
 package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.service.JobManager;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import de.karl_der_iii.economymc.service.TreasuryManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public class PlotzJobDetailMenu extends ChestMenu {
 
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzJobDetailMenu(containerId, inventory, player, jobId, returnPage, allowCreate, serverOnly),
-            Component.literal("EC Job Details")
+            Component.literal(LanguageManager.tr("job.detail.title"))
         ));
     }
 
@@ -94,7 +95,7 @@ public class PlotzJobDetailMenu extends ChestMenu {
         boolean serverModeManage = serverOnly && viewer.hasPermissions(2);
 
         if (job.status() == JobManager.JobStatus.OPEN) {
-            if (serverModeManage && job.serverJob()) {
+            if (job.serverJob() && serverModeManage) {
                 if (JobManager.canAcceptNow(job)) {
                     box.setItem(23, MenuUtil.named(Items.LIME_CONCRETE, "§aAccept Server Job"));
                 } else {
@@ -156,12 +157,10 @@ public class PlotzJobDetailMenu extends ChestMenu {
                         sp.sendSystemMessage(Component.literal("§cThis job cannot be accepted yet."));
                         return;
                     }
-
                     if (!JobManager.acceptJob(jobId, sp.getUUID(), sp.getGameProfile().getName())) {
                         sp.sendSystemMessage(Component.literal("§cThis job is no longer open."));
                         return;
                     }
-
                     sp.sendSystemMessage(Component.literal("§aYou accepted the server job."));
                     PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                     return;
@@ -172,7 +171,6 @@ public class PlotzJobDetailMenu extends ChestMenu {
                         sp.sendSystemMessage(Component.literal("§cCould not withdraw job."));
                         return;
                     }
-
                     sp.sendSystemMessage(Component.literal("§aJob withdrawn."));
                     PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                     return;
@@ -203,7 +201,6 @@ public class PlotzJobDetailMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal("§cCould not mark job as completed."));
                     return;
                 }
-
                 sp.sendSystemMessage(Component.literal("§aJob marked as completed."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;
@@ -214,7 +211,6 @@ public class PlotzJobDetailMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal("§cCould not confirm job."));
                     return;
                 }
-
                 sp.sendSystemMessage(Component.literal("§aJob confirmed."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;
@@ -227,7 +223,6 @@ public class PlotzJobDetailMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal("§cCould not withdraw job."));
                     return;
                 }
-
                 sp.sendSystemMessage(Component.literal("§aServer job withdrawn."));
                 PlotzJobsMenu.open(sp, returnPage, allowCreate, serverOnly);
                 return;

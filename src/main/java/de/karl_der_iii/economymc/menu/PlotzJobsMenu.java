@@ -2,6 +2,7 @@ package de.karl_der_iii.economymc.menu;
 
 import de.karl_der_iii.economymc.service.JobManager;
 import de.karl_der_iii.economymc.service.JobsInputManager;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -36,7 +37,7 @@ public class PlotzJobsMenu extends ChestMenu {
 
         player.openMenu(new SimpleMenuProvider(
             (containerId, inventory, p) -> new PlotzJobsMenu(containerId, inventory, player, page, allowCreate, serverOnly),
-            Component.literal(serverOnly ? "EC Server Jobs" : "EC Jobs")
+            Component.literal(LanguageManager.tr(serverOnly ? "jobs.server.title" : "jobs.menu.title"))
         ));
     }
 
