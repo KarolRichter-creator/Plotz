@@ -23,25 +23,25 @@ public final class DraftInputManager {
 
     public static void waitForPrice(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.PRICE);
-        player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.price")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.price")));
         player.closeContainer();
     }
 
     public static void waitForDescription(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.DESCRIPTION);
-        player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.description")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.description")));
         player.closeContainer();
     }
 
     public static void waitForBuilt(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.BUILT);
-        player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.built")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.edit")));
         player.closeContainer();
     }
 
     public static void waitForJustification(ServerPlayer player) {
         WAITING.put(player.getUUID(), Mode.JUSTIFICATION);
-        player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.justification")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.edit")));
         player.closeContainer();
     }
 
@@ -51,7 +51,7 @@ public final class DraftInputManager {
 
         PlotzStore.SaleDraft draft = PlotzStore.getDraft(player.getUUID());
         if (draft == null) {
-            player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.no_draft")));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("common.cancel")));
             return true;
         }
 
@@ -60,26 +60,26 @@ public final class DraftInputManager {
                 try {
                     int price = Integer.parseInt(message.trim());
                     if (price <= 0) {
-                        player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.price_positive")));
+                        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.cancel")));
                     } else {
                         PlotzStore.updateDraftPrice(player.getUUID(), price);
-                        player.sendSystemMessage(Component.literal(LanguageManager.format("draft.input.price_set", price)));
+                        player.sendSystemMessage(Component.literal(LanguageManager.tr("common.confirm")));
                     }
                 } catch (NumberFormatException e) {
-                    player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.invalid_number")));
+                    player.sendSystemMessage(Component.literal(LanguageManager.tr("common.cancel")));
                 }
             }
             case DESCRIPTION -> {
                 PlotzStore.updateDraftDescription(player.getUUID(), message);
-                player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.description_set")));
+                player.sendSystemMessage(Component.literal(LanguageManager.tr("common.confirm")));
             }
             case BUILT -> {
                 PlotzStore.updateDraftBuilt(player.getUUID(), message);
-                player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.built_set")));
+                player.sendSystemMessage(Component.literal(LanguageManager.tr("common.confirm")));
             }
             case JUSTIFICATION -> {
                 PlotzStore.updateDraftJustification(player.getUUID(), message);
-                player.sendSystemMessage(Component.literal(LanguageManager.tr("draft.input.justification_set")));
+                player.sendSystemMessage(Component.literal(LanguageManager.tr("common.confirm")));
             }
         }
 
