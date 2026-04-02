@@ -23,6 +23,7 @@ import java.util.UUID;
 
 public class PlotzHistoryMenu extends ChestMenu {
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd.MM HH:mm");
+
     private final ServerPlayer viewer;
     private final SimpleContainer box;
     private final boolean treasuryView;
@@ -54,23 +55,33 @@ public class PlotzHistoryMenu extends ChestMenu {
         UUID owner = treasuryView ? BalanceManager.TREASURY_ACCOUNT_ID : viewer.getUUID();
         List<TransactionHistoryManager.Entry> entries = TransactionHistoryManager.getEntries(owner, 45);
 
-        box.setItem(4, MenuUtil.named(Items.CLOCK, treasuryView ? LanguageManager.tr("history.treasury") : LanguageManager.tr("history.mine")));
+        box.setItem(4, MenuUtil.named(
+            Items.CLOCK,
+            treasuryView ? LanguageManager.tr("history.treasury") : LanguageManager.tr("history.mine")
+        ));
 
         if (entries.isEmpty()) {
             box.setItem(22, MenuUtil.named(Items.BOOK, LanguageManager.tr("history.empty")));
         } else {
             int slot = 0;
             for (TransactionHistoryManager.Entry entry : entries) {
-                String time = FORMAT.format(Instant.ofEpochMilli(entry.timestamp()).atZone(ZoneId.systemDefault()));
-                box.setItem(slot, MenuUtil.named(Items.PAPER, "§7[" + time + "] " + entry.text()));
-                slot++;
                 if (slot >= 45) break;
+                String time = FORMAT.format(Instant.ofEpochMilli(entry.timestamp()).atZone(ZoneId.systemDefault()));
+                box.setItem(slot, MenuUtil.named(
+                    Items.PAPER,
+                    "§7[" + time + "] " + entry.text()
+                ));
+                slot++;
             }
         }
 
         box.setItem(45, MenuUtil.playerInfoHead(viewer));
         box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
-        box.setItem(52, MenuUtil.named(Items.PAPER, treasuryView ? LanguageManager.tr("history.treasury") : LanguageManager.tr("history.mine")));
+        box.setItem(53, MenuUtil.named(
+            Items.PAPER,
+            treasuryView ? LanguageManager.tr("history.treasury") : LanguageManager.tr("history.mine")
+        ));
+
         broadcastChanges();
     }
 

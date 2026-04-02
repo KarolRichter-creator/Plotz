@@ -51,6 +51,8 @@ public class PlotzChecksMenu extends ChestMenu {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
 
+        box.setItem(4, MenuUtil.named(Items.PAPER, LanguageManager.tr("checks.menu.title")));
+
         List<CheckManager.CheckEntry> checks = CheckManager.getAllChecks();
         int start = page * 45;
         int end = Math.min(start + 45, checks.size());
@@ -72,6 +74,7 @@ public class PlotzChecksMenu extends ChestMenu {
         box.setItem(51, MenuUtil.named(Items.PAPER, LanguageManager.tr("common.page") + (page + 1)));
         box.setItem(52, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.next")));
         box.setItem(53, MenuUtil.named(Items.EMERALD, LanguageManager.tr("checks.create")));
+
         broadcastChanges();
     }
 
