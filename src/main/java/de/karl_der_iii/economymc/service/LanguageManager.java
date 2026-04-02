@@ -89,25 +89,6 @@ public final class LanguageManager {
         en.put("shop.input.price_set", "§aShop price set to $");
         en.put("shop.input.invalid_number", "§cThat is not a valid number.");
 
-        en.put("sale.menu.title", "EconomyMC Create Sale Listing");
-        en.put("sale.no_draft", "§cNo sale draft selected");
-        en.put("sale.selected_capital", "§6Selected Capital Plot");
-        en.put("sale.selected_plot", "§7Selected Plot");
-        en.put("sale.plot", "§bPlot: ");
-        en.put("sale.chunks", " Chunks");
-        en.put("sale.set_price", "§eSet Price: $");
-        en.put("sale.set_description", "§7Set Description");
-        en.put("sale.set_built", "§7Set Built On Plot");
-        en.put("sale.set_justification", "§7Set Price Justification");
-        en.put("sale.negotiable", "§aNegotiable");
-        en.put("sale.fixed", "§6Fixed Price");
-        en.put("sale.publish", "§bPublish Listing");
-        en.put("sale.location", "§7Location: ");
-        en.put("sale.clear_draft", "§cClear Draft");
-        en.put("sale.already_listed", "§cThis plot is already listed in the market.");
-        en.put("sale.published", "§aListing published.");
-        en.put("sale.cleared", "§aSale draft cleared.");
-
         en.put("jobs.menu.title", "EconomyMC Jobs");
         en.put("jobs.server.title", "EconomyMC Server Jobs");
         en.put("job.detail.title", "EconomyMC Job Details");
@@ -292,25 +273,6 @@ public final class LanguageManager {
         de.put("shop.input.price_set", "§aShop-Preis gesetzt auf $");
         de.put("shop.input.invalid_number", "§cDas ist keine gültige Zahl.");
 
-        de.put("sale.menu.title", "EconomyMC Verkaufsangebot erstellen");
-        de.put("sale.no_draft", "§cKein Verkaufsentwurf ausgewählt");
-        de.put("sale.selected_capital", "§6Ausgewähltes Hauptstadt-Grundstück");
-        de.put("sale.selected_plot", "§7Ausgewähltes Grundstück");
-        de.put("sale.plot", "§bGrundstück: ");
-        de.put("sale.chunks", " Chunks");
-        de.put("sale.set_price", "§ePreis setzen: $");
-        de.put("sale.set_description", "§7Beschreibung setzen");
-        de.put("sale.set_built", "§7Bebauung setzen");
-        de.put("sale.set_justification", "§7Preisbegründung setzen");
-        de.put("sale.negotiable", "§aVerhandelbar");
-        de.put("sale.fixed", "§6Festpreis");
-        de.put("sale.publish", "§bAngebot veröffentlichen");
-        de.put("sale.location", "§7Ort: ");
-        de.put("sale.clear_draft", "§cEntwurf löschen");
-        de.put("sale.already_listed", "§cDieses Grundstück ist bereits auf dem Markt gelistet.");
-        de.put("sale.published", "§aAngebot veröffentlicht.");
-        de.put("sale.cleared", "§aVerkaufsentwurf gelöscht.");
-
         de.put("jobs.menu.title", "EconomyMC Jobs");
         de.put("jobs.server.title", "EconomyMC Server-Jobs");
         de.put("job.detail.title", "EconomyMC Jobdetails");
@@ -435,15 +397,6 @@ public final class LanguageManager {
         pl.put("common.publish", "§bOpublikuj");
         pl.put("common.sell", "§aSprzedaj");
         pl.put("plots.menu.title", "EconomyMC Działki");
-        pl.put("plots.position.capital", "§6Aktualna pozycja: Strefa stolicy");
-        pl.put("plots.position.normal", "§7Aktualna pozycja: Zwykła strefa");
-        pl.put("plots.buy.normal", "§eKup zwykłe kredyty działki");
-        pl.put("plots.buy.capital", "§6Kup kredyty działki stolicy");
-        pl.put("plots.create.sale", "§aUtwórz ofertę sprzedaży");
-        pl.put("plots.market", "§3Oferty rynku");
-        pl.put("plots.mine", "§bMoje działki");
-        pl.put("plots.sales", "§dMoje sprzedaże");
-        pl.put("plots.history", "§aOtwórz historię");
         pl.put("shop.menu.title", "EconomyMC Sklep");
         pl.put("shop.sell.title", "EconomyMC Sprzedaj przedmiot");
         pl.put("jobs.menu.title", "EconomyMC Zadania");

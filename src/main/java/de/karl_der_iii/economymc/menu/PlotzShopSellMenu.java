@@ -45,9 +45,7 @@ public class PlotzShopSellMenu extends ChestMenu {
 
     private void restoreDraftItems() {
         PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(viewer.getUUID());
-        if (draft == null) {
-            return;
-        }
+        if (draft == null) return;
 
         int slot = 0;
         for (ItemStack stack : draft.items()) {
@@ -79,9 +77,7 @@ public class PlotzShopSellMenu extends ChestMenu {
         List<ItemStack> result = new ArrayList<>();
         for (int i = 0; i < 45; i++) {
             ItemStack stack = box.getItem(i);
-            if (!stack.isEmpty()) {
-                result.add(stack.copy());
-            }
+            if (!stack.isEmpty()) result.add(stack.copy());
         }
         return result;
     }
@@ -94,9 +90,7 @@ public class PlotzShopSellMenu extends ChestMenu {
 
     private void saveDraftFromContainer() {
         List<ItemStack> items = getSellContents();
-        if (items.isEmpty()) {
-            return;
-        }
+        if (items.isEmpty()) return;
 
         PlotzStore.ShopDraft existing = PlotzStore.getShopDraft(viewer.getUUID());
         int price = existing == null ? 100 : existing.price();
@@ -159,7 +153,6 @@ public class PlotzShopSellMenu extends ChestMenu {
                 PlotzShopMenu.open(sp);
                 return;
             }
-
             return;
         }
 

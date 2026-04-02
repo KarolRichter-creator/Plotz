@@ -13,7 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.ResolvableProfile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class MenuUtil {
@@ -25,27 +24,13 @@ public final class MenuUtil {
         return stack;
     }
 
-    public static ItemStack namedWithLore(Item item, String text, List<String> loreLines) {
-        ItemStack stack = new ItemStack(item);
-        stack.set(DataComponents.CUSTOM_NAME, Component.literal(text));
-
-        if (loreLines != null && !loreLines.isEmpty()) {
-            List<Component> lore = new ArrayList<>();
-            for (String line : loreLines) {
-                lore.add(Component.literal(line));
-            }
-            stack.set(DataComponents.LORE, new ItemLore(lore));
-        }
-
-        return stack;
-    }
-
     public static ItemStack playerInfoHead(ServerPlayer player) {
         long balance = EconomyBridge.getBalance(player);
         int normalCredits = PlotzStore.getNormalCredits(player.getUUID());
         int capitalCredits = PlotzStore.getCapitalCredits(player.getUUID());
 
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+
         stack.set(DataComponents.CUSTOM_NAME, Component.literal("§e" + player.getGameProfile().getName()));
         stack.set(
             DataComponents.LORE,
@@ -56,6 +41,7 @@ public final class MenuUtil {
             ))
         );
         stack.set(DataComponents.PROFILE, new ResolvableProfile(player.getGameProfile()));
+
         return stack;
     }
 
