@@ -26,11 +26,11 @@ public class PlotzAdminModeMenu extends ChestMenu {
     }
 
     public PlotzAdminModeMenu(int containerId, Inventory inventory, ServerPlayer viewer) {
-        this(containerId, inventory, viewer, new SimpleContainer(27));
+        this(containerId, inventory, viewer, new SimpleContainer(36));
     }
 
     private PlotzAdminModeMenu(int containerId, Inventory inventory, ServerPlayer viewer, SimpleContainer box) {
-        super(MenuType.GENERIC_9x3, containerId, inventory, box, 3);
+        super(MenuType.GENERIC_9x4, containerId, inventory, box, 4);
         this.viewer = viewer;
         this.box = box;
         refresh();
@@ -48,20 +48,33 @@ public class PlotzAdminModeMenu extends ChestMenu {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
 
+        box.setItem(4, MenuUtil.named(Items.REDSTONE_TORCH, LanguageManager.tr("admin.mode.title")));
+
         box.setItem(10, toggleItem(AdminSettingsManager.jobsEnabled(), LanguageManager.tr("admin.jobs")));
         box.setItem(11, toggleItem(AdminSettingsManager.checksEnabled(), LanguageManager.tr("admin.checks")));
         box.setItem(12, toggleItem(AdminSettingsManager.shopEnabled(), LanguageManager.tr("admin.shop")));
         box.setItem(13, toggleItem(AdminSettingsManager.plotMarketEnabled(), LanguageManager.tr("admin.plot_market")));
         box.setItem(14, toggleItem(AdminSettingsManager.serverModeEnabled(), LanguageManager.tr("admin.server_mode")));
 
-        box.setItem(16, MenuUtil.named(Items.PAPER, LanguageManager.tr("admin.min_tax") + ": " + AdminSettingsManager.minTaxPercent() + "%"));
-        box.setItem(17, MenuUtil.named(Items.PAPER, LanguageManager.tr("admin.min_overdue") + ": " + AdminSettingsManager.minOverduePercent() + "%"));
-        box.setItem(18, MenuUtil.named(Items.PAPER, LanguageManager.tr("admin.min_cancel") + ": " + AdminSettingsManager.minCancelPercent() + "%"));
+        box.setItem(19, MenuUtil.named(
+            Items.PAPER,
+            LanguageManager.tr("admin.min_tax") + ": " + AdminSettingsManager.minTaxPercent() + "%"
+        ));
+        box.setItem(20, MenuUtil.named(
+            Items.PAPER,
+            LanguageManager.tr("admin.min_overdue") + ": " + AdminSettingsManager.minOverduePercent() + "%"
+        ));
+        box.setItem(21, MenuUtil.named(
+            Items.PAPER,
+            LanguageManager.tr("admin.min_cancel") + ": " + AdminSettingsManager.minCancelPercent() + "%"
+        ));
 
-        box.setItem(20, MenuUtil.named(Items.GLOBE_BANNER_PATTERN, LanguageManager.currentLanguageLabel()));
-        box.setItem(21, MenuUtil.named(Items.WRITABLE_BOOK, LanguageManager.tr("admin.language.toggle")));
+        box.setItem(23, MenuUtil.named(Items.GLOBE_BANNER_PATTERN, LanguageManager.currentLanguageLabel()));
+        box.setItem(24, MenuUtil.named(Items.WRITABLE_BOOK, LanguageManager.tr("admin.language.toggle")));
 
-        MenuUtil.putPlayerInfoHead(box, viewer, 22);
+        box.setItem(31, MenuUtil.playerInfoHead(viewer));
+        box.setItem(35, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
+
         broadcastChanges();
     }
 
@@ -75,12 +88,17 @@ public class PlotzAdminModeMenu extends ChestMenu {
         if (slotId == 13) AdminSettingsManager.setPlotMarketEnabled(!AdminSettingsManager.plotMarketEnabled());
         if (slotId == 14) AdminSettingsManager.setServerModeEnabled(!AdminSettingsManager.serverModeEnabled());
 
-        if (slotId == 16) AdminSettingsManager.setMinTaxPercent((AdminSettingsManager.minTaxPercent() + 1) % 6);
-        if (slotId == 17) AdminSettingsManager.setMinOverduePercent((AdminSettingsManager.minOverduePercent() + 1) % 6);
-        if (slotId == 18) AdminSettingsManager.setMinCancelPercent((AdminSettingsManager.minCancelPercent() + 1) % 6);
+        if (slotId == 19) AdminSettingsManager.setMinTaxPercent(AdminSettingsManager.minTaxPercent() + 1);
+        if (slotId == 20) AdminSettingsManager.setMinOverduePercent(AdminSettingsManager.minOverduePercent() + 1);
+        if (slotId == 21) AdminSettingsManager.setMinCancelPercent(AdminSettingsManager.minCancelPercent() + 1);
 
-        if (slotId == 20 || slotId == 21) {
+        if (slotId == 23 || slotId == 24) {
             AdminSettingsManager.setLanguage(AdminSettingsManager.nextLanguage());
+        }
+
+        if (slotId == 35) {
+            PlotzMainMenu.open(sp);
+            return;
         }
 
         refresh();

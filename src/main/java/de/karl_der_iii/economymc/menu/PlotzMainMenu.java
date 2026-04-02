@@ -30,45 +30,41 @@ public class PlotzMainMenu extends ChestMenu {
     }
 
     public PlotzMainMenu(int containerId, Inventory inventory, ServerPlayer viewer) {
-        this(containerId, inventory, viewer, new SimpleContainer(54));
+        this(containerId, inventory, viewer, new SimpleContainer(45));
     }
 
     private PlotzMainMenu(int containerId, Inventory inventory, ServerPlayer viewer, SimpleContainer box) {
-        super(MenuType.GENERIC_9x6, containerId, inventory, box, 6);
+        super(MenuType.GENERIC_9x5, containerId, inventory, box, 5);
         this.viewer = viewer;
         this.box = box;
         refresh();
     }
 
-    private void fillBackground() {
+    private void refresh() {
         for (int i = 0; i < box.getContainerSize(); i++) {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
-    }
-
-    private void refresh() {
-        fillBackground();
 
         box.setItem(4, MenuUtil.named(Items.NETHER_STAR, LanguageManager.tr("main.menu.title")));
 
         box.setItem(10, MenuUtil.named(Items.MAP, LanguageManager.tr("main.plots")));
-        box.setItem(11, MenuUtil.named(Items.CHEST, LanguageManager.tr("main.shop")));
-        box.setItem(12, MenuUtil.named(Items.BOOK, LanguageManager.tr("main.jobs")));
-        box.setItem(13, MenuUtil.named(Items.PAPER, LanguageManager.tr("main.checks")));
+        box.setItem(12, MenuUtil.named(Items.CHEST, LanguageManager.tr("main.shop")));
+        box.setItem(14, MenuUtil.named(Items.BOOK, LanguageManager.tr("main.jobs")));
+        box.setItem(16, MenuUtil.named(Items.PAPER, LanguageManager.tr("main.checks")));
 
-        box.setItem(19, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("main.bank")));
-        box.setItem(20, MenuUtil.named(Items.CLOCK, LanguageManager.tr("main.history")));
-        box.setItem(21, MenuUtil.named(Items.EMERALD, LanguageManager.tr("main.daily")));
-        box.setItem(22, MenuUtil.named(Items.SUNFLOWER, LanguageManager.tr("main.pay")));
+        box.setItem(28, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("main.bank")));
+        box.setItem(30, MenuUtil.named(Items.CLOCK, LanguageManager.tr("main.history")));
+        box.setItem(32, MenuUtil.named(Items.EMERALD, LanguageManager.tr("main.daily")));
+        box.setItem(34, MenuUtil.named(Items.SUNFLOWER, LanguageManager.tr("main.pay")));
 
         if (AdminSettingsManager.serverModeEnabled()) {
-            box.setItem(30, MenuUtil.named(Items.IRON_BARS, LanguageManager.tr("main.servermode")));
+            box.setItem(38, MenuUtil.named(Items.IRON_BARS, LanguageManager.tr("main.servermode")));
         } else {
-            box.setItem(30, MenuUtil.named(Items.BARRIER, LanguageManager.tr("main.servermode.disabled")));
+            box.setItem(38, MenuUtil.named(Items.BARRIER, LanguageManager.tr("main.servermode.disabled")));
         }
 
-        box.setItem(31, MenuUtil.named(Items.REDSTONE_TORCH, LanguageManager.tr("main.adminmode")));
-        box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.close")));
+        box.setItem(40, MenuUtil.named(Items.REDSTONE_TORCH, LanguageManager.tr("main.adminmode")));
+        box.setItem(44, MenuUtil.playerInfoHead(viewer));
 
         broadcastChanges();
     }
@@ -81,30 +77,30 @@ public class PlotzMainMenu extends ChestMenu {
 
         switch (slotId) {
             case 10 -> PlotzPlotsHubMenu.open(sp);
-            case 11 -> {
+            case 12 -> {
                 if (AdminSettingsManager.shopEnabled()) {
                     PlotzShopMenu.open(sp);
                 } else {
                     sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.shop_disabled")));
                 }
             }
-            case 12 -> {
+            case 14 -> {
                 if (AdminSettingsManager.jobsEnabled()) {
                     PlotzJobsMenu.open(sp, 0, true, false);
                 } else {
                     sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.jobs_disabled")));
                 }
             }
-            case 13 -> {
+            case 16 -> {
                 if (AdminSettingsManager.checksEnabled()) {
                     PlotzChecksMenu.open(sp, 0);
                 } else {
                     sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.checks_disabled")));
                 }
             }
-            case 19 -> PlotzBankMenu.open(sp);
-            case 20 -> PlotzHistoryMenu.open(sp, false);
-            case 21 -> {
+            case 28 -> PlotzBankMenu.open(sp);
+            case 30 -> PlotzHistoryMenu.open(sp, false);
+            case 32 -> {
                 if (!DailyRewardManager.canClaim(sp.getUUID())) {
                     long remaining = DailyRewardManager.getRemainingMs(sp.getUUID()) / 1000L;
                     long hours = remaining / 3600L;
@@ -120,20 +116,19 @@ public class PlotzMainMenu extends ChestMenu {
                 sp.sendSystemMessage(Component.literal(LanguageManager.tr("daily.claimed")));
                 refresh();
             }
-            case 22 -> PlotzPayMenu.open(sp);
-            case 30 -> {
+            case 34 -> PlotzPayMenu.open(sp);
+            case 38 -> {
                 if (AdminSettingsManager.serverModeEnabled()) {
                     PlotzServerModeMenu.open(sp);
                 } else {
                     sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.servermode_disabled")));
                 }
             }
-            case 31 -> {
+            case 40 -> {
                 if (sp.hasPermissions(2)) {
                     PlotzAdminModeMenu.open(sp);
                 }
             }
-            case 49 -> sp.closeContainer();
             default -> {
             }
         }

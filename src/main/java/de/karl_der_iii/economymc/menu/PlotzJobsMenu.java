@@ -79,16 +79,29 @@ public class PlotzJobsMenu extends ChestMenu {
             box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
         }
 
+        box.setItem(4, MenuUtil.named(
+            serverOnly ? Items.GOLD_BLOCK : Items.BOOK,
+            LanguageManager.tr(serverOnly ? "jobs.server.title" : "jobs.menu.title")
+        ));
+
         List<JobManager.JobEntry> jobs = JobManager.getVisibleJobs();
         if (serverOnly) {
             jobs = jobs.stream().filter(JobManager.JobEntry::serverJob).collect(Collectors.toList());
         }
 
-        int start = page * 45;
-        int end = Math.min(start + 45, jobs.size());
+        int start = page * 36;
+        int end = Math.min(start + 36, jobs.size());
 
-        int slot = 0;
+        int slot = 9;
         for (int i = start; i < end; i++) {
+            if (slot % 9 == 8) {
+                slot += 2;
+            }
+
+            if (slot >= 45) {
+                break;
+            }
+
             JobManager.JobEntry job = jobs.get(i);
             box.setItem(slot, MenuUtil.named(
                 job.serverJob() ? Items.GOLD_BLOCK : Items.PAPER,
@@ -99,7 +112,7 @@ public class PlotzJobsMenu extends ChestMenu {
         }
 
         box.setItem(45, MenuUtil.playerInfoHead(viewer));
-        box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.close")));
+        box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
         box.setItem(50, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.previous")));
         box.setItem(51, MenuUtil.named(Items.PAPER, LanguageManager.tr("common.page") + (page + 1)));
         box.setItem(52, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.next")));
@@ -118,7 +131,11 @@ public class PlotzJobsMenu extends ChestMenu {
         if (!(player instanceof ServerPlayer sp)) return;
 
         if (slotId == 49) {
-            sp.closeContainer();
+            if (serverOnly) {
+                PlotzServerModeMenu.open(sp);
+            } else {
+                PlotzMainMenu.open(sp);
+            }
             return;
         }
 

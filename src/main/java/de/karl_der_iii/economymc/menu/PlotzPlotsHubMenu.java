@@ -29,11 +29,11 @@ public class PlotzPlotsHubMenu extends ChestMenu {
     }
 
     public PlotzPlotsHubMenu(int containerId, Inventory inventory, ServerPlayer viewer) {
-        this(containerId, inventory, viewer, new SimpleContainer(27));
+        this(containerId, inventory, viewer, new SimpleContainer(36));
     }
 
     private PlotzPlotsHubMenu(int containerId, Inventory inventory, ServerPlayer viewer, SimpleContainer box) {
-        super(MenuType.GENERIC_9x3, containerId, inventory, box, 3);
+        super(MenuType.GENERIC_9x4, containerId, inventory, box, 4);
         this.viewer = viewer;
         this.box = box;
         refresh();
@@ -47,34 +47,34 @@ public class PlotzPlotsHubMenu extends ChestMenu {
         UUID id = viewer.getUUID();
         boolean capitalHere = PlotzLogic.isCapital(viewer.blockPosition());
 
-        box.setItem(10, MenuUtil.named(
+        box.setItem(4, MenuUtil.named(
             Items.COMPASS,
             capitalHere ? LanguageManager.tr("plots.position.capital") : LanguageManager.tr("plots.position.normal")
         ));
 
-        box.setItem(11, MenuUtil.named(
+        box.setItem(10, MenuUtil.named(
             Items.BOOK,
             LanguageManager.tr("plots.buy.normal") + " §7(" + PlotzStore.getNormalCredits(id) + " | " + PlotzLogic.NORMAL_CHUNK_PRICE + "$)"
         ));
 
-        box.setItem(13, MenuUtil.named(
+        box.setItem(12, MenuUtil.named(
             Items.ENCHANTED_BOOK,
             LanguageManager.tr("plots.buy.capital") + " §7(" + PlotzStore.getCapitalCredits(id) + " | " + PlotzLogic.CAPITAL_CHUNK_PRICE + "$)"
         ));
 
-        box.setItem(15, MenuUtil.named(
+        box.setItem(14, MenuUtil.named(
             Items.MAP,
             LanguageManager.tr("plots.mine") + " §7(" + PlotzStore.getOwnedPlots(id).size() + ")"
         ));
 
         box.setItem(16, MenuUtil.named(
-            Items.WRITABLE_BOOK,
-            LanguageManager.tr("plots.sales") + " §7(" + PlotzStore.getListingsBySeller(id).size() + ")"
+            Items.CHEST,
+            LanguageManager.tr("plots.market") + " §7(" + PlotzStore.getListings().size() + ")"
         ));
 
         box.setItem(22, MenuUtil.named(
-            Items.CHEST,
-            LanguageManager.tr("plots.market") + " §7(" + PlotzStore.getListings().size() + ")"
+            Items.WRITABLE_BOOK,
+            LanguageManager.tr("plots.sales") + " §7(" + PlotzStore.getListingsBySeller(id).size() + ")"
         ));
 
         box.setItem(24, MenuUtil.named(
@@ -82,10 +82,8 @@ public class PlotzPlotsHubMenu extends ChestMenu {
             LanguageManager.tr("plots.create.sale")
         ));
 
-        box.setItem(26, MenuUtil.named(
-            Items.BARRIER,
-            LanguageManager.tr("common.back")
-        ));
+        box.setItem(27, MenuUtil.playerInfoHead(viewer));
+        box.setItem(35, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
 
         broadcastChanges();
     }
@@ -96,49 +94,53 @@ public class PlotzPlotsHubMenu extends ChestMenu {
             return;
         }
 
-        if (slotId == 11) {
-            if (PlotzLogic.tryCharge(sp, PlotzLogic.NORMAL_CHUNK_PRICE)) {
-                PlotzStore.addNormalCredit(sp.getUUID(), 1);
-                sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.normal.ok")));
-                refresh();
-            } else {
+        if (slotId == 10) {
+            boolean charged = PlotzLogic.canBuyNormalCredit(sp);
+            if (!charged) {
                 sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.normal.fail")));
+                return;
             }
+
+            PlotzStore.addNormalCredit(sp.getUUID(), 1);
+            sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.normal.ok")));
+            refresh();
             return;
         }
 
-        if (slotId == 13) {
-            if (PlotzLogic.tryCharge(sp, PlotzLogic.CAPITAL_CHUNK_PRICE)) {
-                PlotzStore.addCapitalCredit(sp.getUUID(), 1);
-                sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.capital.ok")));
-                refresh();
-            } else {
+        if (slotId == 12) {
+            boolean charged = PlotzLogic.canBuyCapitalCredit(sp);
+            if (!charged) {
                 sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.capital.fail")));
+                return;
             }
+
+            PlotzStore.addCapitalCredit(sp.getUUID(), 1);
+            sp.sendSystemMessage(Component.literal(LanguageManager.tr("plots.buy.capital.ok")));
+            refresh();
             return;
         }
 
-        if (slotId == 15) {
+        if (slotId == 14) {
             PlotzMyPlotsMenu.open(sp);
             return;
         }
 
         if (slotId == 16) {
-            PlotzMySalesMenu.open(sp);
-            return;
-        }
-
-        if (slotId == 22) {
             PlotzMarketMenu.open(sp);
             return;
         }
 
-        if (slotId == 24) {
-            PlotzMyPlotsMenu.open(sp);
+        if (slotId == 22) {
+            PlotzMySalesMenu.open(sp);
             return;
         }
 
-        if (slotId == 26) {
+        if (slotId == 24) {
+            PlotzCreateSaleMenu.open(sp);
+            return;
+        }
+
+        if (slotId == 35) {
             PlotzMainMenu.open(sp);
         }
     }
