@@ -38,28 +38,24 @@ public class PlotzServerModeMenu extends ChestMenu {
         refresh();
     }
 
-    private void fillBackground() {
-        for (int i = 0; i < box.getContainerSize(); i++) {
-            box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
-        }
+    private ItemStack stateItem(boolean enabled, String title) {
+        return MenuUtil.named(
+            enabled ? Items.LIME_DYE : Items.GRAY_DYE,
+            (enabled ? "§a" : "§7") + title + ": " + (enabled ? LanguageManager.tr("admin.on") : LanguageManager.tr("admin.off"))
+        );
     }
 
     private void refresh() {
-        fillBackground();
+        for (int i = 0; i < box.getContainerSize(); i++) {
+            box.setItem(i, MenuUtil.named(Items.GRAY_STAINED_GLASS_PANE, " "));
+        }
 
         box.setItem(4, MenuUtil.named(Items.IRON_BARS, LanguageManager.tr("server.mode.title")));
+
         box.setItem(10, MenuUtil.named(Items.RED_CONCRETE, LanguageManager.tr("server.tax_minus")));
-        box.setItem(11, MenuUtil.named(
-            AdminSettingsManager.autoTaxEnabled() ? Items.COMPASS : Items.PAPER,
-            LanguageManager.tr("server.tax_rate") + TreasuryManager.getTaxPercent() + "% " +
-                (AdminSettingsManager.autoTaxEnabled() ? "§8(" + LanguageManager.tr("admin.auto") + ")" : "§8(" + LanguageManager.tr("admin.manual") + ")")
-        ));
+        box.setItem(11, MenuUtil.named(Items.PAPER, LanguageManager.tr("server.tax_rate") + TreasuryManager.getTaxPercent() + "%"));
         box.setItem(12, MenuUtil.named(Items.LIME_CONCRETE, LanguageManager.tr("server.tax_plus")));
-        box.setItem(13, MenuUtil.named(
-            AdminSettingsManager.autoTaxEnabled() ? Items.LIME_DYE : Items.GRAY_DYE,
-            (AdminSettingsManager.autoTaxEnabled() ? "§a" : "§7") + LanguageManager.tr("server.auto_tax") + ": " +
-                (AdminSettingsManager.autoTaxEnabled() ? LanguageManager.tr("admin.on") : LanguageManager.tr("admin.off"))
-        ));
+        box.setItem(13, stateItem(AdminSettingsManager.autoTaxEnabled(), LanguageManager.tr("server.auto_tax")));
 
         box.setItem(14, MenuUtil.named(Items.RED_CONCRETE, LanguageManager.tr("server.overdue_minus")));
         box.setItem(15, MenuUtil.named(Items.PAPER, LanguageManager.tr("server.overdue_penalty") + TreasuryManager.getOverduePenaltyPercent() + "%"));
@@ -80,10 +76,11 @@ public class PlotzServerModeMenu extends ChestMenu {
         box.setItem(40, MenuUtil.named(Items.EMERALD, LanguageManager.tr("server.create_job")));
         box.setItem(42, MenuUtil.named(Items.BOOK, LanguageManager.tr("server.open_jobs")));
         box.setItem(44, MenuUtil.named(Items.GOLD_BLOCK, LanguageManager.tr("server.treasury_balance") + TreasuryManager.getTreasury()));
+
+        box.setItem(45, MenuUtil.playerInfoHead(viewer));
         box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
         box.setItem(53, MenuUtil.named(Items.CLOCK, LanguageManager.tr("history.treasury")));
 
-        MenuUtil.putPlayerInfoHead(box, viewer, 45);
         broadcastChanges();
     }
 
