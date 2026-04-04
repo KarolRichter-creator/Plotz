@@ -74,7 +74,7 @@ public class PlotzBankMenu extends ChestMenu {
                 List.of(
                     LanguageManager.tr("bank.detail.borrower") + loan.borrowerName(),
                     LanguageManager.tr("bank.detail.lender") + lender,
-                    "§7Target: " + target
+                    LanguageManager.tr("bank.detail.target") + target
                 )
             ));
             loanIds.put(slot, loan.id());
