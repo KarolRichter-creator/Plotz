@@ -88,16 +88,16 @@ public class PlotzMod {
                         }))
                         .then(Commands.literal("setcapital").executes(ctx -> {
                             if (!CapitalAreaManager.canCreateArea()) {
-                                ctx.getSource().sendFailure(Component.literal("§cSet /ec admin pos1 and /ec admin pos2 first."));
+                                ctx.getSource().sendFailure(Component.literal(LanguageManager.tr("admin.capital.pos_required")));
                                 return 0;
                             }
                             CapitalAreaManager.applyArea();
-                            ctx.getSource().sendSuccess(() -> Component.literal("§aCapital area saved."), false);
+                            ctx.getSource().sendSuccess(() -> Component.literal(LanguageManager.tr("admin.capital.saved")), false);
                             return 1;
                         }))
                         .then(Commands.literal("clearcapital").executes(ctx -> {
                             CapitalAreaManager.clearArea();
-                            ctx.getSource().sendSuccess(() -> Component.literal("§aCapital area cleared."), false);
+                            ctx.getSource().sendSuccess(() -> Component.literal(LanguageManager.tr("admin.capital.cleared")), false);
                             return 1;
                         }))
                         .then(
@@ -109,7 +109,7 @@ public class PlotzMod {
                                         long amount = IntegerArgumentType.getInteger(ctx, "amount");
                                         Optional<UUID> targetOpt = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
                                         if (targetOpt.isEmpty()) {
-                                            ctx.getSource().sendFailure(Component.literal("§cUnknown account."));
+                                            ctx.getSource().sendFailure(Component.literal(LanguageManager.tr("admin.money.unknown")));
                                             return 0;
                                         }
                                         UUID target = targetOpt.get();
@@ -128,7 +128,7 @@ public class PlotzMod {
                                         long amount = IntegerArgumentType.getInteger(ctx, "amount");
                                         Optional<UUID> targetOpt = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
                                         if (targetOpt.isEmpty()) {
-                                            ctx.getSource().sendFailure(Component.literal("§cUnknown account."));
+                                            ctx.getSource().sendFailure(Component.literal(LanguageManager.tr("admin.money.unknown")));
                                             return 0;
                                         }
                                         UUID target = targetOpt.get();
@@ -147,12 +147,12 @@ public class PlotzMod {
                                         long amount = IntegerArgumentType.getInteger(ctx, "amount");
                                         Optional<UUID> targetOpt = BalanceManager.resolveKnownAccount(ctx.getSource().getServer(), account);
                                         if (targetOpt.isEmpty()) {
-                                            ctx.getSource().sendFailure(Component.literal("§cUnknown account."));
+                                            ctx.getSource().sendFailure(Component.literal(LanguageManager.tr("admin.money.unknown")));
                                             return 0;
                                         }
                                         UUID target = targetOpt.get();
                                         if (!BalanceManager.removeBalance(target, amount)) {
-                                            ctx.getSource().sendFailure(Component.literal("§cNot enough money on that account."));
+                                            ctx.getSource().sendFailure(Component.literal(LanguageManager.tr("admin.money.not_enough_account")));
                                             return 0;
                                         }
                                         ScoreboardManager.update(ctx.getSource().getServer());

@@ -33,17 +33,17 @@ public final class BankInputManager {
 
     public static void startServerRequest(ServerPlayer player) {
         DRAFTS.put(player.getUUID(), new Draft(LoanManager.LoanTargetType.SERVER, Stage.AMOUNT, "", null, 0));
-        player.sendSystemMessage(Component.literal("§eEnter the loan amount in chat."));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.amount")));
     }
 
     public static void startAllRequest(ServerPlayer player) {
         DRAFTS.put(player.getUUID(), new Draft(LoanManager.LoanTargetType.ALL_PLAYERS, Stage.AMOUNT, "", null, 0));
-        player.sendSystemMessage(Component.literal("§eEnter the loan amount in chat."));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.amount")));
     }
 
     public static void startPlayerRequest(ServerPlayer player) {
         DRAFTS.put(player.getUUID(), new Draft(LoanManager.LoanTargetType.SPECIFIC_PLAYER, Stage.PLAYER_NAME, "", null, 0));
-        player.sendSystemMessage(Component.literal("§eEnter the target player name in chat."));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.target_name")));
     }
 
     public static boolean handleChat(ServerPlayer player, String message) {
@@ -55,7 +55,7 @@ public final class BankInputManager {
         String input = message.trim();
         if (input.equalsIgnoreCase("cancel")) {
             DRAFTS.remove(player.getUUID());
-            player.sendSystemMessage(Component.literal("§cCancelled."));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.cancelled")));
             PlotzBankMenu.open(player);
             return true;
         }
@@ -76,7 +76,7 @@ public final class BankInputManager {
         }
 
         DRAFTS.put(player.getUUID(), draft.withPlayer(input, targetOpt.get()));
-        player.sendSystemMessage(Component.literal("§eEnter the loan amount in chat."));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.amount")));
     }
 
     private static void handleAmount(ServerPlayer player, String input, Draft draft) {
@@ -84,17 +84,17 @@ public final class BankInputManager {
         try {
             amount = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            player.sendSystemMessage(Component.literal("§cThat is not a valid number."));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.invalid_number")));
             return;
         }
 
         if (amount <= 0) {
-            player.sendSystemMessage(Component.literal("§cAmount must be above 0."));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.amount_positive")));
             return;
         }
 
         DRAFTS.put(player.getUUID(), draft.withAmount(amount));
-        player.sendSystemMessage(Component.literal("§eEnter the loan duration in full days."));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.days")));
     }
 
     private static void handleDays(ServerPlayer player, String input, Draft draft) {
@@ -102,12 +102,12 @@ public final class BankInputManager {
         try {
             days = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            player.sendSystemMessage(Component.literal("§cThat is not a valid number."));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.invalid_number")));
             return;
         }
 
         if (days <= 0) {
-            player.sendSystemMessage(Component.literal("§cDays must be above 0."));
+            player.sendSystemMessage(Component.literal(LanguageManager.tr("bank.input.days_positive")));
             return;
         }
 
