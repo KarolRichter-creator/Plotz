@@ -17,8 +17,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.List;
-
 public class PlotzServerModeMenu extends ChestMenu {
     private final ServerPlayer viewer;
     private final SimpleContainer box;
@@ -90,11 +88,7 @@ public class PlotzServerModeMenu extends ChestMenu {
 
         box.setItem(39, MenuUtil.named(Items.EMERALD, LanguageManager.tr("server.create_job")));
         box.setItem(40, MenuUtil.named(Items.BOOK, LanguageManager.tr("server.open_jobs")));
-        box.setItem(41, MenuUtil.named(
-            Items.GOLD_INGOT,
-            LanguageManager.tr("bank.title") + " §7(" + serverLoanRequests + ")",
-            List.of("§7" + LanguageManager.tr("bank.target.server"))
-        ));
+        box.setItem(41, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("bank.title") + " §7(" + serverLoanRequests + ")"));
         box.setItem(42, MenuUtil.named(Items.CLOCK, LanguageManager.tr("common.treasury")));
 
         box.setItem(45, MenuUtil.playerInfoHead(viewer));
