@@ -288,7 +288,8 @@ public final class AdminSettingsManager {
 
     public static void setAutoTaxReactionStrength(int value) {
         ensureLoaded();
-        PROPS.setProperty("autoTaxReactionStrength", Integer.toString(Math.max(1, Math.min(10, value))));
+        int min = autoTaxMinReactionStrength();
+        PROPS.setProperty("autoTaxReactionStrength", Integer.toString(Math.max(min, Math.min(10, value))));
         save();
     }
 
@@ -303,7 +304,14 @@ public final class AdminSettingsManager {
 
     public static void setAutoTaxMinReactionStrength(int value) {
         ensureLoaded();
-        PROPS.setProperty("autoTaxMinReactionStrength", Integer.toString(Math.max(0, Math.min(10, value))));
+        int clamped = Math.max(0, Math.min(10, value));
+        PROPS.setProperty("autoTaxMinReactionStrength", Integer.toString(clamped));
+
+        int current = autoTaxReactionStrength();
+        if (current < clamped) {
+            PROPS.setProperty("autoTaxReactionStrength", Integer.toString(clamped));
+        }
+
         save();
     }
 

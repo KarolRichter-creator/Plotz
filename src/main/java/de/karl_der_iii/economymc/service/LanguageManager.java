@@ -1137,6 +1137,8 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("server.open_jobs_hint", "§7Otwórz zadania serwera, aby tworzyć tam zadania serwerowe.");
         pl.put("admin.approve", "§aZatwierdź");
         pl.put("admin.deny", "§cOdrzuć");
+        pl.put("server.left_increase_10000", "§7Lewy klik: +10000");
+        pl.put("server.right_decrease_10000", "§7Prawy klik: -10000");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1481,6 +1483,8 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("server.open_jobs_hint", "§7Ouvrez les jobs serveur pour y créer des jobs serveur.");
         fr.put("admin.approve", "§aApprouver");
         fr.put("admin.deny", "§cRefuser");
+        fr.put("server.left_increase_10000", "§7Clic gauche : +10000");
+        fr.put("server.right_decrease_10000", "§7Clic droit : -10000");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -1825,6 +1829,8 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("server.open_jobs_hint", "§7Abre los trabajos del servidor para crear allí trabajos del servidor.");
         es.put("admin.approve", "§aAprobar");
         es.put("admin.deny", "§cDenegar");
+        es.put("server.left_increase_10000", "§7Clic izquierdo: +10000");
+        es.put("server.right_decrease_10000", "§7Clic derecho: -10000");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2169,6 +2175,8 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("server.open_jobs_hint", "§7Abra os trabalhos do servidor para criar trabalhos do servidor lá.");
         pt.put("admin.approve", "§aAprovar");
         pt.put("admin.deny", "§cNegar");
+        pt.put("server.left_increase_10000", "§7Clique esquerdo: +10000");
+        pt.put("server.right_decrease_10000", "§7Clique direito: -10000");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -2513,6 +2521,8 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("server.open_jobs_hint", "§7Откройте серверные работы, чтобы создавать их там.");
         ru.put("admin.approve", "§aОдобрить");
         ru.put("admin.deny", "§cОтклонить");
+        ru.put("server.left_increase_10000", "§7ЛКМ: +10000");
+        ru.put("server.right_decrease_10000", "§7ПКМ: -10000");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -2857,6 +2867,8 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("server.open_jobs_hint", "§7Sunucu işlerini aç ve sunucu işlerini oradan oluştur.");
         tr.put("admin.approve", "§aOnayla");
         tr.put("admin.deny", "§cReddet");
+        tr.put("server.left_increase_10000", "§7Sol tık: +10000");
+        tr.put("server.right_decrease_10000", "§7Sağ tık: -10000");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3201,6 +3213,8 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("server.open_jobs_hint", "§7打开服务器工作，并在那里创建服务器工作。");
         zh.put("admin.approve", "§a批准");
         zh.put("admin.deny", "§c拒绝");
+        zh.put("server.left_increase_10000", "§7左键：+10000");
+        zh.put("server.right_decrease_10000", "§7右键：-10000");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -3545,6 +3559,8 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("server.open_jobs_hint", "§7サーバージョブを開いて、そこでサーバージョブを作成してください。");
         ja.put("admin.approve", "§a承認");
         ja.put("admin.deny", "§c拒否");
+        ja.put("server.left_increase_10000", "§7左クリック：+10000");
+        ja.put("server.right_decrease_10000", "§7右クリック：-10000");
         LANG.put("ja_jp", ja);
     }
 

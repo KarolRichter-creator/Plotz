@@ -95,16 +95,8 @@ public class PlotzServerModeMenu extends ChestMenu {
             LanguageManager.tr("server.reaction_strength") + AdminSettingsManager.autoTaxReactionStrength(),
             List.of(
                 LanguageManager.tr("server.left_increase"),
-                LanguageManager.tr("server.right_decrease")
-            )
-        ));
-
-        box.setItem(21, MenuUtil.named(
-            Items.PAPER,
-            LanguageManager.tr("server.min_reaction_strength") + AdminSettingsManager.autoTaxMinReactionStrength(),
-            List.of(
-                LanguageManager.tr("server.left_increase"),
-                LanguageManager.tr("server.right_decrease")
+                LanguageManager.tr("server.right_decrease"),
+                LanguageManager.tr("server.min_reaction_strength") + AdminSettingsManager.autoTaxMinReactionStrength()
             )
         ));
 
@@ -190,11 +182,10 @@ public class PlotzServerModeMenu extends ChestMenu {
         }
 
         if (slotId == 20) {
-            AdminSettingsManager.setAutoTaxReactionStrength(AdminSettingsManager.autoTaxReactionStrength() + (button == 1 ? -1 : 1));
-        }
-
-        if (slotId == 21) {
-            AdminSettingsManager.setAutoTaxMinReactionStrength(AdminSettingsManager.autoTaxMinReactionStrength() + (button == 1 ? -1 : 1));
+            int min = AdminSettingsManager.autoTaxMinReactionStrength();
+            int current = AdminSettingsManager.autoTaxReactionStrength();
+            int next = current + (button == 1 ? -1 : 1);
+            AdminSettingsManager.setAutoTaxReactionStrength(Math.max(min, next));
         }
 
         if (slotId == 23) {

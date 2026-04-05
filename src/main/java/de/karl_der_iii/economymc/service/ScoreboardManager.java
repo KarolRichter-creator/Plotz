@@ -12,8 +12,7 @@ import java.util.UUID;
 public final class ScoreboardManager {
     private static final String OBJECTIVE = "economymc_balance";
 
-    private ScoreboardManager() {
-    }
+    private ScoreboardManager() {}
 
     public static void update(MinecraftServer server) {
         try {
@@ -21,18 +20,8 @@ public final class ScoreboardManager {
                 .withSuppressedOutput()
                 .withPermission(4);
 
-            String title = escape(LanguageManager.tr("menu.player.balance").replaceAll("§.", "").replace(": $%d", "").replace(": $", "").trim());
-            if (title.isBlank()) {
-                title = "Balance";
-            }
-
-            String treasuryLabel = sanitize(LanguageManager.tr("history.treasury").replaceAll("§.", "").trim());
-            if (treasuryLabel.isBlank()) {
-                treasuryLabel = "Treasury";
-            }
-
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
-            server.getCommands().performPrefixedCommand(source, "scoreboard objectives add " + OBJECTIVE + " dummy \"" + title + "\"");
+            server.getCommands().performPrefixedCommand(source, "scoreboard objectives add " + OBJECTIVE + " dummy \"" + sanitizeTitle(LanguageManager.tr("common.treasury")) + "\"");
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
 
             List<Map.Entry<UUID, Long>> entries = new ArrayList<>(BalanceManager.getAllBalances().entrySet());
@@ -52,24 +41,17 @@ public final class ScoreboardManager {
             }
 
             long treasury = TreasuryManager.getTreasury();
-            server.getCommands().performPrefixedCommand(
-                source,
-                "scoreboard players set " + treasuryLabel + " " + OBJECTIVE + " " + treasury
-            );
+            server.getCommands().performPrefixedCommand(source, "scoreboard players set " + sanitize(LanguageManager.tr("common.treasury")) + " " + OBJECTIVE + " " + treasury);
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
         } catch (Exception ignored) {
         }
     }
 
     private static String sanitize(String input) {
-        String value = input.replaceAll("§.", "").replaceAll("[^\\p{L}\\p{N}_]", "_");
-        if (value.isBlank()) {
-            return "Entry";
-        }
-        return value;
+        return input.replaceAll("[^A-Za-z0-9_]", "_");
     }
 
-    private static String escape(String input) {
-        return input.replace("\\", "\\\\").replace("\"", "\\\"");
+    private static String sanitizeTitle(String input) {
+        return input.replace("\"", "");
     }
 }
