@@ -81,16 +81,25 @@ public class PlotzMainMenu extends ChestMenu {
 
         int dailyReward = DailyRewardManager.getCurrentReward(viewer.getUUID());
         int streak = DailyRewardManager.getStreak(viewer.getUUID());
-        box.setItem(32, MenuUtil.named(
-            Items.EMERALD,
-            LanguageManager.tr("main.daily"),
-            List.of(
-                LanguageManager.format("main.daily.reward", dailyReward),
-                LanguageManager.format("main.daily.streak", streak),
-                LanguageManager.format("main.daily.rate", AdminSettingsManager.dailyIncreasePercent()),
-                LanguageManager.format("main.daily.max", AdminSettingsManager.dailyMaxReward())
-            )
-        ));
+
+        if (AdminSettingsManager.dailyEnabled()) {
+            box.setItem(32, MenuUtil.named(
+                Items.EMERALD,
+                LanguageManager.tr("main.daily"),
+                List.of(
+                    LanguageManager.format("main.daily.reward", dailyReward),
+                    LanguageManager.format("main.daily.streak", streak),
+                    LanguageManager.format("main.daily.rate", AdminSettingsManager.dailyIncreasePercent()),
+                    LanguageManager.format("main.daily.max", AdminSettingsManager.dailyMaxReward())
+                )
+            ));
+        } else {
+            box.setItem(32, MenuUtil.named(
+                Items.GRAY_DYE,
+                LanguageManager.tr("main.daily") + " §7(" + LanguageManager.tr("admin.off") + ")",
+                List.of(LanguageManager.tr("daily.disabled"))
+            ));
+        }
 
         box.setItem(34, MenuUtil.named(Items.SUNFLOWER, LanguageManager.tr("main.pay")));
 
@@ -138,6 +147,11 @@ public class PlotzMainMenu extends ChestMenu {
             case 28 -> PlotzBankMenu.open(sp);
             case 30 -> PlotzHistoryMenu.open(sp, false);
             case 32 -> {
+                if (!AdminSettingsManager.dailyEnabled()) {
+                    sp.sendSystemMessage(Component.literal(LanguageManager.tr("daily.disabled")));
+                    return;
+                }
+
                 if (!DailyRewardManager.canClaim(sp.getUUID())) {
                     long remaining = DailyRewardManager.getRemainingMs(sp.getUUID()) / 1000L;
                     long hours = remaining / 3600L;

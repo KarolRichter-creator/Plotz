@@ -23,7 +23,7 @@ repositories {
 }
 
 base {
-    archivesName = "economymc"
+    archivesName = "EconomyMC-NeoForge-1.21.4"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)

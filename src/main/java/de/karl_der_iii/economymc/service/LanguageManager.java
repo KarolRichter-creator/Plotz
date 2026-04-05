@@ -1139,6 +1139,8 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("admin.deny", "§cOdrzuć");
         pl.put("server.left_increase_10000", "§7Lewy klik: +10000");
         pl.put("server.right_decrease_10000", "§7Prawy klik: -10000");
+        pl.put("server.confirm_needed", "§cWymagane potwierdzenie");
+        pl.put("server.budget.confirm", "§cCzy na pewno chcesz zmienić budżet docelowy?");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1485,6 +1487,8 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("admin.deny", "§cRefuser");
         fr.put("server.left_increase_10000", "§7Clic gauche : +10000");
         fr.put("server.right_decrease_10000", "§7Clic droit : -10000");
+        fr.put("server.confirm_needed", "§cConfirmation requise");
+        fr.put("server.budget.confirm", "§cVoulez-vous vraiment modifier le budget cible ?");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -1831,6 +1835,8 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("admin.deny", "§cDenegar");
         es.put("server.left_increase_10000", "§7Clic izquierdo: +10000");
         es.put("server.right_decrease_10000", "§7Clic derecho: -10000");
+        es.put("server.confirm_needed", "§cSe requiere confirmación");
+        es.put("server.budget.confirm", "§c¿Seguro que quieres cambiar el presupuesto objetivo?");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2177,6 +2183,8 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("admin.deny", "§cNegar");
         pt.put("server.left_increase_10000", "§7Clique esquerdo: +10000");
         pt.put("server.right_decrease_10000", "§7Clique direito: -10000");
+        pt.put("server.confirm_needed", "§cConfirmação necessária");
+        pt.put("server.budget.confirm", "§cTem certeza de que deseja alterar o orçamento alvo?");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -2523,6 +2531,8 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("admin.deny", "§cОтклонить");
         ru.put("server.left_increase_10000", "§7ЛКМ: +10000");
         ru.put("server.right_decrease_10000", "§7ПКМ: -10000");
+        ru.put("server.confirm_needed", "§cТребуется подтверждение");
+        ru.put("server.budget.confirm", "§cВы действительно хотите изменить целевой бюджет?");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -2869,6 +2879,8 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("admin.deny", "§cReddet");
         tr.put("server.left_increase_10000", "§7Sol tık: +10000");
         tr.put("server.right_decrease_10000", "§7Sağ tık: -10000");
+        tr.put("server.confirm_needed", "§cOnay gerekli");
+        tr.put("server.budget.confirm", "§cHedef bütçeyi gerçekten değiştirmek istiyor musun?");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3215,6 +3227,8 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("admin.deny", "§c拒绝");
         zh.put("server.left_increase_10000", "§7左键：+10000");
         zh.put("server.right_decrease_10000", "§7右键：-10000");
+        zh.put("server.confirm_needed", "§c需要确认");
+        zh.put("server.budget.confirm", "§c你确定要更改目标预算吗？");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -3561,6 +3575,8 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("admin.deny", "§c拒否");
         ja.put("server.left_increase_10000", "§7左クリック：+10000");
         ja.put("server.right_decrease_10000", "§7右クリック：-10000");
+        ja.put("server.confirm_needed", "§c確認が必要です");
+        ja.put("server.budget.confirm", "§c本当に目標予算を変更しますか？");
         LANG.put("ja_jp", ja);
     }
 
