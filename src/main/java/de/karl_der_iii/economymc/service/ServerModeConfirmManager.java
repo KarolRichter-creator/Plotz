@@ -17,11 +17,13 @@ public final class ServerModeConfirmManager {
     private static final Map<UUID, PendingAction> PENDING = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> PENDING_BUDGET_VALUES = new ConcurrentHashMap<>();
 
-    private ServerModeConfirmManager() {}
+    private ServerModeConfirmManager() {
+    }
 
     public static void requestAutoTaxDisable(ServerPlayer player) {
         PENDING.put(player.getUUID(), PendingAction.AUTO_TAX_DISABLE);
         player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.type_phrase")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.admin_needed")));
         player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.type_phrase_exact") + CONFIRM_TEXT));
     }
 
@@ -29,6 +31,7 @@ public final class ServerModeConfirmManager {
         PENDING.put(player.getUUID(), PendingAction.BUDGET_CHANGE);
         PENDING_BUDGET_VALUES.put(player.getUUID(), newBudget);
         player.sendSystemMessage(Component.literal(LanguageManager.tr("server.budget.confirm")));
+        player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.admin_needed")));
         player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.type_phrase_exact") + CONFIRM_TEXT));
     }
 

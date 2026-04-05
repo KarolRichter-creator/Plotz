@@ -17,6 +17,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlotzServerModeMenu extends ChestMenu {
@@ -41,11 +42,13 @@ public class PlotzServerModeMenu extends ChestMenu {
         refresh();
     }
 
-    private ItemStack stateItem(boolean enabled, String title) {
-        return MenuUtil.named(
-            enabled ? Items.LIME_DYE : Items.GRAY_DYE,
-            (enabled ? "§a" : "§7") + title + ": " + (enabled ? LanguageManager.tr("admin.on") : LanguageManager.tr("admin.off"))
-        );
+    private ItemStack stateItem(boolean enabled, String title, boolean needsConfirm) {
+        List<String> lore = new ArrayList<>();
+        lore.add((enabled ? "§a" : "§7") + (enabled ? LanguageManager.tr("admin.on") : LanguageManager.tr("admin.off")));
+        if (needsConfirm) {
+            lore.add(LanguageManager.tr("server.confirm_needed"));
+        }
+        return MenuUtil.named(enabled ? Items.LIME_DYE : Items.GRAY_DYE, title, lore);
     }
 
     private int serverLoanRequestCount() {
@@ -75,7 +78,7 @@ public class PlotzServerModeMenu extends ChestMenu {
         box.setItem(10, MenuUtil.named(Items.RED_CONCRETE, LanguageManager.tr("server.tax_minus")));
         box.setItem(11, MenuUtil.named(Items.PAPER, LanguageManager.tr("server.tax_rate") + TreasuryManager.getTaxPercent() + "%"));
         box.setItem(12, MenuUtil.named(Items.LIME_CONCRETE, LanguageManager.tr("server.tax_plus")));
-        box.setItem(13, stateItem(AdminSettingsManager.autoTaxEnabled(), LanguageManager.tr("server.auto_tax")));
+        box.setItem(13, stateItem(AdminSettingsManager.autoTaxEnabled(), LanguageManager.tr("server.auto_tax"), true));
 
         box.setItem(19, MenuUtil.named(
             Items.CHEST,
@@ -125,7 +128,7 @@ public class PlotzServerModeMenu extends ChestMenu {
             ));
         } else if (AdminSettingsManager.hasPendingBudgetChange()) {
             box.setItem(37, MenuUtil.named(
-                Items.REDSTONE_TORCH,
+                Items.CHEST,
                 LanguageManager.tr("server.budget.pending"),
                 List.of(
                     LanguageManager.tr("server.auto_tax.disable_pending_by") + AdminSettingsManager.pendingBudgetChangeRequester(),

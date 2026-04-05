@@ -402,6 +402,7 @@ public final class LanguageManager {
         en.put("server.budget.pending", "§eBudget change request pending");
         en.put("server.budget.approved", "§aBudget change approved.");
         en.put("server.budget.denied", "§cBudget change denied.");
+        en.put("server.confirm.admin_needed", "§cBecause this is a deep change to the economy system, admin approval is required. If you want to continue and forward the request to the admin, type the phrase below.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -783,6 +784,7 @@ public final class LanguageManager {
         de.put("server.budget.pending", "§eBudgetänderung wartet auf Bestätigung");
         de.put("server.budget.approved", "§aBudgetänderung bestätigt.");
         de.put("server.budget.denied", "§cBudgetänderung abgelehnt.");
+        de.put("server.confirm.admin_needed", "§cDa dies ein tiefer Eingriff ins Wirtschaftssystem ist, ist eine Bestätigung des Admins nötig. Wenn du zustimmen und die Nachricht an den Admin weiterleiten willst, schreibe die Phrase unten.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
