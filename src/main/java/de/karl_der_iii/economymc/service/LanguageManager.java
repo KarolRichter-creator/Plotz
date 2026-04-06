@@ -79,10 +79,10 @@ public final class LanguageManager {
         en.put("main.servermode", "§cServer Mode");
         en.put("main.servermode.disabled", "§8Server Mode Disabled");
         en.put("main.adminmode", "§4Admin Mode");
-        en.put("main.disabled.shop", "§8Shop Disabled");
-        en.put("main.disabled.jobs", "§8Jobs Disabled");
-        en.put("main.disabled.checks", "§8Checks Disabled");
-        en.put("main.disabled.servermode", "§8Server Mode Disabled");
+        en.put("main.disabled.shop", "§cShop disabled");
+        en.put("main.disabled.jobs", "§cJobs disabled");
+        en.put("main.disabled.checks", "§cChecks disabled");
+        en.put("main.disabled.servermode", "§cServer mode disabled");
 
         en.put("admin.mode.title", "EconomyMC Admin Mode");
         en.put("admin.jobs", "Jobs");
@@ -407,6 +407,10 @@ public final class LanguageManager {
         en.put("server.confirm.phrase", "i am aware of the risk");
         en.put("server.budget.pending_title", "§ePending: budget change");
         en.put("server.auto_tax.disable_pending_title", "§ePending: auto tax disable");
+        en.put("main.disabled.plots", "§cPlots disabled");
+        en.put("main.disabled.daily", "§cDaily disabled");
+        en.put("msg.plots_disabled", "§cPlots are currently disabled.");
+        en.put("scoreboard.title", "Balance");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -461,10 +465,10 @@ public final class LanguageManager {
         de.put("main.servermode", "§cServermodus");
         de.put("main.servermode.disabled", "§8Servermodus deaktiviert");
         de.put("main.adminmode", "§4Adminmodus");
-        de.put("main.disabled.shop", "§8Shop deaktiviert");
-        de.put("main.disabled.jobs", "§8Jobs deaktiviert");
-        de.put("main.disabled.checks", "§8Checks deaktiviert");
-        de.put("main.disabled.servermode", "§8Servermodus deaktiviert");
+        de.put("main.disabled.shop", "§cShop deaktiviert");
+        de.put("main.disabled.jobs", "§cJobs deaktiviert");
+        de.put("main.disabled.checks", "§cChecks deaktiviert");
+        de.put("main.disabled.servermode", "§cServermodus deaktiviert");
 
         de.put("admin.mode.title", "EconomyMC Adminmodus");
         de.put("admin.jobs", "Jobs");
@@ -793,6 +797,10 @@ public final class LanguageManager {
         de.put("server.confirm.phrase", "ich bin der gefahr bewusst");
         de.put("server.budget.pending_title", "§eOffen: Budgetänderung");
         de.put("server.auto_tax.disable_pending_title", "§eOffen: Auto-Steuer deaktivieren");
+        de.put("main.disabled.plots", "§cGrundstücke deaktiviert");
+        de.put("main.disabled.daily", "§cDaily deaktiviert");
+        de.put("msg.plots_disabled", "§cGrundstücke sind aktuell deaktiviert.");
+        de.put("scoreboard.title", "Guthaben");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
@@ -1141,6 +1149,8 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("server.right_decrease_10000", "§7Prawy klik: -10000");
         pl.put("server.confirm_needed", "§cWymagane potwierdzenie");
         pl.put("server.budget.confirm", "§cCzy na pewno chcesz zmienić budżet docelowy?");
+        pl.put("server.confirm.admin_needed", "§cPonieważ jest to głęboka ingerencja w system gospodarki, wymagana jest zgoda administratora. Jeśli chcesz wyrazić swoją zgodę i przekazać prośbę administratorowi, wpisz poniższą frazę.");
+        pl.put("server.confirm.type_phrase_exact", "§7Dokładna fraza: ");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1489,6 +1499,8 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("server.right_decrease_10000", "§7Clic droit : -10000");
         fr.put("server.confirm_needed", "§cConfirmation requise");
         fr.put("server.budget.confirm", "§cVoulez-vous vraiment modifier le budget cible ?");
+        fr.put("server.confirm.admin_needed", "§cComme il s'agit d'une intervention profonde dans le système économique, l'approbation d'un administrateur est requise. Si vous donnez votre accord et souhaitez transmettre la demande à l'administrateur, tapez la phrase ci-dessous.");
+        fr.put("server.confirm.type_phrase_exact", "§7Phrase exacte : ");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -1837,6 +1849,8 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("server.right_decrease_10000", "§7Clic derecho: -10000");
         es.put("server.confirm_needed", "§cSe requiere confirmación");
         es.put("server.budget.confirm", "§c¿Seguro que quieres cambiar el presupuesto objetivo?");
+        es.put("server.confirm.admin_needed", "§cComo se trata de una intervención profunda en el sistema económico, se requiere la aprobación de un administrador. Si das tu consentimiento y quieres enviar la solicitud al administrador, escribe la frase de abajo.");
+        es.put("server.confirm.type_phrase_exact", "§7Frase exacta: ");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2185,6 +2199,8 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("server.right_decrease_10000", "§7Clique direito: -10000");
         pt.put("server.confirm_needed", "§cConfirmação necessária");
         pt.put("server.budget.confirm", "§cTem certeza de que deseja alterar o orçamento alvo?");
+        pt.put("server.confirm.admin_needed", "§cComo esta é uma intervenção profunda no sistema econômico, é necessária a aprovação de um administrador. Se você der seu consentimento e quiser encaminhar o pedido ao administrador, digite a frase abaixo.");
+        pt.put("server.confirm.type_phrase_exact", "§7Frase exata: ");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -2533,6 +2549,8 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("server.right_decrease_10000", "§7ПКМ: -10000");
         ru.put("server.confirm_needed", "§cТребуется подтверждение");
         ru.put("server.budget.confirm", "§cВы действительно хотите изменить целевой бюджет?");
+        ru.put("server.confirm.admin_needed", "§cПоскольку это серьёзное вмешательство в экономическую систему, требуется одобрение администратора. Если вы даёте своё согласие и хотите отправить запрос администратору, введите фразу ниже.");
+        ru.put("server.confirm.type_phrase_exact", "§7Точная фраза: ");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -2881,6 +2899,8 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("server.right_decrease_10000", "§7Sağ tık: -10000");
         tr.put("server.confirm_needed", "§cOnay gerekli");
         tr.put("server.budget.confirm", "§cHedef bütçeyi gerçekten değiştirmek istiyor musun?");
+        tr.put("server.confirm.admin_needed", "§cBu, ekonomi sistemine derin bir müdahale olduğu için bir sunucu yöneticisinin onayı gerekir. Kendi onayını veriyor ve isteği yöneticiye iletmek istiyorsan aşağıdaki ifadeyi yaz.");
+        tr.put("server.confirm.type_phrase_exact", "§7Tam ifade: ");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3229,6 +3249,8 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("server.right_decrease_10000", "§7右键：-10000");
         zh.put("server.confirm_needed", "§c需要确认");
         zh.put("server.budget.confirm", "§c你确定要更改目标预算吗？");
+        zh.put("server.confirm.admin_needed", "§c由于这是对经济系统的深度干预，因此需要管理员批准。如果你愿意表示同意并将请求转发给管理员，请输入下面的短语。");
+        zh.put("server.confirm.type_phrase_exact", "§7准确短语：");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -3577,6 +3599,8 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("server.right_decrease_10000", "§7右クリック：-10000");
         ja.put("server.confirm_needed", "§c確認が必要です");
         ja.put("server.budget.confirm", "§c本当に目標予算を変更しますか？");
+        ja.put("server.confirm.admin_needed", "§cこれは経済システムへの大きな介入であるため、管理者の承認が必要です。自分の同意を与え、管理者へ申請を送る場合は、以下のフレーズを入力してください。");
+        ja.put("server.confirm.type_phrase_exact", "§7正確なフレーズ：");
         LANG.put("ja_jp", ja);
     }
 

@@ -21,7 +21,10 @@ public final class ScoreboardManager {
                 .withPermission(4);
 
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
-            server.getCommands().performPrefixedCommand(source, "scoreboard objectives add " + OBJECTIVE + " dummy \"" + sanitizeTitle(LanguageManager.tr("common.treasury")) + "\"");
+            server.getCommands().performPrefixedCommand(
+                source,
+                "scoreboard objectives add " + OBJECTIVE + " dummy \"" + sanitizeTitle(LanguageManager.tr("scoreboard.title")) + "\""
+            );
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
 
             List<Map.Entry<UUID, Long>> entries = new ArrayList<>(BalanceManager.getAllBalances().entrySet());
@@ -41,7 +44,10 @@ public final class ScoreboardManager {
             }
 
             long treasury = TreasuryManager.getTreasury();
-            server.getCommands().performPrefixedCommand(source, "scoreboard players set " + sanitize(LanguageManager.tr("common.treasury")) + " " + OBJECTIVE + " " + treasury);
+            server.getCommands().performPrefixedCommand(
+                source,
+                "scoreboard players set " + sanitize(LanguageManager.tr("common.treasury")) + " " + OBJECTIVE + " " + treasury
+            );
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
         } catch (Exception ignored) {
         }

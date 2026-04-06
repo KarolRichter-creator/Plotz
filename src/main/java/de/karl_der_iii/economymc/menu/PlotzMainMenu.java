@@ -56,7 +56,11 @@ public class PlotzMainMenu extends ChestMenu {
 
         box.setItem(4, MenuUtil.named(Items.NETHER_STAR, LanguageManager.tr("main.menu.title")));
 
-        box.setItem(10, MenuUtil.named(Items.MAP, LanguageManager.tr("main.plots")));
+        box.setItem(10, sectionItem(
+            AdminSettingsManager.plotMarketEnabled(),
+            MenuUtil.named(Items.MAP, LanguageManager.tr("main.plots")),
+            LanguageManager.tr("main.disabled.plots")
+        ));
 
         box.setItem(12, sectionItem(
             AdminSettingsManager.shopEnabled(),
@@ -79,10 +83,10 @@ public class PlotzMainMenu extends ChestMenu {
         box.setItem(28, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("main.bank")));
         box.setItem(30, MenuUtil.named(Items.CLOCK, LanguageManager.tr("main.history")));
 
-        int dailyReward = DailyRewardManager.getCurrentReward(viewer.getUUID());
-        int streak = DailyRewardManager.getStreak(viewer.getUUID());
-
         if (AdminSettingsManager.dailyEnabled()) {
+            int dailyReward = DailyRewardManager.getCurrentReward(viewer.getUUID());
+            int streak = DailyRewardManager.getStreak(viewer.getUUID());
+
             box.setItem(32, MenuUtil.named(
                 Items.EMERALD,
                 LanguageManager.tr("main.daily"),
@@ -95,9 +99,8 @@ public class PlotzMainMenu extends ChestMenu {
             ));
         } else {
             box.setItem(32, MenuUtil.named(
-                Items.GRAY_DYE,
-                LanguageManager.tr("main.daily") + " §7(" + LanguageManager.tr("admin.off") + ")",
-                List.of(LanguageManager.tr("daily.disabled"))
+                Items.BARRIER,
+                LanguageManager.tr("main.disabled.daily")
             ));
         }
 
@@ -122,7 +125,13 @@ public class PlotzMainMenu extends ChestMenu {
         }
 
         switch (slotId) {
-            case 10 -> PlotzPlotsHubMenu.open(sp);
+            case 10 -> {
+                if (AdminSettingsManager.plotMarketEnabled()) {
+                    PlotzPlotsHubMenu.open(sp);
+                } else {
+                    sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.plots_disabled")));
+                }
+            }
             case 12 -> {
                 if (AdminSettingsManager.shopEnabled()) {
                     PlotzShopMenu.open(sp);
