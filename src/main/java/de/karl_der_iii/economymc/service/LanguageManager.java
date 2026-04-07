@@ -458,6 +458,8 @@ public final class LanguageManager {
         en.put("server.shop.click_buy", "§eClick to buy");
         en.put("server.shop.page", "Page");
         en.put("server.auto_tax.confirm", "§cDo you really want to disable the automatic treasury control?");
+        en.put("scoreboard.balance", "Balance");
+        en.put("scoreboard.treasury", "Treasury");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -841,7 +843,7 @@ public final class LanguageManager {
         de.put("server.budget.denied", "§cBudgetänderung abgelehnt.");
         de.put("server.confirm.admin_needed", "§cDa dies ein tiefer Eingriff ins Wirtschaftssystem ist, ist eine Bestätigung des Admins nötig. Wenn du zustimmst und die Anfrage an den Admin weiterleiten willst, schreibe die Phrase unten.");
         de.put("server.min_reaction_strength", "Mindest-Reaktionsstärke: ");
-        de.put("server.confirm.phrase", "ich bin der gefahr bewusst");
+        de.put("server.confirm.phrase", "ich bin mir des risikos bewusst");
         de.put("server.budget.pending_title", "§eOffen: Budgetänderung");
         de.put("server.auto_tax.disable_pending_title", "§eOffen: Auto-Steuer deaktivieren");
         de.put("main.disabled.plots", "§cGrundstücke deaktiviert");
@@ -895,6 +897,8 @@ public final class LanguageManager {
         de.put("server.shop.click_buy", "§eKlicken zum Kaufen");
         de.put("server.shop.page", "Seite");
         de.put("server.auto_tax.confirm", "§cWillst du die automatische Haushaltssteuerung wirklich deaktivieren?");
+        de.put("scoreboard.balance", "Kontostand");
+        de.put("scoreboard.treasury", "Staatskasse");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
@@ -1297,6 +1301,9 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("server.shop.page", "Strona");
         pl.put("server.confirm.failed", "§cPotwierdzenie nie powiodło się.");
         pl.put("server.auto_tax.confirm", "§cCzy na pewno chcesz wyłączyć automatyczną kontrolę budżetu?");
+        pl.put("scoreboard.balance", "Saldo");
+        pl.put("scoreboard.treasury", "Skarbiec");
+        pl.put("server.confirm.phrase", "jestem swiadomy ryzyka");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1699,6 +1706,9 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("server.shop.page", "Page");
         fr.put("server.confirm.failed", "§cÉchec de la confirmation.");
         fr.put("server.auto_tax.confirm", "§cVoulez-vous vraiment désactiver le contrôle automatique du budget ?");
+        fr.put("scoreboard.balance", "Solde");
+        fr.put("scoreboard.treasury", "Trésor");
+        fr.put("server.confirm.phrase", "je suis conscient du risque");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -2101,6 +2111,9 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("server.shop.page", "Página");
         es.put("server.confirm.failed", "§cLa confirmación falló.");
         es.put("server.auto_tax.confirm", "§c¿Seguro que quieres desactivar el control automático del presupuesto?");
+        es.put("scoreboard.balance", "Saldo");
+        es.put("scoreboard.treasury", "Tesoro");
+        es.put("server.confirm.phrase", "soy consciente del riesgo");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2503,6 +2516,9 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("server.shop.page", "Página");
         pt.put("server.confirm.failed", "§cA confirmação falhou.");
         pt.put("server.auto_tax.confirm", "§cTem certeza de que deseja desativar o controle automático do orçamento?");
+        pt.put("scoreboard.balance", "Saldo");
+        pt.put("scoreboard.treasury", "Tesouro");
+        pt.put("server.confirm.phrase", "estou ciente do risco");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -2905,6 +2921,9 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("server.shop.page", "Страница");
         ru.put("server.confirm.failed", "§cПодтверждение не удалось.");
         ru.put("server.auto_tax.confirm", "§cВы действительно хотите отключить автоматический контроль бюджета?");
+        ru.put("scoreboard.balance", "Баланс");
+        ru.put("scoreboard.treasury", "Казна");
+        ru.put("server.confirm.phrase", "ya osознаyu risk");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -3307,6 +3326,9 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("server.shop.page", "Sayfa");
         tr.put("server.confirm.failed", "§cOnay başarısız oldu.");
         tr.put("server.auto_tax.confirm", "§cOtomatik bütçe kontrolünü gerçekten kapatmak istiyor musun?");
+        tr.put("scoreboard.balance", "Bakiye");
+        tr.put("scoreboard.treasury", "Hazine");
+        tr.put("server.confirm.phrase", "riskin farkindayim");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3709,6 +3731,9 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("server.shop.page", "页");
         zh.put("server.confirm.failed", "§c确认失败。");
         zh.put("server.auto_tax.confirm", "§c你确定要关闭自动预算控制吗？");
+        zh.put("scoreboard.balance", "余额");
+        zh.put("scoreboard.treasury", "国库");
+        zh.put("server.confirm.phrase", "wo yi shibie fengxian");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -4111,6 +4136,9 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("server.shop.page", "ページ");
         ja.put("server.confirm.failed", "§c確認に失敗しました。");
         ja.put("server.auto_tax.confirm", "§c自動予算管理を本当に無効化しますか？");
+        ja.put("scoreboard.balance", "残高");
+        ja.put("scoreboard.treasury", "国庫");
+        ja.put("server.confirm.phrase", "risk o rikai shiteimasu");
         LANG.put("ja_jp", ja);
     }
 

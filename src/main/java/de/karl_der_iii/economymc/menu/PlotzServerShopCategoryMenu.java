@@ -59,7 +59,6 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
 
     private ItemStack entryStack(ServerShopManager.Entry entry) {
         ItemStack stack = entry.item().getDefaultInstance().copy();
-        stack.set(DataComponents.CUSTOM_NAME, Component.literal(ServerShopManager.displayName(entry)));
 
         List<Component> lore = new ArrayList<>();
         lore.add(Component.literal(LanguageManager.tr("server.shop.base_price") + entry.basePrice()));
@@ -84,9 +83,9 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
 
         box.setItem(4, MenuUtil.named(category.icon(), LanguageManager.tr(category.translationKey())));
         box.setItem(45, MenuUtil.playerInfoHead(viewer));
-        box.setItem(48, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.previous")));
+        box.setItem(47, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.previous")));
         box.setItem(49, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
-        box.setItem(50, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.next")));
+        box.setItem(51, MenuUtil.named(Items.ARROW, LanguageManager.tr("common.next")));
         box.setItem(53, MenuUtil.named(
             Items.PAPER,
             LanguageManager.tr("server.shop.page") + " " + (page + 1) + "/" + (maxPage + 1)
@@ -116,7 +115,7 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
         List<ServerShopManager.Entry> entries = ServerShopManager.getEntries(category);
         int maxPage = Math.max(0, (entries.size() - 1) / PAGE_SIZE);
 
-        if (slotId == 48 && page > 0) {
+        if (slotId == 47 && page > 0) {
             open(sp, category, page - 1);
             return;
         }
@@ -126,7 +125,7 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
             return;
         }
 
-        if (slotId == 50 && page < maxPage) {
+        if (slotId == 51 && page < maxPage) {
             open(sp, category, page + 1);
             return;
         }

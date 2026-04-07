@@ -7,14 +7,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 public final class ServerModeConfirmManager {
+    private static String confirmText() {
+        return LanguageManager.tr("server.confirm.phrase");
+    }
+
+
     public enum PendingAction {
         AUTO_TAX_DISABLE,
         BUDGET_CHANGE
     }
 
-    private static final String CONFIRM_TEXT = "ich bin der gefahr bewusst";
-    private static final Map<UUID, PendingAction> PENDING = new ConcurrentHashMap<>();
+        private static final Map<UUID, PendingAction> PENDING = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> PENDING_BUDGET_VALUES = new ConcurrentHashMap<>();
 
     private ServerModeConfirmManager() {}
@@ -40,7 +45,11 @@ public final class ServerModeConfirmManager {
             return false;
         }
 
-        if (!message.trim().equalsIgnoreCase(CONFIRM_TEXT)) {
+        String input = message.trim();
+        String localPhrase = confirmText();
+        String englishPhrase = "i am aware of the risk";
+
+        if (!input.equalsIgnoreCase(localPhrase) && !input.equalsIgnoreCase(englishPhrase)) {
             player.sendSystemMessage(Component.literal(LanguageManager.tr("server.confirm.failed")));
             PENDING.remove(player.getUUID());
             PENDING_BUDGET_VALUES.remove(player.getUUID());
