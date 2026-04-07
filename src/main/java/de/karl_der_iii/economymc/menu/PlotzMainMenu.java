@@ -18,8 +18,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.List;
-
 public class PlotzMainMenu extends ChestMenu {
     private final ServerPlayer viewer;
     private final SimpleContainer box;
@@ -56,11 +54,7 @@ public class PlotzMainMenu extends ChestMenu {
 
         box.setItem(4, MenuUtil.named(Items.NETHER_STAR, LanguageManager.tr("main.menu.title")));
 
-        box.setItem(10, sectionItem(
-            AdminSettingsManager.plotMarketEnabled(),
-            MenuUtil.named(Items.MAP, LanguageManager.tr("main.plots")),
-            LanguageManager.tr("main.disabled.plots")
-        ));
+        box.setItem(10, MenuUtil.named(Items.MAP, LanguageManager.tr("main.plots")));
 
         box.setItem(12, sectionItem(
             AdminSettingsManager.shopEnabled(),
@@ -80,7 +74,7 @@ public class PlotzMainMenu extends ChestMenu {
             LanguageManager.tr("main.disabled.checks")
         ));
 
-        box.setItem(26, sectionItem(
+        box.setItem(22, sectionItem(
             AdminSettingsManager.serverShopEnabled(),
             MenuUtil.named(Items.GOLD_BLOCK, LanguageManager.tr("main.server_shop")),
             LanguageManager.tr("main.disabled.server_shop")
@@ -88,28 +82,7 @@ public class PlotzMainMenu extends ChestMenu {
 
         box.setItem(28, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("main.bank")));
         box.setItem(30, MenuUtil.named(Items.CLOCK, LanguageManager.tr("main.history")));
-
-        if (AdminSettingsManager.dailyEnabled()) {
-            int dailyReward = DailyRewardManager.getCurrentReward(viewer.getUUID());
-            int streak = DailyRewardManager.getStreak(viewer.getUUID());
-
-            box.setItem(32, MenuUtil.named(
-                Items.EMERALD,
-                LanguageManager.tr("main.daily"),
-                List.of(
-                    LanguageManager.format("main.daily.reward", dailyReward),
-                    LanguageManager.format("main.daily.streak", streak),
-                    LanguageManager.format("main.daily.rate", AdminSettingsManager.dailyIncreasePercent()),
-                    LanguageManager.format("main.daily.max", AdminSettingsManager.dailyMaxReward())
-                )
-            ));
-        } else {
-            box.setItem(32, MenuUtil.named(
-                Items.BARRIER,
-                LanguageManager.tr("main.disabled.daily")
-            ));
-        }
-
+        box.setItem(32, MenuUtil.named(Items.EMERALD, LanguageManager.tr("main.daily")));
         box.setItem(34, MenuUtil.named(Items.SUNFLOWER, LanguageManager.tr("main.pay")));
 
         box.setItem(38, sectionItem(
@@ -131,13 +104,7 @@ public class PlotzMainMenu extends ChestMenu {
         }
 
         switch (slotId) {
-            case 10 -> {
-                if (AdminSettingsManager.plotMarketEnabled()) {
-                    PlotzPlotsHubMenu.open(sp);
-                } else {
-                    sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.plots_disabled")));
-                }
-            }
+            case 10 -> PlotzPlotsHubMenu.open(sp);
             case 12 -> {
                 if (AdminSettingsManager.shopEnabled()) {
                     PlotzShopMenu.open(sp);
@@ -159,7 +126,7 @@ public class PlotzMainMenu extends ChestMenu {
                     sp.sendSystemMessage(Component.literal(LanguageManager.tr("msg.checks_disabled")));
                 }
             }
-            case 26 -> {
+            case 22 -> {
                 if (AdminSettingsManager.serverShopEnabled()) {
                     PlotzServerShopMenu.open(sp);
                 } else {
@@ -169,11 +136,6 @@ public class PlotzMainMenu extends ChestMenu {
             case 28 -> PlotzBankMenu.open(sp);
             case 30 -> PlotzHistoryMenu.open(sp, false);
             case 32 -> {
-                if (!AdminSettingsManager.dailyEnabled()) {
-                    sp.sendSystemMessage(Component.literal(LanguageManager.tr("daily.disabled")));
-                    return;
-                }
-
                 if (!DailyRewardManager.canClaim(sp.getUUID())) {
                     long remaining = DailyRewardManager.getRemainingMs(sp.getUUID()) / 1000L;
                     long hours = remaining / 3600L;
@@ -182,9 +144,8 @@ public class PlotzMainMenu extends ChestMenu {
                     return;
                 }
 
-                int reward = DailyRewardManager.getCurrentReward(sp.getUUID());
-                BalanceManager.addBalance(sp.getUUID(), reward);
-                TransactionHistoryManager.add(sp.getUUID(), LanguageManager.format("history.daily", reward));
+                BalanceManager.addBalance(sp.getUUID(), 100);
+                TransactionHistoryManager.add(sp.getUUID(), LanguageManager.format("history.daily", 100));
                 ScoreboardManager.update(sp.server);
                 DailyRewardManager.markClaimed(sp.getUUID());
                 sp.sendSystemMessage(Component.literal(LanguageManager.tr("daily.claimed")));

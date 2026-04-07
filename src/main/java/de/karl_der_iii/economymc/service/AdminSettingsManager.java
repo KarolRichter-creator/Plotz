@@ -20,7 +20,8 @@ public final class AdminSettingsManager {
         "pt_br", "ru_ru", "tr_tr", "zh_cn", "ja_jp"
     );
 
-    private AdminSettingsManager() {}
+    private AdminSettingsManager() {
+    }
 
     private static void ensureLoaded() {
         if (loaded) return;
@@ -32,23 +33,18 @@ public final class AdminSettingsManager {
             PROPS.setProperty("shopEnabled", "true");
             PROPS.setProperty("plotMarketEnabled", "true");
             PROPS.setProperty("serverModeEnabled", "true");
-            PROPS.setProperty("dailyEnabled", "true");
             PROPS.setProperty("serverShopEnabled", "true");
+            PROPS.setProperty("dailyEnabled", "true");
 
             PROPS.setProperty("minTaxPercent", "1");
             PROPS.setProperty("minOverduePercent", "1");
             PROPS.setProperty("minCancelPercent", "1");
             PROPS.setProperty("jobAcceptHour", "2");
+
             PROPS.setProperty("autoTaxEnabled", "true");
-            PROPS.setProperty("language", "de_de");
-
-            PROPS.setProperty("dailyBaseReward", "100");
-            PROPS.setProperty("dailyIncreasePercent", "1");
-            PROPS.setProperty("dailyMaxReward", "200");
-
-            PROPS.setProperty("treasuryTargetBudget", "200000");
             PROPS.setProperty("autoTaxReactionStrength", "5");
             PROPS.setProperty("autoTaxMinReactionStrength", "1");
+            PROPS.setProperty("treasuryTargetBudget", "200000");
 
             PROPS.setProperty("pendingAutoTaxDisable", "false");
             PROPS.setProperty("pendingAutoTaxDisableRequester", "");
@@ -56,6 +52,11 @@ public final class AdminSettingsManager {
             PROPS.setProperty("pendingBudgetChange", "false");
             PROPS.setProperty("pendingBudgetChangeRequester", "");
             PROPS.setProperty("pendingBudgetValue", "200000");
+
+            PROPS.setProperty("language", "de_de");
+            PROPS.setProperty("dailyBaseReward", "100");
+            PROPS.setProperty("dailyIncreasePercent", "1");
+            PROPS.setProperty("dailyMaxReward", "200");
 
             save();
             return;
@@ -132,17 +133,6 @@ public final class AdminSettingsManager {
         save();
     }
 
-    public static boolean dailyEnabled() {
-        ensureLoaded();
-        return Boolean.parseBoolean(PROPS.getProperty("dailyEnabled", "true"));
-    }
-
-    public static void setDailyEnabled(boolean value) {
-        ensureLoaded();
-        PROPS.setProperty("dailyEnabled", Boolean.toString(value));
-        save();
-    }
-
     public static boolean serverShopEnabled() {
         ensureLoaded();
         return Boolean.parseBoolean(PROPS.getProperty("serverShopEnabled", "true"));
@@ -154,6 +144,17 @@ public final class AdminSettingsManager {
         save();
     }
 
+    public static boolean dailyEnabled() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("dailyEnabled", "true"));
+    }
+
+    public static void setDailyEnabled(boolean value) {
+        ensureLoaded();
+        PROPS.setProperty("dailyEnabled", Boolean.toString(value));
+        save();
+    }
+
     public static boolean autoTaxEnabled() {
         ensureLoaded();
         return Boolean.parseBoolean(PROPS.getProperty("autoTaxEnabled", "true"));
@@ -162,6 +163,135 @@ public final class AdminSettingsManager {
     public static void setAutoTaxEnabled(boolean value) {
         ensureLoaded();
         PROPS.setProperty("autoTaxEnabled", Boolean.toString(value));
+        save();
+    }
+
+    public static int autoTaxReactionStrength() {
+        ensureLoaded();
+        try {
+            return Math.max(1, Math.min(10, Integer.parseInt(PROPS.getProperty("autoTaxReactionStrength", "5"))));
+        } catch (NumberFormatException e) {
+            return 5;
+        }
+    }
+
+    public static void setAutoTaxReactionStrength(int value) {
+        ensureLoaded();
+        int min = autoTaxMinReactionStrength();
+        PROPS.setProperty("autoTaxReactionStrength", Integer.toString(Math.max(min, Math.min(10, value))));
+        save();
+    }
+
+    public static int autoTaxMinReactionStrength() {
+        ensureLoaded();
+        try {
+            return Math.max(0, Math.min(10, Integer.parseInt(PROPS.getProperty("autoTaxMinReactionStrength", "1"))));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    public static void setAutoTaxMinReactionStrength(int value) {
+        ensureLoaded();
+        int clamped = Math.max(0, Math.min(10, value));
+        PROPS.setProperty("autoTaxMinReactionStrength", Integer.toString(clamped));
+
+        int current = autoTaxReactionStrength();
+        if (current < clamped) {
+            PROPS.setProperty("autoTaxReactionStrength", Integer.toString(clamped));
+        }
+
+        save();
+    }
+
+    public static long treasuryTargetBudget() {
+        ensureLoaded();
+        try {
+            return Math.max(10000L, Long.parseLong(PROPS.getProperty("treasuryTargetBudget", "200000")));
+        } catch (NumberFormatException e) {
+            return 200000L;
+        }
+    }
+
+    public static void setTreasuryTargetBudget(long value) {
+        ensureLoaded();
+        PROPS.setProperty("treasuryTargetBudget", Long.toString(Math.max(10000L, value)));
+        save();
+    }
+
+    public static boolean hasPendingAutoTaxDisableRequest() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("pendingAutoTaxDisable", "false"));
+    }
+
+    public static String pendingAutoTaxDisableRequester() {
+        ensureLoaded();
+        return PROPS.getProperty("pendingAutoTaxDisableRequester", "");
+    }
+
+    public static void createPendingAutoTaxDisableRequest(String requesterName) {
+        ensureLoaded();
+        PROPS.setProperty("pendingAutoTaxDisable", "true");
+        PROPS.setProperty("pendingAutoTaxDisableRequester", requesterName == null ? "" : requesterName);
+        save();
+    }
+
+    public static void approvePendingAutoTaxDisableRequest() {
+        ensureLoaded();
+        PROPS.setProperty("pendingAutoTaxDisable", "false");
+        PROPS.setProperty("pendingAutoTaxDisableRequester", "");
+        PROPS.setProperty("autoTaxEnabled", "false");
+        save();
+    }
+
+    public static void denyPendingAutoTaxDisableRequest() {
+        ensureLoaded();
+        PROPS.setProperty("pendingAutoTaxDisable", "false");
+        PROPS.setProperty("pendingAutoTaxDisableRequester", "");
+        save();
+    }
+
+    public static boolean hasPendingBudgetChange() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("pendingBudgetChange", "false"));
+    }
+
+    public static String pendingBudgetChangeRequester() {
+        ensureLoaded();
+        return PROPS.getProperty("pendingBudgetChangeRequester", "");
+    }
+
+    public static long pendingBudgetValue() {
+        ensureLoaded();
+        try {
+            return Long.parseLong(PROPS.getProperty("pendingBudgetValue", "200000"));
+        } catch (NumberFormatException e) {
+            return treasuryTargetBudget();
+        }
+    }
+
+    public static void createPendingBudgetChange(String requesterName, long value) {
+        ensureLoaded();
+        PROPS.setProperty("pendingBudgetChange", "true");
+        PROPS.setProperty("pendingBudgetChangeRequester", requesterName == null ? "" : requesterName);
+        PROPS.setProperty("pendingBudgetValue", Long.toString(Math.max(10000L, value)));
+        save();
+    }
+
+    public static void approvePendingBudgetChange() {
+        ensureLoaded();
+        long value = pendingBudgetValue();
+        PROPS.setProperty("treasuryTargetBudget", Long.toString(Math.max(10000L, value)));
+        PROPS.setProperty("pendingBudgetChange", "false");
+        PROPS.setProperty("pendingBudgetChangeRequester", "");
+        PROPS.setProperty("pendingBudgetValue", Long.toString(value));
+        save();
+    }
+
+    public static void denyPendingBudgetChange() {
+        ensureLoaded();
+        PROPS.setProperty("pendingBudgetChange", "false");
+        PROPS.setProperty("pendingBudgetChangeRequester", "");
         save();
     }
 
@@ -271,135 +401,6 @@ public final class AdminSettingsManager {
     public static void setDailyMaxReward(int value) {
         ensureLoaded();
         PROPS.setProperty("dailyMaxReward", Integer.toString(Math.max(dailyBaseReward(), value)));
-        save();
-    }
-
-    public static long treasuryTargetBudget() {
-        ensureLoaded();
-        try {
-            return Math.max(10000L, Long.parseLong(PROPS.getProperty("treasuryTargetBudget", "200000")));
-        } catch (NumberFormatException e) {
-            return 200000L;
-        }
-    }
-
-    public static void setTreasuryTargetBudget(long value) {
-        ensureLoaded();
-        PROPS.setProperty("treasuryTargetBudget", Long.toString(Math.max(10000L, value)));
-        save();
-    }
-
-    public static int autoTaxReactionStrength() {
-        ensureLoaded();
-        try {
-            return Math.max(1, Math.min(10, Integer.parseInt(PROPS.getProperty("autoTaxReactionStrength", "5"))));
-        } catch (NumberFormatException e) {
-            return 5;
-        }
-    }
-
-    public static void setAutoTaxReactionStrength(int value) {
-        ensureLoaded();
-        int min = autoTaxMinReactionStrength();
-        PROPS.setProperty("autoTaxReactionStrength", Integer.toString(Math.max(min, Math.min(10, value))));
-        save();
-    }
-
-    public static int autoTaxMinReactionStrength() {
-        ensureLoaded();
-        try {
-            return Math.max(0, Math.min(10, Integer.parseInt(PROPS.getProperty("autoTaxMinReactionStrength", "1"))));
-        } catch (NumberFormatException e) {
-            return 1;
-        }
-    }
-
-    public static void setAutoTaxMinReactionStrength(int value) {
-        ensureLoaded();
-        int clamped = Math.max(0, Math.min(10, value));
-        PROPS.setProperty("autoTaxMinReactionStrength", Integer.toString(clamped));
-
-        int current = autoTaxReactionStrength();
-        if (current < clamped) {
-            PROPS.setProperty("autoTaxReactionStrength", Integer.toString(clamped));
-        }
-
-        save();
-    }
-
-    public static boolean hasPendingAutoTaxDisableRequest() {
-        ensureLoaded();
-        return Boolean.parseBoolean(PROPS.getProperty("pendingAutoTaxDisable", "false"));
-    }
-
-    public static String pendingAutoTaxDisableRequester() {
-        ensureLoaded();
-        return PROPS.getProperty("pendingAutoTaxDisableRequester", "");
-    }
-
-    public static void createPendingAutoTaxDisableRequest(String requesterName) {
-        ensureLoaded();
-        PROPS.setProperty("pendingAutoTaxDisable", "true");
-        PROPS.setProperty("pendingAutoTaxDisableRequester", requesterName == null ? "" : requesterName);
-        save();
-    }
-
-    public static void approvePendingAutoTaxDisableRequest() {
-        ensureLoaded();
-        PROPS.setProperty("pendingAutoTaxDisable", "false");
-        PROPS.setProperty("pendingAutoTaxDisableRequester", "");
-        PROPS.setProperty("autoTaxEnabled", "false");
-        save();
-    }
-
-    public static void denyPendingAutoTaxDisableRequest() {
-        ensureLoaded();
-        PROPS.setProperty("pendingAutoTaxDisable", "false");
-        PROPS.setProperty("pendingAutoTaxDisableRequester", "");
-        save();
-    }
-
-    public static boolean hasPendingBudgetChange() {
-        ensureLoaded();
-        return Boolean.parseBoolean(PROPS.getProperty("pendingBudgetChange", "false"));
-    }
-
-    public static String pendingBudgetChangeRequester() {
-        ensureLoaded();
-        return PROPS.getProperty("pendingBudgetChangeRequester", "");
-    }
-
-    public static long pendingBudgetValue() {
-        ensureLoaded();
-        try {
-            return Long.parseLong(PROPS.getProperty("pendingBudgetValue", "200000"));
-        } catch (NumberFormatException e) {
-            return treasuryTargetBudget();
-        }
-    }
-
-    public static void createPendingBudgetChange(String requesterName, long value) {
-        ensureLoaded();
-        PROPS.setProperty("pendingBudgetChange", "true");
-        PROPS.setProperty("pendingBudgetChangeRequester", requesterName == null ? "" : requesterName);
-        PROPS.setProperty("pendingBudgetValue", Long.toString(Math.max(10000L, value)));
-        save();
-    }
-
-    public static void approvePendingBudgetChange() {
-        ensureLoaded();
-        long value = pendingBudgetValue();
-        PROPS.setProperty("treasuryTargetBudget", Long.toString(Math.max(10000L, value)));
-        PROPS.setProperty("pendingBudgetChange", "false");
-        PROPS.setProperty("pendingBudgetChangeRequester", "");
-        PROPS.setProperty("pendingBudgetValue", Long.toString(value));
-        save();
-    }
-
-    public static void denyPendingBudgetChange() {
-        ensureLoaded();
-        PROPS.setProperty("pendingBudgetChange", "false");
-        PROPS.setProperty("pendingBudgetChangeRequester", "");
         save();
     }
 
