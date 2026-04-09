@@ -15,6 +15,10 @@ public final class ScoreboardManager {
     private ScoreboardManager() {}
 
     public static void update(MinecraftServer server) {
+        if (!AdminSettingsManager.scoreboardEnabled()) {
+            return;
+        }
+
         try {
             CommandSourceStack source = server.createCommandSourceStack()
                 .withSuppressedOutput()

@@ -84,6 +84,7 @@ public class PlotzAdminModeMenu extends ChestMenu {
         box.setItem(14, toggleItem(AdminSettingsManager.serverModeEnabled(), LanguageManager.tr("admin.server_mode")));
         box.setItem(15, toggleItem(AdminSettingsManager.serverShopEnabled(), LanguageManager.tr("admin.server_shop")));
         box.setItem(16, toggleItem(AdminSettingsManager.dailyEnabled(), LanguageManager.tr("main.daily")));
+        box.setItem(17, toggleItem(AdminSettingsManager.scoreboardEnabled(), LanguageManager.tr("admin.scoreboard")));
 
         box.setItem(19, MenuUtil.named(
             Items.PAPER,
@@ -100,6 +101,10 @@ public class PlotzAdminModeMenu extends ChestMenu {
         box.setItem(22, MenuUtil.named(
             Items.PAPER,
             LanguageManager.tr("server.min_reaction_strength") + AdminSettingsManager.autoTaxMinReactionStrength()
+        ));
+        box.setItem(23, MenuUtil.named(
+            Items.PAPER,
+            LanguageManager.tr("admin.server_shop.min_strength") + AdminSettingsManager.serverShopMinPriceStrength()
         ));
 
         box.setItem(23, MenuUtil.named(Items.ARROW, LanguageManager.tr("admin.language.previous")));
@@ -146,6 +151,10 @@ public class PlotzAdminModeMenu extends ChestMenu {
         }
 
         box.setItem(31, MenuUtil.playerInfoHead(viewer));
+        if (AdminSettingsManager.hasPendingBudgetChange() || AdminSettingsManager.hasPendingAutoTaxDisableRequest()) {
+            box.setItem(53, MenuUtil.named(Items.RED_CONCRETE, LanguageManager.tr("admin.pending.open")));
+        }
+
         box.setItem(40, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
 
         broadcastChanges();
@@ -165,11 +174,13 @@ public class PlotzAdminModeMenu extends ChestMenu {
             case 14 -> AdminSettingsManager.setServerModeEnabled(!AdminSettingsManager.serverModeEnabled());
             case 15 -> AdminSettingsManager.setServerShopEnabled(!AdminSettingsManager.serverShopEnabled());
             case 16 -> AdminSettingsManager.setDailyEnabled(!AdminSettingsManager.dailyEnabled());
+            case 17 -> AdminSettingsManager.setScoreboardEnabled(!AdminSettingsManager.scoreboardEnabled());
 
             case 19 -> AdminSettingsManager.setMinTaxPercent(AdminSettingsManager.minTaxPercent() + (button == 1 ? -1 : 1));
             case 20 -> AdminSettingsManager.setMinOverduePercent(AdminSettingsManager.minOverduePercent() + (button == 1 ? -1 : 1));
             case 21 -> AdminSettingsManager.setMinCancelPercent(AdminSettingsManager.minCancelPercent() + (button == 1 ? -1 : 1));
             case 22 -> AdminSettingsManager.setAutoTaxMinReactionStrength(AdminSettingsManager.autoTaxMinReactionStrength() + (button == 1 ? -1 : 1));
+            case 23 -> AdminSettingsManager.setServerShopMinPriceStrength(AdminSettingsManager.serverShopMinPriceStrength() + (button == 1 ? -1 : 1));
 
             case 23 -> setLangByIndex(currentLangIndex() - 1);
             case 24, 25 -> setLangByIndex(currentLangIndex() + 1);
@@ -193,6 +204,12 @@ public class PlotzAdminModeMenu extends ChestMenu {
                 }
             }
 
+            case 53 -> {
+                if (AdminSettingsManager.hasPendingBudgetChange() || AdminSettingsManager.hasPendingAutoTaxDisableRequest()) {
+                    PlotzAdminPendingRequestMenu.open(sp);
+                    return;
+                }
+            }
             case 40 -> {
                 PlotzMainMenu.open(sp);
                 return;
