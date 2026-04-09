@@ -36,6 +36,7 @@ public final class AdminSettingsManager {
             PROPS.setProperty("serverShopEnabled", "true");
             PROPS.setProperty("dailyEnabled", "true");
             PROPS.setProperty("scoreboardEnabled", "true");
+            PROPS.setProperty("adminToolsEnabled", "false");
 
             PROPS.setProperty("minTaxPercent", "1");
             PROPS.setProperty("minOverduePercent", "1");
@@ -155,6 +156,18 @@ public final class AdminSettingsManager {
     public static void setDailyEnabled(boolean value) {
         ensureLoaded();
         PROPS.setProperty("dailyEnabled", Boolean.toString(value));
+        save();
+    }
+
+
+    public static boolean adminToolsEnabled() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("adminToolsEnabled", "false"));
+    }
+
+    public static void setAdminToolsEnabled(boolean value) {
+        ensureLoaded();
+        PROPS.setProperty("adminToolsEnabled", Boolean.toString(value));
         save();
     }
 

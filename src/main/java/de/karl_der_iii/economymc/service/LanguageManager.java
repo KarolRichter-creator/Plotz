@@ -472,6 +472,7 @@ public final class LanguageManager {
         en.put("server.shop.strength", "Server Shop Price Strength: ");
         en.put("server.shop.strength.desc", "§7Left click: increase / Right click: decrease");
         en.put("server.shop.strength.min", "§7Minimum: ");
+        en.put("admin.admin_tools", "Admin Tools");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -923,6 +924,7 @@ public final class LanguageManager {
         de.put("server.shop.strength", "Server-Shop-Preis-Stärke: ");
         de.put("server.shop.strength.desc", "§7Linksklick: erhöhen / Rechtsklick: verringern");
         de.put("server.shop.strength.min", "§7Minimum: ");
+        de.put("admin.admin_tools", "Admin-Tools");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
@@ -1340,6 +1342,7 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("server.shop.strength", "Siła cen sklepu serwera: ");
         pl.put("server.shop.strength.desc", "§7Lewy klik: zwiększ / Prawy klik: zmniejsz");
         pl.put("server.shop.strength.min", "§7Minimum: ");
+        pl.put("admin.admin_tools", "Narzędzia admina");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1757,6 +1760,7 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("server.shop.strength", "Force des prix de la boutique serveur : ");
         fr.put("server.shop.strength.desc", "§7Clic gauche : augmenter / Clic droit : diminuer");
         fr.put("server.shop.strength.min", "§7Minimum : ");
+        fr.put("admin.admin_tools", "Outils admin");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -2174,6 +2178,7 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("server.shop.strength", "Fuerza de precios de la tienda del servidor: ");
         es.put("server.shop.strength.desc", "§7Clic izquierdo: aumentar / Clic derecho: reducir");
         es.put("server.shop.strength.min", "§7Mínimo: ");
+        es.put("admin.admin_tools", "Herramientas admin");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2591,6 +2596,7 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("server.shop.strength", "Força de preço da loja do servidor: ");
         pt.put("server.shop.strength.desc", "§7Clique esquerdo: aumentar / Clique direito: reduzir");
         pt.put("server.shop.strength.min", "§7Mínimo: ");
+        pt.put("admin.admin_tools", "Ferramentas admin");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -3008,6 +3014,7 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("server.shop.strength", "Сила цен магазина сервера: ");
         ru.put("server.shop.strength.desc", "§7ЛКМ: увеличить / ПКМ: уменьшить");
         ru.put("server.shop.strength.min", "§7Минимум: ");
+        ru.put("admin.admin_tools", "Админ-инструменты");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -3425,6 +3432,7 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("server.shop.strength", "Sunucu mağazası fiyat gücü: ");
         tr.put("server.shop.strength.desc", "§7Sol tık: artır / Sağ tık: azalt");
         tr.put("server.shop.strength.min", "§7Minimum: ");
+        tr.put("admin.admin_tools", "Yönetici araçları");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3842,6 +3850,7 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("server.shop.strength", "服务器商店价格强度：");
         zh.put("server.shop.strength.desc", "§7左键：增加 / 右键：减少");
         zh.put("server.shop.strength.min", "§7最小值：");
+        zh.put("admin.admin_tools", "管理员工具");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -4259,6 +4268,7 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("server.shop.strength", "サーバーショップ価格強度：");
         ja.put("server.shop.strength.desc", "§7左クリック: 増加 / 右クリック: 減少");
         ja.put("server.shop.strength.min", "§7最小値：");
+        ja.put("admin.admin_tools", "管理ツール");
         LANG.put("ja_jp", ja);
     }
 

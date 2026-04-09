@@ -19,6 +19,7 @@ public final class ScoreboardManager {
             return;
         }
 
+
         try {
             CommandSourceStack source = server.createCommandSourceStack()
                 .withSuppressedOutput()
