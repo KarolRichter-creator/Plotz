@@ -82,7 +82,18 @@ public class PlotzMainMenu extends ChestMenu {
 
         box.setItem(28, MenuUtil.named(Items.GOLD_INGOT, LanguageManager.tr("main.bank")));
         box.setItem(30, MenuUtil.named(Items.CLOCK, LanguageManager.tr("main.history")));
-        box.setItem(32, MenuUtil.named(Items.EMERALD, LanguageManager.tr("main.daily")));
+        int dailyReward = DailyRewardManager.getCurrentReward(viewer.getUUID());
+        int streak = DailyRewardManager.getStreak(viewer.getUUID());
+        box.setItem(32, MenuUtil.named(
+            Items.EMERALD,
+            LanguageManager.tr("main.daily"),
+            java.util.List.of(
+                LanguageManager.format("main.daily.reward", dailyReward),
+                LanguageManager.format("main.daily.streak", streak),
+                LanguageManager.format("main.daily.rate", AdminSettingsManager.dailyIncreasePercent()),
+                LanguageManager.format("main.daily.max", AdminSettingsManager.dailyMaxReward())
+            )
+        ));
         box.setItem(34, MenuUtil.named(Items.SUNFLOWER, LanguageManager.tr("main.pay")));
 
         box.setItem(38, sectionItem(
