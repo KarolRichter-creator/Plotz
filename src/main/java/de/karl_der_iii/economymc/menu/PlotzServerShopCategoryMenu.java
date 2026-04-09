@@ -34,7 +34,7 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
     private final ServerPlayer viewer;
     private final SimpleContainer box;
     private final ServerShopManager.Category category;
-    private final int page;
+    private int page;
     private final Map<Integer, ServerShopManager.Entry> entriesBySlot = new HashMap<>();
 
     public static void open(ServerPlayer player, ServerShopManager.Category category, int page) {
@@ -116,7 +116,8 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
         int maxPage = Math.max(0, (entries.size() - 1) / PAGE_SIZE);
 
         if (slotId == 47 && page > 0) {
-            open(sp, category, page - 1);
+            page--;
+            refresh();
             return;
         }
 
@@ -126,7 +127,8 @@ public class PlotzServerShopCategoryMenu extends ChestMenu {
         }
 
         if (slotId == 51 && page < maxPage) {
-            open(sp, category, page + 1);
+            page++;
+            refresh();
             return;
         }
 
