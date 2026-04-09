@@ -253,6 +253,8 @@ public final class ServerShopManager {
             base += 180;
         }
 
-        return Math.max(5, base);
+        int strength = AdminSettingsManager.serverShopPriceStrength();
+        int scaled = (int) Math.round(base * (0.55 + (strength * 0.15)));
+        return Math.max(5, scaled);
     }
 }

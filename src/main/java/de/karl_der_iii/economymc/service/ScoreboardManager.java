@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public final class ScoreboardManager {
+        if (!AdminSettingsManager.scoreboardEnabled()) {
+            return;
+        }
     private static final String OBJECTIVE = "economymc_balance";
 
     private ScoreboardManager() {}

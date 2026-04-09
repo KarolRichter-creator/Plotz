@@ -35,6 +35,7 @@ public final class AdminSettingsManager {
             PROPS.setProperty("serverModeEnabled", "true");
             PROPS.setProperty("serverShopEnabled", "true");
             PROPS.setProperty("dailyEnabled", "true");
+            PROPS.setProperty("scoreboardEnabled", "true");
 
             PROPS.setProperty("minTaxPercent", "1");
             PROPS.setProperty("minOverduePercent", "1");
@@ -43,7 +44,9 @@ public final class AdminSettingsManager {
 
             PROPS.setProperty("autoTaxEnabled", "true");
             PROPS.setProperty("autoTaxReactionStrength", "5");
+            PROPS.setProperty("serverShopPriceStrength", "5");
             PROPS.setProperty("autoTaxMinReactionStrength", "1");
+            PROPS.setProperty("serverShopMinPriceStrength", "1");
             PROPS.setProperty("treasuryTargetBudget", "200000");
 
             PROPS.setProperty("pendingAutoTaxDisable", "false");
@@ -155,6 +158,18 @@ public final class AdminSettingsManager {
         save();
     }
 
+    public static boolean scoreboardEnabled() {
+        ensureLoaded();
+        return Boolean.parseBoolean(PROPS.getProperty("scoreboardEnabled", "true"));
+    }
+
+    public static void setScoreboardEnabled(boolean value) {
+        ensureLoaded();
+        PROPS.setProperty("scoreboardEnabled", Boolean.toString(value));
+        save();
+    }
+
+
     public static boolean autoTaxEnabled() {
         ensureLoaded();
         return Boolean.parseBoolean(PROPS.getProperty("autoTaxEnabled", "true"));
@@ -179,6 +194,44 @@ public final class AdminSettingsManager {
         ensureLoaded();
         int min = autoTaxMinReactionStrength();
         PROPS.setProperty("autoTaxReactionStrength", Integer.toString(Math.max(min, Math.min(10, value))));
+        save();
+    }
+
+
+    public static int serverShopPriceStrength() {
+        ensureLoaded();
+        try {
+            int min = serverShopMinPriceStrength();
+            return Math.max(min, Math.min(10, Integer.parseInt(PROPS.getProperty("serverShopPriceStrength", "5"))));
+        } catch (NumberFormatException e) {
+            return 5;
+        }
+    }
+
+    public static void setServerShopPriceStrength(int value) {
+        ensureLoaded();
+        int min = serverShopMinPriceStrength();
+        PROPS.setProperty("serverShopPriceStrength", Integer.toString(Math.max(min, Math.min(10, value))));
+        save();
+    }
+
+    public static int serverShopMinPriceStrength() {
+        ensureLoaded();
+        try {
+            return Math.max(1, Math.min(10, Integer.parseInt(PROPS.getProperty("serverShopMinPriceStrength", "1"))));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    public static void setServerShopMinPriceStrength(int value) {
+        ensureLoaded();
+        int clamped = Math.max(1, Math.min(10, value));
+        PROPS.setProperty("serverShopMinPriceStrength", Integer.toString(clamped));
+        int current = serverShopPriceStrength();
+        if (current < clamped) {
+            PROPS.setProperty("serverShopPriceStrength", Integer.toString(clamped));
+        }
         save();
     }
 
