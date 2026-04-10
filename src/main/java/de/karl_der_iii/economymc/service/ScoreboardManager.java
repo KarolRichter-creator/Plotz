@@ -23,11 +23,7 @@ public final class ScoreboardManager {
 
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
 
-            if (!AdminSettingsManager.scoreboardEnabled()) {
-                return;
-            }
-
-            String title = safe(LanguageManager.tr("scoreboard.balance"));
+            String title = clean(LanguageManager.tr("menu.player.balance"));
             if (title.isBlank()) {
                 title = "Balance";
             }
@@ -44,31 +40,31 @@ public final class ScoreboardManager {
             entries.removeIf(e -> BalanceManager.TREASURY_ACCOUNT_ID.equals(e.getKey()));
             entries.sort(Map.Entry.<UUID, Long>comparingByValue(Comparator.reverseOrder()));
 
-            int score = 15;
-            int line = 0;
+            int index = 0;
             for (Map.Entry<UUID, Long> entry : entries) {
-                if (line >= 5) break;
+                if (index >= 5) break;
 
-                String team = "ec_line_" + line;
-                String fake = fakeEntry(line);
-                String name = BalanceManager.resolveDisplayName(server, entry.getKey());
-                String prefix = trim(safe(name));
+                String team = "ec_line_" + index;
+                String fake = fakeEntry(index);
+                String name = trim(clean(BalanceManager.resolveDisplayName(server, entry.getKey())));
 
                 server.getCommands().performPrefixedCommand(source, "scoreboard teams add " + team);
-                server.getCommands().performPrefixedCommand(source, "scoreboard teams modify " + team + " prefix \"" + escape(prefix) + "\"");
+                server.getCommands().performPrefixedCommand(source, "scoreboard teams modify " + team + " prefix \"" + escape(name) + "\"");
                 server.getCommands().performPrefixedCommand(source, "scoreboard teams join " + team + " \"" + fake + "\"");
                 server.getCommands().performPrefixedCommand(source, "scoreboard players set \"" + fake + "\" " + OBJECTIVE + " " + entry.getValue());
 
-                score--;
-                line++;
+                index++;
             }
 
             String treasuryTeam = "ec_treasury";
             String treasuryFake = "§a";
-            String treasuryPrefix = trim(safe(LanguageManager.tr("scoreboard.treasury")));
+            String treasuryName = trim(clean(LanguageManager.tr("history.treasury")));
+            if (treasuryName.isBlank()) {
+                treasuryName = "Treasury";
+            }
 
             server.getCommands().performPrefixedCommand(source, "scoreboard teams add " + treasuryTeam);
-            server.getCommands().performPrefixedCommand(source, "scoreboard teams modify " + treasuryTeam + " prefix \"" + escape(treasuryPrefix) + "\"");
+            server.getCommands().performPrefixedCommand(source, "scoreboard teams modify " + treasuryTeam + " prefix \"" + escape(treasuryName) + "\"");
             server.getCommands().performPrefixedCommand(source, "scoreboard teams join " + treasuryTeam + " \"" + treasuryFake + "\"");
             server.getCommands().performPrefixedCommand(source, "scoreboard players set \"" + treasuryFake + "\" " + OBJECTIVE + " " + TreasuryManager.getTreasury());
         } catch (Exception ignored) {
@@ -86,9 +82,9 @@ public final class ScoreboardManager {
         return "§" + Integer.toHexString(index);
     }
 
-    private static String safe(String input) {
+    private static String clean(String input) {
         if (input == null) return "";
-        return input.replaceAll("§.", "").trim();
+        return input.replaceAll("§.", "").replace(": $%d", "").replace(": $", "").trim();
     }
 
     private static String trim(String s) {

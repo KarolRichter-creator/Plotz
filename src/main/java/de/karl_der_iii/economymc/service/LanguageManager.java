@@ -476,6 +476,13 @@ public final class LanguageManager {
         en.put("server.shop.category.admin_tools", "Admin Tools");
         en.put("plots.opac.missing", "§cOpen Parties and Claims is not installed. Plot features are currently disabled.");
         en.put("shop.sell.admin_tool_blocked", "§cAdmin tools bought from the server shop cannot be resold.");
+        en.put("shop.sell.admin_tool_blocked", "§cAdmin items cannot be sold in the player shop.");
+        en.put("plots.blocked.title", "§cPlot menu disabled");
+        en.put("plots.blocked.desc", "§7Open Parties and Claims is missing or plots are disabled.");
+        en.put("plots.opac.missing", "§cOpen Parties and Claims is not installed. Plot features are disabled.");
+        en.put("admin.opac.missing.title", "§cOpen Parties and Claims missing");
+        en.put("admin.opac.missing.desc1", "§7Plot features are automatically disabled.");
+        en.put("admin.opac.missing.desc2", "§7Install Open Parties and Claims to use plots.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -931,6 +938,13 @@ public final class LanguageManager {
         de.put("server.shop.category.admin_tools", "Admin-Tools");
         de.put("plots.opac.missing", "§cOpen Parties and Claims ist nicht installiert. Grundstücksfunktionen sind aktuell deaktiviert.");
         de.put("shop.sell.admin_tool_blocked", "§cAdmin-Tools aus dem Server-Shop können nicht weiterverkauft werden.");
+        de.put("shop.sell.admin_tool_blocked", "§cAdmin-Items können nicht im Spielershop verkauft werden.");
+        de.put("plots.blocked.title", "§cGrundstücksmenü deaktiviert");
+        de.put("plots.blocked.desc", "§7Open Parties and Claims fehlt oder Grundstücke sind deaktiviert.");
+        de.put("plots.opac.missing", "§cOpen Parties and Claims ist nicht installiert. Grundstücksfunktionen sind deaktiviert.");
+        de.put("admin.opac.missing.title", "§cOpen Parties and Claims fehlt");
+        de.put("admin.opac.missing.desc1", "§7Grundstücksfunktionen wurden automatisch deaktiviert.");
+        de.put("admin.opac.missing.desc2", "§7Installiere Open Parties and Claims für Grundstücke.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);

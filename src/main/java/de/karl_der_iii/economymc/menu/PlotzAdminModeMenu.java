@@ -13,6 +13,8 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.fml.ModList;
+import java.util.List;
 
 import java.util.List;
 
@@ -127,6 +129,18 @@ public class PlotzAdminModeMenu extends ChestMenu {
             Items.GOLD_BLOCK,
             LanguageManager.tr("admin.daily.max") + AdminSettingsManager.dailyMaxReward()
         ));
+
+
+        if (!ModList.get().isLoaded("openpartiesandclaims")) {
+            box.setItem(32, MenuUtil.named(
+                Items.RED_STAINED_GLASS_PANE,
+                LanguageManager.tr("admin.opac.missing.title"),
+                List.of(
+                    LanguageManager.tr("admin.opac.missing.desc1"),
+                    LanguageManager.tr("admin.opac.missing.desc2")
+                )
+            ));
+        }
 
         box.setItem(31, MenuUtil.playerInfoHead(viewer));
         if (AdminSettingsManager.hasPendingBudgetChange() || AdminSettingsManager.hasPendingAutoTaxDisableRequest()) {
