@@ -15,18 +15,6 @@ public final class ScoreboardManager {
     private ScoreboardManager() {
     }
 
-
-    public static void clear(MinecraftServer server) {
-        try {
-            CommandSourceStack source = server.createCommandSourceStack()
-                .withSuppressedOutput()
-                .withPermission(4);
-            clearTeams(source, server);
-            server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
-        } catch (Exception ignored) {
-        }
-    }
-
     public static void update(MinecraftServer server) {
         try {
             CommandSourceStack source = server.createCommandSourceStack()
@@ -61,7 +49,7 @@ public final class ScoreboardManager {
                 if (line >= 5) break;
 
                 String team = "ec_line_" + line;
-                String fake = fakeEntry(line);
+                String fake = "§" + Integer.toHexString(line);
                 String name = clean(BalanceManager.resolveDisplayName(server, entry.getKey()));
                 if (name.isBlank()) {
                     name = "Player";
@@ -86,8 +74,8 @@ public final class ScoreboardManager {
 
             String treasuryTeam = "ec_treasury";
             String treasuryFake = "§a";
-            String treasuryName = clean(LanguageManager.tr("scoreboard.treasury"));
-            if (treasuryName.isBlank() || treasuryName.equals("scoreboard.treasury")) {
+            String treasuryName = clean(LanguageManager.tr("common.treasury"));
+            if (treasuryName.isBlank() || treasuryName.equals("common.treasury")) {
                 treasuryName = "Treasury";
             }
 
@@ -108,15 +96,23 @@ public final class ScoreboardManager {
         }
     }
 
+    public static void clear(MinecraftServer server) {
+        try {
+            CommandSourceStack source = server.createCommandSourceStack()
+                .withSuppressedOutput()
+                .withPermission(4);
+
+            clearTeams(source, server);
+            server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
+        } catch (Exception ignored) {
+        }
+    }
+
     private static void clearTeams(CommandSourceStack source, MinecraftServer server) {
         for (int i = 0; i < 5; i++) {
             server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_line_" + i);
         }
         server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_treasury");
-    }
-
-    private static String fakeEntry(int index) {
-        return "§" + Integer.toHexString(index);
     }
 
     private static String clean(String input) {

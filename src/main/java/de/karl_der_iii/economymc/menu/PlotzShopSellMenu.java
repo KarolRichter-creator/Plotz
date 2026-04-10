@@ -137,6 +137,13 @@ public class PlotzShopSellMenu extends ChestMenu {
         }
 
         for (ItemStack stack : draft.items()) {
+            if (isBlockedAdminTool(stack)) {
+                viewer.sendSystemMessage(Component.literal(LanguageManager.tr("shop.sell.admin_tool_blocked")));
+                return;
+            }
+        }
+
+        for (ItemStack stack : draft.items()) {
             if (stack.has(net.minecraft.core.component.DataComponents.CUSTOM_DATA)
                 && stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA) != null
                 && stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA).copyTag().contains("plotz_admin_tool")) {
