@@ -36,7 +36,10 @@ public final class ScoreboardManager {
                 source,
                 "scoreboard objectives add " + OBJECTIVE + " dummy \"" + escape(title) + "\""
             );
-            server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
+            server.getCommands().performPrefixedCommand(
+                source,
+                "scoreboard objectives setdisplay sidebar " + OBJECTIVE
+            );
 
             List<Map.Entry<UUID, Long>> entries = new ArrayList<>(BalanceManager.getAllBalances().entrySet());
             entries.removeIf(e -> BalanceManager.TREASURY_ACCOUNT_ID.equals(e.getKey()));
@@ -46,7 +49,9 @@ public final class ScoreboardManager {
             int index = 0;
 
             for (Map.Entry<UUID, Long> entry : entries) {
-                if (index >= 5) break;
+                if (index >= 5) {
+                    break;
+                }
 
                 String team = "ec_line_" + index;
                 String fake = hiddenEntry(index);
@@ -117,7 +122,9 @@ public final class ScoreboardManager {
     }
 
     private static String clean(String input) {
-        if (input == null) return "";
+        if (input == null) {
+            return "";
+        }
         return input.replaceAll("§.", "").trim();
     }
 
