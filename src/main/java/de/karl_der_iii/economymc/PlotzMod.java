@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import de.karl_der_iii.economymc.menu.PlotzMainMenu;
 import de.karl_der_iii.economymc.service.BalanceManager;
+import de.karl_der_iii.economymc.service.AdminSettingsManager;
 import de.karl_der_iii.economymc.service.BankInputManager;
 import de.karl_der_iii.economymc.service.CapitalAreaManager;
 import de.karl_der_iii.economymc.service.ChecksInputManager;
@@ -31,7 +32,6 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import xaero.pac.common.event.api.OPACServerAddonRegisterEvent;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,6 @@ public class PlotzMod {
 
     public PlotzMod(IEventBus modEventBus) {
         NeoForge.EVENT_BUS.addListener(this::registerCommands);
-        NeoForge.EVENT_BUS.addListener(this::onOpacAddonRegister);
         NeoForge.EVENT_BUS.addListener(this::onServerChat);
         NeoForge.EVENT_BUS.addListener(this::onPlayerLogin);
         NeoForge.EVENT_BUS.addListener(this::onPlayerLogout);
@@ -165,10 +164,7 @@ public class PlotzMod {
         );
     }
 
-    private void onOpacAddonRegister(OPACServerAddonRegisterEvent event) {
-        OpacBridge.registerClaimsTracker(event);
-        System.out.println("[EconomyMC] OPAC tracker registered.");
-    }
+
 
     private void onServerChat(ServerChatEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
@@ -218,6 +214,11 @@ public class PlotzMod {
     private void onServerStarted(ServerStartedEvent event) {
         TreasuryManager.getTreasury();
         JobManager.processExpiredJobs();
+
+        if (!OpacBridge.isInstalled()) {
+            AdminSettingsManager.setPlotMarketEnabled(false);
+        }
+
         ScoreboardManager.update(event.getServer());
     }
 }

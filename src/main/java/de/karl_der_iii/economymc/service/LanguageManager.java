@@ -474,6 +474,8 @@ public final class LanguageManager {
         en.put("server.shop.strength.min", "§7Minimum: ");
         en.put("admin.admin_tools", "Admin Tools");
         en.put("server.shop.category.admin_tools", "Admin Tools");
+        en.put("plots.opac.missing", "§cOpen Parties and Claims is not installed. Plot features are currently disabled.");
+        en.put("shop.sell.admin_tool_blocked", "§cAdmin tools bought from the server shop cannot be resold.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -927,6 +929,8 @@ public final class LanguageManager {
         de.put("server.shop.strength.min", "§7Minimum: ");
         de.put("admin.admin_tools", "Admin-Tools");
         de.put("server.shop.category.admin_tools", "Admin-Tools");
+        de.put("plots.opac.missing", "§cOpen Parties and Claims ist nicht installiert. Grundstücksfunktionen sind aktuell deaktiviert.");
+        de.put("shop.sell.admin_tool_blocked", "§cAdmin-Tools aus dem Server-Shop können nicht weiterverkauft werden.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
