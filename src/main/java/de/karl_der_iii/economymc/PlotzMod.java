@@ -215,7 +215,7 @@ public class PlotzMod {
         TreasuryManager.getTreasury();
         JobManager.processExpiredJobs();
 
-        if (!OpacBridge.isInstalled()) {
+        if (!net.neoforged.fml.ModList.get().isLoaded("openpartiesandclaims")) {
             AdminSettingsManager.setPlotMarketEnabled(false);
         }
 
