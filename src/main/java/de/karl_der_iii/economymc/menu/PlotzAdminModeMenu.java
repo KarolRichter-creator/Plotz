@@ -14,7 +14,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.fml.ModList;
-import java.util.List;
 
 import java.util.List;
 
@@ -79,22 +78,21 @@ public class PlotzAdminModeMenu extends ChestMenu {
 
         box.setItem(4, MenuUtil.named(Items.REDSTONE_TORCH, LanguageManager.tr("admin.mode.title")));
 
+        boolean opacInstalled = ModList.get().isLoaded("openpartiesandclaims");
+
         box.setItem(10, toggleItem(AdminSettingsManager.jobsEnabled(), LanguageManager.tr("admin.jobs")));
         box.setItem(11, toggleItem(AdminSettingsManager.checksEnabled(), LanguageManager.tr("admin.checks")));
         box.setItem(12, toggleItem(AdminSettingsManager.shopEnabled(), LanguageManager.tr("admin.shop")));
-        boolean opacInstalled = ModList.get().isLoaded("openpartiesandclaims");
         box.setItem(13, opacInstalled
             ? toggleItem(AdminSettingsManager.plotMarketEnabled(), LanguageManager.tr("admin.plot_market"))
             : MenuUtil.named(
                 Items.BARRIER,
                 LanguageManager.tr("main.disabled.plots"),
-                java.util.List.of(LanguageManager.tr("admin.opac.required"))
+                List.of(LanguageManager.tr("admin.opac.required"))
             ));
         box.setItem(14, toggleItem(AdminSettingsManager.serverModeEnabled(), LanguageManager.tr("admin.server_mode")));
         box.setItem(15, toggleItem(AdminSettingsManager.serverShopEnabled(), LanguageManager.tr("admin.server_shop")));
         box.setItem(16, toggleItem(AdminSettingsManager.dailyEnabled(), LanguageManager.tr("main.daily")));
-        box.setItem(17, toggleItem(AdminSettingsManager.adminToolsEnabled(), LanguageManager.tr("admin.admin_tools")));
-        box.setItem(18, toggleItem(AdminSettingsManager.scoreboardEnabled(), LanguageManager.tr("admin.scoreboard")));
         box.setItem(17, toggleItem(AdminSettingsManager.adminToolsEnabled(), LanguageManager.tr("admin.admin_tools")));
         box.setItem(18, toggleItem(AdminSettingsManager.scoreboardEnabled(), LanguageManager.tr("admin.scoreboard")));
 
@@ -139,23 +137,11 @@ public class PlotzAdminModeMenu extends ChestMenu {
             LanguageManager.tr("admin.daily.max") + AdminSettingsManager.dailyMaxReward()
         ));
 
-
-        if (!ModList.get().isLoaded("openpartiesandclaims")) {
-            box.setItem(32, MenuUtil.named(
-                Items.RED_STAINED_GLASS_PANE,
-                LanguageManager.tr("admin.opac.missing.title"),
-                List.of(
-                    LanguageManager.tr("admin.opac.missing.desc1"),
-                    LanguageManager.tr("admin.opac.missing.desc2")
-                )
-            ));
-        }
-
-        box.setItem(31, MenuUtil.playerInfoHead(viewer));
         if (AdminSettingsManager.hasPendingBudgetChange() || AdminSettingsManager.hasPendingAutoTaxDisableRequest()) {
             box.setItem(53, MenuUtil.named(Items.RED_CONCRETE, LanguageManager.tr("admin.pending.open")));
         }
 
+        box.setItem(31, MenuUtil.playerInfoHead(viewer));
         box.setItem(40, MenuUtil.named(Items.BARRIER, LanguageManager.tr("common.back")));
 
         broadcastChanges();
@@ -196,12 +182,12 @@ public class PlotzAdminModeMenu extends ChestMenu {
             case 22 -> AdminSettingsManager.setAutoTaxMinReactionStrength(AdminSettingsManager.autoTaxMinReactionStrength() + (button == 1 ? -1 : 1));
             case 23 -> AdminSettingsManager.setServerShopMinPriceStrength(AdminSettingsManager.serverShopMinPriceStrength() + (button == 1 ? -1 : 1));
 
+            case 24 -> setLangByIndex(currentLangIndex() - 1);
+            case 25, 26 -> setLangByIndex(currentLangIndex() + 1);
+
             case 28 -> AdminSettingsManager.setDailyBaseReward(AdminSettingsManager.dailyBaseReward() + (button == 1 ? -10 : 10));
             case 29 -> AdminSettingsManager.setDailyIncreasePercent(AdminSettingsManager.dailyIncreasePercent() + (button == 1 ? -1 : 1));
             case 30 -> AdminSettingsManager.setDailyMaxReward(AdminSettingsManager.dailyMaxReward() + (button == 1 ? -10 : 10));
-
-            case 24 -> setLangByIndex(currentLangIndex() - 1);
-            case 25, 26 -> setLangByIndex(currentLangIndex() + 1);
 
             case 53 -> {
                 if (AdminSettingsManager.hasPendingBudgetChange() || AdminSettingsManager.hasPendingAutoTaxDisableRequest()) {
