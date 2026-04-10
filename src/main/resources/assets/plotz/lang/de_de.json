@@ -1,4 +1,6 @@
 {
   "key.categories.plotz": "EconomyMC",
-  "key.plotz.open_menu": "EconomyMC Menü öffnen"
+  "key.plotz.open_menu": "EconomyMC Menü öffnen",
+  "plots.opac.missing": "§cOpen Parties and Claims ist nicht installiert. Grundstücksfunktionen sind deaktiviert.",
+  "shop.sell.admin_tool_blocked": "§cAdmin-Items können nicht im Spielershop verkauft werden."
 }

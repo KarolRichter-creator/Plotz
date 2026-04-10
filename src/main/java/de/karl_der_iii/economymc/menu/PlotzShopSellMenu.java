@@ -103,11 +103,30 @@ public class PlotzShopSellMenu extends ChestMenu {
         ));
     }
 
+    private boolean isBlockedAdminTool(ItemStack stack) {
+        return stack.is(Items.COMMAND_BLOCK)
+            || stack.is(Items.CHAIN_COMMAND_BLOCK)
+            || stack.is(Items.REPEATING_COMMAND_BLOCK)
+            || stack.is(Items.STRUCTURE_BLOCK)
+            || stack.is(Items.STRUCTURE_VOID)
+            || stack.is(Items.BARRIER)
+            || stack.is(Items.LIGHT)
+            || stack.is(Items.DEBUG_STICK)
+            || stack.is(Items.JIGSAW);
+    }
+
     private void publish() {
         PlotzStore.ShopDraft draft = PlotzStore.getShopDraft(viewer.getUUID());
         if (draft == null || draft.items().isEmpty()) {
             viewer.sendSystemMessage(Component.literal(LanguageManager.tr("shop.sell.put_items_first")));
             return;
+        }
+
+        for (ItemStack stack : draft.items()) {
+            if (isBlockedAdminTool(stack)) {
+                viewer.sendSystemMessage(Component.literal(LanguageManager.tr("shop.sell.admin_tool_blocked")));
+                return;
+            }
         }
 
         for (ItemStack stack : draft.items()) {
