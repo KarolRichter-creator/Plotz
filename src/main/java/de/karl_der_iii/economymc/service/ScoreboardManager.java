@@ -21,7 +21,7 @@ public final class ScoreboardManager {
                 .withSuppressedOutput()
                 .withPermission(4);
 
-            server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
+            clear(server);
 
             if (!AdminSettingsManager.scoreboardEnabled()) {
                 return;
@@ -38,18 +38,18 @@ public final class ScoreboardManager {
             );
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives setdisplay sidebar " + OBJECTIVE);
 
-            clearTeams(source, server);
-
             List<Map.Entry<UUID, Long>> entries = new ArrayList<>(BalanceManager.getAllBalances().entrySet());
             entries.removeIf(e -> BalanceManager.TREASURY_ACCOUNT_ID.equals(e.getKey()));
             entries.sort(Map.Entry.<UUID, Long>comparingByValue(Comparator.reverseOrder()));
 
-            int line = 0;
-            for (Map.Entry<UUID, Long> entry : entries) {
-                if (line >= 5) break;
+            int score = 15;
+            int index = 0;
 
-                String team = "ec_line_" + line;
-                String fake = fakeEntry(line);
+            for (Map.Entry<UUID, Long> entry : entries) {
+                if (index >= 5) break;
+
+                String team = "ec_line_" + index;
+                String fake = "§" + Integer.toHexString(index);
                 String name = clean(BalanceManager.resolveDisplayName(server, entry.getKey()));
                 if (name.isBlank()) {
                     name = "Player";
@@ -66,10 +66,11 @@ public final class ScoreboardManager {
                 );
                 server.getCommands().performPrefixedCommand(
                     source,
-                    "scoreboard players set \"" + fake + "\" " + OBJECTIVE + " " + entry.getValue()
+                    "scoreboard players set \"" + fake + "\" " + OBJECTIVE + " " + score
                 );
 
-                line++;
+                index++;
+                score--;
             }
 
             String treasuryTeam = "ec_treasury";
@@ -90,7 +91,7 @@ public final class ScoreboardManager {
             );
             server.getCommands().performPrefixedCommand(
                 source,
-                "scoreboard players set \"" + treasuryFake + "\" " + OBJECTIVE + " " + TreasuryManager.getTreasury()
+                "scoreboard players set \"" + treasuryFake + "\" " + OBJECTIVE + " " + (score - 1)
             );
         } catch (Exception ignored) {
         }
@@ -102,21 +103,13 @@ public final class ScoreboardManager {
                 .withSuppressedOutput()
                 .withPermission(4);
 
-            clearTeams(source, server);
+            for (int i = 0; i < 5; i++) {
+                server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_line_" + i);
+            }
+            server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_treasury");
             server.getCommands().performPrefixedCommand(source, "scoreboard objectives remove " + OBJECTIVE);
         } catch (Exception ignored) {
         }
-    }
-
-    private static void clearTeams(CommandSourceStack source, MinecraftServer server) {
-        for (int i = 0; i < 5; i++) {
-            server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_line_" + i);
-        }
-        server.getCommands().performPrefixedCommand(source, "scoreboard teams remove ec_treasury");
-    }
-
-    private static String fakeEntry(int index) {
-        return "§" + Integer.toHexString(index);
     }
 
     private static String clean(String input) {
