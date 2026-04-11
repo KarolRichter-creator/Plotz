@@ -484,6 +484,9 @@ public final class LanguageManager {
         en.put("admin.opac.missing.desc1", "§7Plot features are automatically disabled.");
         en.put("admin.opac.missing.desc2", "§7Install Open Parties and Claims to use plots.");
         en.put("admin.opac.required", "§7Requires Open Parties and Claims.");
+        en.put("plots.price.normal", "§eNormal claim price");
+        en.put("plots.price.capital", "§6Capital claim price");
+        en.put("plots.buy.direct.info", "§7Claims are now bought directly through Open Parties and Claims.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -947,6 +950,9 @@ public final class LanguageManager {
         de.put("admin.opac.missing.desc1", "§7Grundstücksfunktionen wurden automatisch deaktiviert.");
         de.put("admin.opac.missing.desc2", "§7Installiere Open Parties and Claims für Grundstücke.");
         de.put("admin.opac.required", "§7Benötigt Open Parties and Claims.");
+        de.put("plots.price.normal", "§ePreis normaler Claim");
+        de.put("plots.price.capital", "§6Preis Hauptstadt-Claim");
+        de.put("plots.buy.direct.info", "§7Claims werden jetzt direkt über Open Parties and Claims gekauft.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
