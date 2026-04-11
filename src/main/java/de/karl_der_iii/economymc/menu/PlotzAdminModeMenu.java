@@ -95,7 +95,6 @@ public class PlotzAdminModeMenu extends ChestMenu {
         box.setItem(16, toggleItem(AdminSettingsManager.dailyEnabled(), LanguageManager.tr("main.daily")));
         box.setItem(17, toggleItem(AdminSettingsManager.scoreboardEnabled(), LanguageManager.tr("admin.scoreboard")));
         box.setItem(18, toggleItem(AdminSettingsManager.adminToolsEnabled(), LanguageManager.tr("admin.admin_tools")));
-
         box.setItem(19, MenuUtil.named(
             Items.PAPER,
             LanguageManager.tr("admin.min_tax") + ": " + AdminSettingsManager.minTaxPercent() + "%"
