@@ -15,11 +15,34 @@ public final class PlotzLogic {
         return CapitalAreaManager.isInside(pos);
     }
 
-    public static boolean tryCharge(ServerPlayer player, int amount) {
+    public static int getClaimPrice(BlockPos pos) {
+        return isCapital(pos) ? CAPITAL_CHUNK_PRICE : NORMAL_CHUNK_PRICE;
+    }
+
+    public static boolean canAffordClaim(ServerPlayer player, BlockPos pos) {
+        return EconomyBridge.hasEnough(player, getClaimPrice(pos));
+    }
+
+    public static boolean chargeClaimToTreasury(ServerPlayer player, BlockPos pos) {
+        int amount = getClaimPrice(pos);
         if (!EconomyBridge.hasEnough(player, amount)) {
             return false;
         }
-        return EconomyBridge.removeMoney(player, amount);
+
+        if (!EconomyBridge.removeMoney(player, amount)) {
+            return false;
+        }
+
+        TreasuryManager.addTreasury(amount);
+        ScoreboardManager.update(player.server);
+
+        String claimType = isCapital(pos) ? "Capital claim" : "Claim";
+        TransactionHistoryManager.add(player.getUUID(), claimType + " bought for $" + amount);
+        TransactionHistoryManager.addTreasury(
+            claimType + " sold to " + player.getGameProfile().getName() + " for $" + amount
+        );
+
+        return true;
     }
 
     public static boolean paySeller(ServerPlayer buyerContext, String sellerName, int amount) {
@@ -94,11 +117,26 @@ public final class PlotzLogic {
         }
     }
 
+    public static boolean tryCharge(net.minecraft.server.level.ServerPlayer player, int amount) {
+        if (!EconomyBridge.hasEnough(player, amount)) {
+            return false;
+        }
+
+        if (!EconomyBridge.removeMoney(player, amount)) {
+            return false;
+        }
+
+        TreasuryManager.addTreasury(amount);
+        ScoreboardManager.update(player.server);
+        return true;
+    }
+
+    // Altmethoden bleiben nur als Kompatibilität drin, werden aber nicht mehr benutzt.
     public static boolean canBuyNormalCredit(ServerPlayer player) {
-        return tryCharge(player, NORMAL_CHUNK_PRICE);
+        return canAffordClaim(player, player.blockPosition());
     }
 
     public static boolean canBuyCapitalCredit(ServerPlayer player) {
-        return tryCharge(player, CAPITAL_CHUNK_PRICE);
+        return canAffordClaim(player, player.blockPosition());
     }
 }
