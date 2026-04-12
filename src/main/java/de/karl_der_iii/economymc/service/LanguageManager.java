@@ -499,6 +499,7 @@ public final class LanguageManager {
         en.put("plots.sell.failed.treasury", "§cSale failed: the treasury cannot pay you right now.");
         en.put("plots.buy.direct.info", "§7Claims are currently handled through the OPAC flow.");
         en.put("plots.sell.draft.info", "§7A sale draft flow will replace direct selling here.");
+        en.put("plots.sell.draft.created", "§aSale draft created. Default price: $%d.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -977,6 +978,7 @@ public final class LanguageManager {
         de.put("plots.sell.failed.treasury", "§cVerkauf fehlgeschlagen: Die Staatskasse kann dich gerade nicht auszahlen.");
         de.put("plots.buy.direct.info", "§7Claims werden aktuell über den OPAC-Ablauf verarbeitet.");
         de.put("plots.sell.draft.info", "§7Hier wird direkter Verkauf später durch einen Verkaufsentwurf ersetzt.");
+        de.put("plots.sell.draft.created", "§aVerkaufsentwurf erstellt. Standardpreis: $%d.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);
@@ -1402,6 +1404,7 @@ pl.put("bank.input.cancelled", "§cCancelled.");
         pl.put("plots.sell.sold.normal", "§aDziałka sprzedana za $%d.");
         pl.put("plots.sell.sold.capital", "§aDziałka stołeczna sprzedana za $%d.");
         pl.put("plots.sell.failed.treasury", "§cSprzedaż nieudana: skarb państwa nie może teraz zapłacić.");
+        pl.put("plots.sell.draft.created", "§aUtworzono szkic sprzedaży. Domyślna cena: $%d.");
         LANG.put("pl_pl", pl);
 
         Map<String, String> fr = new HashMap<>(en);
@@ -1827,6 +1830,7 @@ fr.put("bank.input.cancelled", "§cCancelled.");
         fr.put("plots.sell.sold.normal", "§aClaim vendu pour $%d.");
         fr.put("plots.sell.sold.capital", "§aClaim capitale vendu pour $%d.");
         fr.put("plots.sell.failed.treasury", "§cVente échouée : le trésor ne peut pas vous payer maintenant.");
+        fr.put("plots.sell.draft.created", "§aBrouillon de vente créé. Prix par défaut : $%d.");
         LANG.put("fr_fr", fr);
 
         Map<String, String> es = new HashMap<>(en);
@@ -2252,6 +2256,7 @@ es.put("bank.input.cancelled", "§cCancelled.");
         es.put("plots.sell.sold.normal", "§aParcela vendida por $%d.");
         es.put("plots.sell.sold.capital", "§aParcela de capital vendida por $%d.");
         es.put("plots.sell.failed.treasury", "§cVenta fallida: el tesoro no puede pagarte ahora mismo.");
+        es.put("plots.sell.draft.created", "§aBorrador de venta creado. Precio predeterminado: $%d.");
         LANG.put("es_es", es);
 
         Map<String, String> pt = new HashMap<>(en);
@@ -2677,6 +2682,7 @@ pt.put("bank.input.cancelled", "§cCancelled.");
         pt.put("plots.sell.sold.normal", "§aTerreno vendido por $%d.");
         pt.put("plots.sell.sold.capital", "§aTerreno da capital vendido por $%d.");
         pt.put("plots.sell.failed.treasury", "§cVenda falhou: o tesouro não pode te pagar agora.");
+        pt.put("plots.sell.draft.created", "§aRascunho de venda criado. Preço padrão: $%d.");
         LANG.put("pt_br", pt);
 
         Map<String, String> ru = new HashMap<>(en);
@@ -3102,6 +3108,7 @@ ru.put("bank.input.cancelled", "§cCancelled.");
         ru.put("plots.sell.sold.normal", "§aУчасток продан за $%d.");
         ru.put("plots.sell.sold.capital", "§aСтоличный участок продан за $%d.");
         ru.put("plots.sell.failed.treasury", "§cПродажа не удалась: казна сейчас не может вам заплатить.");
+        ru.put("plots.sell.draft.created", "§aЧерновик продажи создан. Стандартная цена: $%d.");
         LANG.put("ru_ru", ru);
 
         Map<String, String> tr = new HashMap<>(en);
@@ -3527,6 +3534,7 @@ tr.put("bank.input.cancelled", "§cCancelled.");
         tr.put("plots.sell.sold.normal", "§aClaim $%d karşılığında satıldı.");
         tr.put("plots.sell.sold.capital", "§aBaşkent claimi $%d karşılığında satıldı.");
         tr.put("plots.sell.failed.treasury", "§cSatış başarısız: hazine şu anda sana ödeme yapamıyor.");
+        tr.put("plots.sell.draft.created", "§aSatış taslağı oluşturuldu. Varsayılan fiyat: $%d.");
         LANG.put("tr_tr", tr);
 
         Map<String, String> zh = new HashMap<>(en);
@@ -3952,6 +3960,7 @@ zh.put("bank.input.cancelled", "§cCancelled.");
         zh.put("plots.sell.sold.normal", "§a领地已售出，获得 $%d。");
         zh.put("plots.sell.sold.capital", "§a首都领地已售出，获得 $%d。");
         zh.put("plots.sell.failed.treasury", "§c出售失败：国库当前无法向你付款。");
+        zh.put("plots.sell.draft.created", "§a已创建出售草稿。默认价格：$%d。");
         LANG.put("zh_cn", zh);
 
         Map<String, String> ja = new HashMap<>(en);
@@ -4377,6 +4386,7 @@ ja.put("bank.input.cancelled", "§cCancelled.");
         ja.put("plots.sell.sold.normal", "§a土地を $%d で売却しました。");
         ja.put("plots.sell.sold.capital", "§a首都の土地を $%d で売却しました。");
         ja.put("plots.sell.failed.treasury", "§c売却失敗: 国庫が今は支払えません。");
+        ja.put("plots.sell.draft.created", "§a売却ドラフトを作成しました。初期価格: $%d。");
         LANG.put("ja_jp", ja);
     }
 

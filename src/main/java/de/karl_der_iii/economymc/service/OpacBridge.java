@@ -1,6 +1,7 @@
 package de.karl_der_iii.economymc.service;
 
 import de.karl_der_iii.economymc.data.PlotzStore;
+import de.karl_der_iii.economymc.menu.PlotzCreateSaleMenu;
 import de.karl_der_iii.economymc.service.LanguageManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -175,10 +176,31 @@ public final class OpacBridge {
             if (previousOwner != null) {
                 ServerPlayer oldOwner = server.getPlayerList().getPlayer(previousOwner);
                 if (oldOwner != null) {
+                    BlockPos oldClaimPos = new BlockPos(chunkX * 16 + 8, 64, chunkZ * 16 + 8);
+                    boolean capital = PlotzLogic.isCapital(oldClaimPos);
+                    int defaultPrice = PlotzLogic.getClaimPrice(oldClaimPos) * 2;
+                    String location = dimension + " | Chunks " + chunkX + "," + chunkZ + " -> " + chunkX + "," + chunkZ;
+                    String title = capital ? "Capital Plot" : "Plot";
+
+                    PlotzStore.setDraft(new PlotzStore.SaleDraft(
+                        oldOwner.getUUID(),
+                        oldOwner.getGameProfile().getName(),
+                        title,
+                        capital,
+                        1,
+                        location,
+                        defaultPrice,
+                        LanguageManager.tr("myplots.edit_later"),
+                        LanguageManager.tr("myplots.edit_later"),
+                        LanguageManager.tr("myplots.edit_later"),
+                        false
+                    ));
+
                     oldOwner.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                        LanguageManager.tr("plots.sell.draft.info")
+                        LanguageManager.format("plots.sell.draft.created", defaultPrice)
                     ));
                     syncOwnedClaims(oldOwner);
+                    PlotzCreateSaleMenu.open(oldOwner);
                 }
             }
             return;
