@@ -487,6 +487,13 @@ public final class LanguageManager {
         en.put("plots.price.normal", "§eNormal claim price");
         en.put("plots.price.capital", "§6Capital claim price");
         en.put("plots.buy.direct.info", "§7Claims are now bought directly through Open Parties and Claims.");
+        en.put("plots.claim.distance_fail", "§cClaim reverted: minimum distance is %d blocks.");
+        en.put("plots.claim.rollback_fail", "§cDistance rule failed and automatic rollback failed.");
+        en.put("plots.claim.not_enough.normal", "§cClaim reverted: you need $%d for a normal claim.");
+        en.put("plots.claim.not_enough.capital", "§cClaim reverted: you need $%d for a capital claim.");
+        en.put("plots.claim.rollback_fail_money", "§cClaim detected without enough money, but automatic rollback failed.");
+        en.put("plots.claim.bought.normal", "§aClaim bought for $%d.");
+        en.put("plots.claim.bought.capital", "§aCapital claim bought for $%d.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -953,6 +960,13 @@ public final class LanguageManager {
         de.put("plots.price.normal", "§ePreis normaler Claim");
         de.put("plots.price.capital", "§6Preis Hauptstadt-Claim");
         de.put("plots.buy.direct.info", "§7Claims werden jetzt direkt über Open Parties and Claims gekauft.");
+        de.put("plots.claim.distance_fail", "§cClaim rückgängig gemacht: Mindestabstand ist %d Blöcke.");
+        de.put("plots.claim.rollback_fail", "§cAbstandsregel fehlgeschlagen und automatisches Zurücksetzen fehlgeschlagen.");
+        de.put("plots.claim.not_enough.normal", "§cClaim rückgängig gemacht: Du brauchst $%d für einen normalen Claim.");
+        de.put("plots.claim.not_enough.capital", "§cClaim rückgängig gemacht: Du brauchst $%d für einen Hauptstadt-Claim.");
+        de.put("plots.claim.rollback_fail_money", "§cClaim erkannt ohne genug Geld, aber automatisches Zurücksetzen fehlgeschlagen.");
+        de.put("plots.claim.bought.normal", "§aClaim für $%d gekauft.");
+        de.put("plots.claim.bought.capital", "§aHauptstadt-Claim für $%d gekauft.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);

@@ -1,6 +1,7 @@
 package de.karl_der_iii.economymc.service;
 
 import de.karl_der_iii.economymc.data.PlotzStore;
+import de.karl_der_iii.economymc.service.LanguageManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -205,11 +206,11 @@ public final class OpacBridge {
                     OpenPACServerAPI.get(server).getServerClaimsManager().unclaim(dimension, chunkX, chunkZ);
                     CLAIM_OWNER_CACHE.remove(key);
                     player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                        "§cClaim reverted: minimum distance is " + PlotzLogic.MIN_DISTANCE_BLOCKS + " blocks."
+                        LanguageManager.format("plots.claim.distance_fail", PlotzLogic.MIN_DISTANCE_BLOCKS)
                     ));
                 } catch (Exception e) {
                     player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                        "§cDistance rule failed and automatic rollback failed."
+                        LanguageManager.tr("plots.claim.rollback_fail")
                     ));
                 }
                 return;
