@@ -497,6 +497,8 @@ public final class LanguageManager {
         en.put("plots.sell.sold.normal", "§aClaim sold for $%d.");
         en.put("plots.sell.sold.capital", "§aCapital claim sold for $%d.");
         en.put("plots.sell.failed.treasury", "§cSale failed: the treasury cannot pay you right now.");
+        en.put("plots.buy.direct.info", "§7Claims are currently handled through the OPAC flow.");
+        en.put("plots.sell.draft.info", "§7A sale draft flow will replace direct selling here.");
         LANG.put("en_us", en);
 
         Map<String, String> de = new HashMap<>(en);
@@ -973,6 +975,8 @@ public final class LanguageManager {
         de.put("plots.sell.sold.normal", "§aClaim für $%d verkauft.");
         de.put("plots.sell.sold.capital", "§aHauptstadt-Claim für $%d verkauft.");
         de.put("plots.sell.failed.treasury", "§cVerkauf fehlgeschlagen: Die Staatskasse kann dich gerade nicht auszahlen.");
+        de.put("plots.buy.direct.info", "§7Claims werden aktuell über den OPAC-Ablauf verarbeitet.");
+        de.put("plots.sell.draft.info", "§7Hier wird direkter Verkauf später durch einen Verkaufsentwurf ersetzt.");
         LANG.put("de_de", de);
 
         Map<String, String> pl = new HashMap<>(en);

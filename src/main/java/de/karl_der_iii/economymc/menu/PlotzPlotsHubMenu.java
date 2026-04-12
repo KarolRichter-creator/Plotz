@@ -63,7 +63,7 @@ public class PlotzPlotsHubMenu extends ChestMenu {
         box.setItem(13, MenuUtil.named(
             Items.BOOK,
             LanguageManager.tr("plots.price.normal"),
-            List.of("§7$" + PlotzLogic.NORMAL_CHUNK_PRICE, "§7Claim directly via OPAC selection")
+            List.of("§7$" + PlotzLogic.NORMAL_CHUNK_PRICE, LanguageManager.tr("plots.buy.direct.info"))
         ));
         box.setItem(21, MenuUtil.named(
             Items.MAP,
@@ -72,7 +72,7 @@ public class PlotzPlotsHubMenu extends ChestMenu {
         box.setItem(23, MenuUtil.named(
             Items.ENCHANTED_BOOK,
             LanguageManager.tr("plots.price.capital"),
-            List.of("§7$" + PlotzLogic.CAPITAL_CHUNK_PRICE, "§7Claim directly via OPAC selection")
+            List.of("§7$" + PlotzLogic.CAPITAL_CHUNK_PRICE, LanguageManager.tr("plots.buy.direct.info"))
         ));
         box.setItem(31, MenuUtil.named(
             Items.COMPASS,
